@@ -10,22 +10,23 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-$vehicle_type = $_POST['vehicle_type'];
-$ticket = $_POST['ticket'];
-$action = $_POST['action'];
-$current_time = date('Y-m-d H:i:s');
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $vehicle_type = $_POST['vehicle_type'];
+    $license_plate = $_POST['license_plate'];
+    $time_in = $_POST['in'];
 
-if ($action == 'in') {
-    $sql = "INSERT INTO vehicles (vehicle_type, ticket, time_in, charge) VALUES ('$vehicle_type', '$ticket', '$current_time', 0)";
-} else {
-    $sql = "UPDATE vehicles SET time_out='$current_time' WHERE ticket='$ticket' AND time_out IS NULL";
-}
+    // Prepared statement to prevent SQL injection
+    $stmt = $conn->prepare("INSERT INTO vehicles (vehicle_type, ticket, time_in, charge) VALUES (?, ?, ?, 0)");
+    $stmt->bind_param("sss", $vehicle_type, $license_plate, $time_in);
 
-if ($conn->query($sql) === TRUE) {
-    echo "Record updated successfully";
-} else {
-    echo "Errorr: " . $sql . "<br>" . $conn->error;
+    if ($stmt->execute() === TRUE) {
+        header("Location: index.php");
+    } else {
+        echo "Error: " . $stmt->error;
+    }
+
+    $stmt->close();
 }
 
 $conn->close();
-?>
+

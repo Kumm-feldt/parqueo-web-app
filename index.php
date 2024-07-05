@@ -1,3 +1,53 @@
+<?php
+ include_once("nicetime.php");
+
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "mydb";
+
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+// Fetch data from the database
+$sql = "SELECT vehicle_type, ticket, time_in FROM vehicles";
+$result = $conn->query($sql);
+
+$data = [];
+if ($result->num_rows > 0) {
+    while($row = $result->fetch_assoc()) {
+        $data[] = $row;
+    }
+}
+
+function calculateDuration($time_in) {
+    $time_in = new DateTime($time_in);
+    $now = new DateTime();
+    $diff = $now->diff($time_in);
+    return $diff;
+}
+
+function calculatePrice($duration) {
+    // Calculate price based on duration (6Q per 30 minutes)
+    $hours = $duration->h;
+    $minutes = $duration->i;
+    $total_minutes = $hours * 60 + $minutes;
+    $type = $result->fetch_assoc();
+    if($type["vehicle_type"] == "car"){
+        $price = ceil($total_minutes / 30) * 6; // Round up to the nearest 30 minutes
+    }else{
+    $price = ceil($total_minutes / 30) * 5; // Round up to the nearest 30 minutes
+
+    }
+    return $price;
+}
+
+$conn->close();
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -38,6 +88,34 @@
             animation: fadeIn 0.5s;
         }
 
+        .out-modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .out-modal-content {
+            background-color: #fefefe;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 500px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            animation: fadeIn 0.5s;
+            border-radius: 10px;
+            font-family: Arial, sans-serif;
+        }
+
+
         @keyframes fadeIn {
             from {opacity: 0;}
             to {opacity: 1;}
@@ -63,22 +141,47 @@
             font-size: 14px;
             cursor: pointer;
         }
-    </style>
+        .price-icon{
+color:#48752C;
+        }    
+        </style>
 </head>
 <body>
     <h2 id="main-title">Sistema de parqueos</h2>
     <div class="wrapper">
         <div class="table">
-            <table>
-                <tbody>
-                    <tr class="tr-headers">
-                        <th>Vehiculo</th>
-                        <th>Tiempo de entrada</th>
-                        <th>Tiempo transcurrido</th>
-                        <th>Estado</th>
-                    </tr>
-                </tbody>
-            </table>
+         <table>
+            <thead>
+                <tr class="tr-headers">
+                    <th>Vehiculo</th>
+                    <th>Ticket</th>
+
+                    <th>Tiempo de entrada</th>
+                    <th>Tiempo transcurrido</th>
+                    <th>Estado</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($data as $row): ?>
+                    <tr class="vehicle-row" data-vehicle-type="<?php echo htmlspecialchars($row['vehicle_type']); ?>"
+                            data-ticket="<?php echo htmlspecialchars($row['ticket']); ?>"
+                            data-time-in="<?php echo htmlspecialchars($row['time_in']); ?>"
+>
+                            <td><?php echo htmlspecialchars($row['vehicle_type']); ?></td>
+                            <td><?php echo htmlspecialchars($row['ticket']); ?></td>
+
+                            <td><?php echo htmlspecialchars($row['time_in']); ?></td>
+                            <td><?php NiceTime($row["time_in"]) ?></td>
+                            <td>
+                                <span class="material-symbols-outlined price-icon">
+                                    price_check
+                                </span>
+                            </td>
+                        </tr>
+                 
+                <?php endforeach; ?>
+            </tbody>
+        </table>
         </div>
         <div id="footer">
             <div class="img-send">
@@ -108,8 +211,8 @@
                     <br><br>
                     <label for="license_plate">Numero de ticket:</label>
                     <input type="text" name="license_plate" id="ticket" required><br><br>
-                    <label for="in">Hora de Ingreso:</label>
                     <div class="button-time-div">
+                    <label for="in">Hora de Ingreso:</label>
                      <input type="time" name="in" id="in" required>
                      <button type="button" class="get-time-button" id="get-time">Hora Actual</button>
                   </div>
@@ -118,6 +221,23 @@
                 </form>
             </div>
         </div>
+
+        <!-- -->
+        <!-- Checkout Modal -->
+    <div id="out-vehicle-modal" class="out-modal">
+        <div class="out-modal-content">
+            <span class="out-close" id="out-close-modal">&times;</span>
+            <form method="post" action="log_vehicle.php">
+                <p><strong>Tipo de Vehiculo:</strong> <span id="out-vehicle-type"></span></p>
+                <p><strong>Numero de Ticket:</strong> <span id="out-ticket"></span></p>
+                <p><strong>Hora de Ingreso:</strong> <span id="out-time-in"></span></p>
+                <p><strong>Tiempo Transcurrido:</strong> <span id="out-duration"></span></p>
+                <p><strong>Precio a Pagar:</strong> Q<span id="out-price"></span></p>
+                <button type="submit">CORRECTO</button>
+            </form>
+        </div>
+    </div>
+
     </div>
     <script>
         document.getElementById('add_box').addEventListener('click', function() {
