@@ -1,5 +1,5 @@
 <?php
- include_once("nicetime.php");
+include_once("nicetime.php"); // Ensure this is included at the beginning
 
 $servername = "localhost";
 $username = "root";
@@ -63,30 +63,6 @@ $conn->close();
             'opsz' 24
         }
 
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgba(0, 0, 0, 0.4);
-            justify-content: center;
-            align-items: center;
-        }
-
-        .modal-content {
-            background-color: #fefefe;
-            margin: auto;
-            padding: 20px;
-            border: 1px solid #888;
-            width: 80%;
-            max-width: 500px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-            animation: fadeIn 0.5s;
-        }
 
         .out-modal {
             display: none;
@@ -111,8 +87,6 @@ $conn->close();
             max-width: 500px;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
             animation: fadeIn 0.5s;
-            border-radius: 10px;
-            font-family: Arial, sans-serif;
         }
 
 
@@ -121,20 +95,7 @@ $conn->close();
             to {opacity: 1;}
         }
 
-        .close {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-        }
-
-        .close:hover,
-        .close:focus {
-            color: black;
-            text-decoration: none;
-            cursor: pointer;
-        }
-
+       
         .get-time-button {
             margin-left: 10px;
             padding: 5px 10px;
@@ -158,26 +119,19 @@ color:#48752C;
 
                     <th>Tiempo de entrada</th>
                     <th>Tiempo transcurrido</th>
-                    <th>Estado</th>
                 </tr>
             </thead>
             <tbody>
                 <?php foreach ($data as $row): ?>
-                    <tr class="vehicle-row" data-vehicle-type="<?php echo htmlspecialchars($row['vehicle_type']); ?>"
-                            data-ticket="<?php echo htmlspecialchars($row['ticket']); ?>"
-                            data-time-in="<?php echo htmlspecialchars($row['time_in']); ?>"
->
-                            <td><?php echo htmlspecialchars($row['vehicle_type']); ?></td>
+                    
+                    <tr class="vehicle-row" id='<?php echo htmlspecialchars($row["id"]); ?>' onclick="getDataFromRow(this)">
+                    <td><?php echo htmlspecialchars($row['vehicle_type']); ?></td>
                             <td><?php echo htmlspecialchars($row['ticket']); ?></td>
 
                             <td><?php echo htmlspecialchars($row['time_in']); ?></td>
-                            <td><?php NiceTime($row["time_in"]) ?></td>
-                            <td>
-                                <span class="material-symbols-outlined price-icon">
-                                    price_check
-                                </span>
-                            </td>
-                        </tr>
+                            <td><?php echo NiceTime($row["time_in"]); ?></td>
+                          
+                    </tr>
                  
                 <?php endforeach; ?>
             </tbody>
@@ -214,8 +168,8 @@ color:#48752C;
                     <div class="button-time-div">
                     <label for="in">Hora de Ingreso:</label>
                      <input type="time" name="in" id="in" required>
-                     <button type="button" class="get-time-button" id="get-time">Hora Actual</button>
-                  </div>
+                     <button type="button" class="get-time-button" id="get-time">Get Current Time</button>
+                     </div>
                     <br>
                     <button type="submit">INGRESAR</button>
                 </form>
@@ -227,19 +181,91 @@ color:#48752C;
     <div id="out-vehicle-modal" class="out-modal">
         <div class="out-modal-content">
             <span class="out-close" id="out-close-modal">&times;</span>
-            <form method="post" action="log_vehicle.php">
-                <p><strong>Tipo de Vehiculo:</strong> <span id="out-vehicle-type"></span></p>
-                <p><strong>Numero de Ticket:</strong> <span id="out-ticket"></span></p>
-                <p><strong>Hora de Ingreso:</strong> <span id="out-time-in"></span></p>
-                <p><strong>Tiempo Transcurrido:</strong> <span id="out-duration"></span></p>
-                <p><strong>Precio a Pagar:</strong> Q<span id="out-price"></span></p>
+            <form method="post" action="log_vehicle_out.php">
+            <input type="hidden" id="hidden-ticket" name="ticket_id">
+            <input type="hidden" id="hidden-charge" name="charge">
+            <input type="hidden" id="hidden-out" name="out">
+            
+                <table id="data-table">
+                <tr><th>Tipo de Vehiculo:</th> <td id="out-vehicle-type"></td></tr>
+                <tr><th>Numero de Ticket:</th> <td id="out-ticket"></td></tr>
+                <tr><th>Hora de Ingreso:</th> <td id="out-time-in"></td></tr>
+                <tr><th>Tiempo Transcurrido:</th> <td id="out-duration"></td></tr>
+                <tr><th>Precio a Pagar:</th> <td id="out-price"></td></tr>
+                </table>
                 <button type="submit">CORRECTO</button>
             </form>
         </div>
     </div>
 
     </div>
+
+                <script>
+                      document.getElementById('get-time').addEventListener('click', function() {
+                    const now = new Date();
+                    const hours = String(now.getHours()).padStart(2, '0');
+                    const minutes = String(now.getMinutes()).padStart(2, '0');
+                    document.getElementById('in').value = `${hours}:${minutes}`;
+                });
+                    function calculateDuration(timeIn) {
+                    var timeInDate = new Date(timeIn);
+                    var now = new Date();
+                    var duration = new Date(now - timeInDate);
+                    var diff = {
+                        hours: duration.getUTCHours(),
+                        minutes: duration.getUTCMinutes()
+                    };
+                    return diff;
+                }
+
+                function calculatePrice(duration, vehicleType) {
+                    var totalMinutes = duration.hours * 60 + duration.minutes;
+                    var pricePer30Min = vehicleType === "car" ? 6 : 5;
+                    var price = Math.ceil(totalMinutes / 30) * pricePer30Min;
+                    return price;
+                }
+
+                function getDataFromRow(row) {
+                    // Retrieve the data from the row
+                    var vehicleType = row.cells[0].textContent;
+                    var ticket = row.cells[1].textContent;
+                    var timeIn = row.cells[2].textContent;
+                       // Calculate duration and price
+                    var duration = calculateDuration(timeIn);
+                    var price = calculatePrice(duration, vehicleType);
+                    // Set hidden input field value
+                    var id = row.id; // Use the row's id as the ticket ID
+                      // Set hidden input field value
+                    document.getElementById("hidden-ticket").value = id;
+                    document.getElementById("hidden-charge").value = price;
+                    document.getElementById("hidden-out").value = duration;
+
+                    var vehicleTypeGet = document.getElementById("out-vehicle-type");
+                    var ticketGet =  document.getElementById("out-ticket");
+                    var timeInGet =  document.getElementById("out-time-in");
+                    var durationGet =  document.getElementById("out-duration");
+                    var priceGet =  document.getElementById("out-price");
+
+                    vehicleTypeGet.innerText = vehicleType;
+                    ticketGet.innerText = ticket;
+                    timeInGet.innerText =  timeIn;
+                    durationGet.innerText =   duration;
+                    priceGet.innerText =   price;
+                    
+                   
+                    document.getElementById('out-vehicle-modal').style.display = 'flex';
+                    document.getElementById('out-close-modal').addEventListener('click', function() {
+                    document.getElementById('out-vehicle-modal').style.display = 'none';
+                });
+
+
+                }
+                </script>
+
+
     <script>
+
+
         document.getElementById('add_box').addEventListener('click', function() {
             document.getElementById('add-vehicle-modal').style.display = 'flex';
         });
@@ -248,19 +274,23 @@ color:#48752C;
             document.getElementById('add-vehicle-modal').style.display = 'none';
         });
 
+
+        // checkout
+        document.getElementById('close-modal-out').addEventListener('click', function() {
+            document.getElementById('out-vehicle-modal').style.display = 'none';
+        });
+
     
         window.onclick = function(event) {
             if (event.target == document.getElementById('add-vehicle-modal')) {
                 document.getElementById('add-vehicle-modal').style.display = 'none';
             }
         }
+      
 
-        document.getElementById('get-time').addEventListener('click', function() {
-            const now = new Date();
-            const hours = String(now.getHours()).padStart(2, '0');
-            const minutes = String(now.getMinutes()).padStart(2, '0');
-            document.getElementById('in').value = `${hours}:${minutes}`;
-        });
     </script>
+
+
+
 </body>
 </html>
