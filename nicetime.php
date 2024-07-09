@@ -5,6 +5,8 @@
 // Borrowed from http://us.php.net/manual/en/function.time.php#89415
 function NiceTime($date)
 {
+    date_default_timezone_set('America/Denver');
+
     if (empty($date)) {
         return "";
     }

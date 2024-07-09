@@ -5,6 +5,7 @@ $password = "";
 $dbname = "mydb";
 
 $conn = new mysqli($servername, $username, $password, $dbname);
+date_default_timezone_set('America/Mexico_City');
 
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
@@ -12,7 +13,7 @@ if ($conn->connect_error) {
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $vehicle_type = $_POST['vehicle_type'];
-    $license_plate = $_POST['license_plate'];
+    $ticket = $_POST['ticket'];
     $time = $_POST['in'];
 
       // Get current date
@@ -22,8 +23,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
       $time_in = $date . ' ' . $time;
 
     // Prepared statement to prevent SQL injection
-    $stmt = $conn->prepare("INSERT INTO vehicles (vehicle_type, ticket, time_in) VALUES (?, ?, ?)");
-    $stmt->bind_param("sss", $vehicle_type, $license_plate, $time_in);
+    $stmt = $conn->prepare("INSERT INTO log_in (vehicle_type, ticket, time_in) VALUES (?, ?, ?)");
+    $stmt->bind_param("sss", $vehicle_type, $ticket, $time_in);
 
     if ($stmt->execute() === TRUE) {
         header("Location: index.php");

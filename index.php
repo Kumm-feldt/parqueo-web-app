@@ -13,7 +13,7 @@ if ($conn->connect_error) {
 }
 
 // Fetch data from the database
-$sql = "SELECT vehicle_type, ticket, time_in FROM vehicles";
+$sql = "SELECT * FROM log_in";
 $result = $conn->query($sql);
 
 $data = [];
@@ -124,12 +124,12 @@ color:#48752C;
             <tbody>
                 <?php foreach ($data as $row): ?>
                     
-                    <tr class="vehicle-row" id='<?php echo htmlspecialchars($row["id"]); ?>' onclick="getDataFromRow(this)">
+                    <tr class="vehicle-row" id="<?php echo htmlspecialchars($row['id']); ?>" onclick="getDataFromRow(this)">
                     <td><?php echo htmlspecialchars($row['vehicle_type']); ?></td>
                             <td><?php echo htmlspecialchars($row['ticket']); ?></td>
-
                             <td><?php echo htmlspecialchars($row['time_in']); ?></td>
                             <td><?php echo NiceTime($row["time_in"]); ?></td>
+
                           
                     </tr>
                  
@@ -163,8 +163,8 @@ color:#48752C;
                         <option value="motorcycle">Motocicleta</option>
                     </select>
                     <br><br>
-                    <label for="license_plate">Numero de ticket:</label>
-                    <input type="text" name="license_plate" id="ticket" required><br><br>
+                    <label for="tikcet">Numero de ticket:</label>
+                    <input type="text" name="ticket" id="ticket" required><br><br>
                     <div class="button-time-div">
                     <label for="in">Hora de Ingreso:</label>
                      <input type="time" name="in" id="in" required>
@@ -233,10 +233,10 @@ color:#48752C;
                        // Calculate duration and price
                     var duration = calculateDuration(timeIn);
                     var price = calculatePrice(duration, vehicleType);
-                    // Set hidden input field value
-                    var id = row.id; // Use the row's id as the ticket ID
+               
                       // Set hidden input field value
-                    document.getElementById("hidden-ticket").value = id;
+                    
+                    document.getElementById("hidden-ticket").value = row.id;
                     document.getElementById("hidden-charge").value = price;
                     document.getElementById("hidden-out").value = duration;
 
