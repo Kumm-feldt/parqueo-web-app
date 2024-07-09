@@ -13,7 +13,7 @@ if ($conn->connect_error) {
 }
 
 // Fetch data from the database
-$sql = "SELECT * FROM log_in";
+$sql = "SELECT * FROM log_out";
 $result = $conn->query($sql);
 
 $data = [];
@@ -23,45 +23,37 @@ if ($result->num_rows > 0) {
     }
 }
 
-function calculateDuration($time_in) {
-    $time_in = new DateTime($time_in);
-    $now = new DateTime();
-    $diff = $now->diff($time_in);
-    return $diff;
+function calculateDuration($time_in, $time_out) {
+    $time_in_dt = new DateTime($time_in);
+    $time_out_dt = new DateTime($time_out);
+    $diff = $time_out_dt->diff($time_in_dt);
+
+    // Format the duration into a readable string
+    $hours = $diff->h + ($diff->days * 24);
+    $minutes = $diff->i;
+
+    return "$hours hours and $minutes minutes";
 }
 
-function calculatePrice($duration) {
-    // Calculate price based on duration (6Q per 30 minutes)
-    $hours = $duration->h;
-    $minutes = $duration->i;
-    $total_minutes = $hours * 60 + $minutes;
-    $type = $result->fetch_assoc();
-    if($type["vehicle_type"] == "car"){
-        $price = ceil($total_minutes / 30) * 6; // Round up to the nearest 30 minutes
-    }else{
-    $price = ceil($total_minutes / 30) * 5; // Round up to the nearest 30 minutes
 
-    }
-    return $price;
-}
+
+
 function calculateTime($logInTime){
+    // Convert the given time to a DateTime object
+    $logInDateTime = new DateTime($logInTime);
 
+    // Get the current time as a DateTime object
+    $currentDateTime = new DateTime();
 
-// Convert the given time to a DateTime object
-$logInDateTime = new DateTime($logInTime);
+    // Calculate the difference between the two DateTime objects
+    $interval = $currentDateTime->diff($logInDateTime);
 
-// Get the current time as a DateTime object
-$currentDateTime = new DateTime();
+    // Get the difference in hours and minutes
+    $hours = $interval->h + ($interval->days * 24);
+    $minutes = $interval->i;
 
-// Calculate the difference between the two DateTime objects
-$interval = $currentDateTime->diff($logInDateTime);
-
-// Get the difference in hours and minutes
-$hours = $interval->h + ($interval->days * 24);
-$minutes = $interval->i;
-
-// Display the difference in a human-readable format
-return "$hours hora" . ($hours != 1 ? 's' : '') . " y $minutes minuto" . ($minutes != 1 ? 's' : '') . ".";
+    // Display the difference in a human-readable format
+    return "$hours hora" . ($hours != 1 ? 's' : '') . " y $minutes minuto" . ($minutes != 1 ? 's' : '') . ".";
 
 }
 
@@ -136,20 +128,24 @@ color:#48752C;
                 <tr class="tr-headers">
                     <th>Vehiculo</th>
                     <th>Ticket</th>
-
-                    <th>Tiempo de entrada</th>
+                    <th>Hora de entrada</th>
+                    <th>Hora de salida</th>
                     <th>Tiempo transcurrido</th>
+                    <th>Dinero Cobrado</th>
+
+
                 </tr>
             </thead>
             <tbody>
                 <?php foreach ($data as $row): ?>
                     
-                    <tr class="vehicle-row" id="<?php echo htmlspecialchars($row['id']); ?>" onclick="getDataFromRow(this)">
+                    <tr class="vehicle-row" id="<?php echo htmlspecialchars($row['id']); ?>">
                     <td><?php echo htmlspecialchars($row['vehicle_type']); ?></td>
                             <td><?php echo htmlspecialchars($row['ticket']); ?></td>
                             <td><?php echo htmlspecialchars($row['time_in']); ?></td>
-                            <td><span id="timeDifference_<?php echo $row['id']; ?>"></span></td>
-
+                            <td><?php echo htmlspecialchars($row['time_out']); ?></td>
+                            <td><?php echo calculateDuration($row['time_in'], $row['time_out']) ?></td>
+                            <td><?php echo htmlspecialchars($row['charge']); ?></td>
                           
                     </tr>
                  
@@ -159,16 +155,14 @@ color:#48752C;
         </div>
         <div id="footer">
             <div class="img-send">
-                <button>
                 <img src="button.png" alt="send">
-                </button>
             </div>
             <div class="buttons">
-            <form action="previous.php" method="post">
-                <button type="submit" class="icon-button">
-                    <span class="material-symbols-outlined icon">history</span>
+                <button class="icon-button">
+                <a href="index.php"><span class="material-symbols-outlined">
+                home
+                </span></a>
                 </button>
-            </form>
                 <button class="icon-button" id="add_box">
                     <span class="material-symbols-outlined icon">add_box</span>
                 </button>
@@ -224,101 +218,15 @@ color:#48752C;
 
     </div>
     <script>
-    // Function to calculate and update time difference
-    function updateTimeDifference(rowId, timeIn) {
-        var timeInDate = new Date(timeIn);
-        var now = new Date();
-        var duration = new Date(now - timeInDate);
-        var hours = duration.getUTCHours();
-        var minutes = duration.getUTCMinutes();
-        var timeDifference = `${hours} hour${hours !== 1 ? 's' : ''} and ${minutes} minute${minutes !== 1 ? 's' : ''}`;
-
-        // Update the corresponding <span> or <div> element
-        document.getElementById(`timeDifference_${rowId}`).textContent = timeDifference;
-    }
-
-    // Function to periodically update time differences
-    function updateAllTimeDifferences() {
-        <?php foreach ($data as $row): ?>
-            updateTimeDifference(<?php echo $row['id']; ?>, '<?php echo $row['time_in']; ?>');
-        <?php endforeach; ?>
-    }
-
-    // Initial update when the page loads
-    updateAllTimeDifferences();
-
-    // Set interval to update every minute (adjust interval as needed)
-    setInterval(updateAllTimeDifferences, 30000); // 60000 milliseconds = 1 minute
-</script>
-
-                <script>
+  
 
 
-                      document.getElementById('get-time').addEventListener('click', function() {
-                    const now = new Date();
-                    const hours = String(now.getHours()).padStart(2, '0');
-                    const minutes = String(now.getMinutes()).padStart(2, '0');
-                    document.getElementById('in').value = `${hours}:${minutes}`;
-                });
-                    function calculateDuration(timeIn) {
-                    var timeInDate = new Date(timeIn);
-                    var now = new Date();
-                    var duration = new Date(now - timeInDate);
-                    var diff = {
-                        hours: duration.getUTCHours(),
-                        minutes: duration.getUTCMinutes()
-                    };
-                    return diff;
-                }
-
-                function calculatePrice(duration, vehicleType) {
-                    var totalMinutes = duration.hours * 60 + duration.minutes;
-                    var pricePer30Min = vehicleType === "car" ? 6 : 5;
-                    var price = Math.ceil(totalMinutes / 30) * pricePer30Min;
-                    return price;
-                }
-
-                function getDataFromRow(row) {
-                    // Retrieve the data from the row
-                    var vehicleType = row.cells[0].textContent;
-                    var ticket = row.cells[1].textContent;
-                    var timeIn = row.cells[2].textContent;
-                       // Calculate duration and price
-                    var duration = calculateDuration(timeIn);
-                    console.log(duration);
-                    var price = calculatePrice(duration, vehicleType);
-                    var durationFormatted = row.cells[3].textContent;
-                      // Set hidden input field value
-                    
-                    document.getElementById("hidden-ticket").value = row.id;
-                    document.getElementById("hidden-charge").value = price;
-                    document.getElementById("hidden-out").value = duration;
-
-                    var vehicleTypeGet = document.getElementById("out-vehicle-type");
-                    var ticketGet =  document.getElementById("out-ticket");
-                    var timeInGet =  document.getElementById("out-time-in");
-                    var durationGet =  document.getElementById("out-duration");
-                    var priceGet =  document.getElementById("out-price");
-
-                    vehicleTypeGet.innerText = vehicleType;
-                    ticketGet.innerText = ticket;
-                    timeInGet.innerText =  timeIn;
-                    durationGet.innerText =   durationFormatted;
-                    priceGet.innerText = "Q. "+ price+".00";
-                    
-                   
-                    document.getElementById('out-vehicle-modal').style.display = 'flex';
-                    document.getElementById('out-close-modal').addEventListener('click', function() {
-                    document.getElementById('out-vehicle-modal').style.display = 'none';
-                });
-
-
-                }
-                </script>
-
-
-    <script>
-
+document.getElementById('get-time').addEventListener('click', function() {
+const now = new Date();
+const hours = String(now.getHours()).padStart(2, '0');
+const minutes = String(now.getMinutes()).padStart(2, '0');
+document.getElementById('in').value = `${hours}:${minutes}`;
+});
 
         document.getElementById('add_box').addEventListener('click', function() {
             document.getElementById('add-vehicle-modal').style.display = 'flex';
@@ -340,8 +248,6 @@ color:#48752C;
                 document.getElementById('add-vehicle-modal').style.display = 'none';
             }
         }
-      
-
     </script>
 
 
