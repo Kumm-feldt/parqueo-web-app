@@ -15,12 +15,14 @@ if ($conn->connect_error) {
 // Fetch data from the database
 $sql = "SELECT * FROM log_out";
 $result = $conn->query($sql);
-
+$noData = false;
 $data = [];
 if ($result->num_rows > 0) {
     while($row = $result->fetch_assoc()) {
         $data[] = $row;
     }
+}else{
+$noData = true;
 }
 
 function calculateDuration($time_in, $time_out) {
@@ -120,7 +122,7 @@ color:#48752C;
         </style>
 </head>
 <body>
-    <h2 id="main-title">Sistema de parqueos</h2>
+    <h2 id="main-title">HISTORIAL EN TURNO ACTUAL</h2>
     <div class="wrapper">
         <div class="table">
          <table>
@@ -132,6 +134,8 @@ color:#48752C;
                     <th>Hora de salida</th>
                     <th>Tiempo transcurrido</th>
                     <th>Dinero Cobrado</th>
+                    <th>Turno</th>
+
 
 
                 </tr>
@@ -146,6 +150,8 @@ color:#48752C;
                             <td><?php echo htmlspecialchars($row['time_out']); ?></td>
                             <td><?php echo calculateDuration($row['time_in'], $row['time_out']) ?></td>
                             <td><?php echo htmlspecialchars($row['charge']); ?></td>
+                            <td><?php echo htmlspecialchars($row['person']); ?></td>
+
                           
                     </tr>
                  
@@ -154,9 +160,16 @@ color:#48752C;
         </table>
         </div>
         <div id="footer">
+        <?php if ($noData == false): ?>
             <div class="img-send">
-                <img src="button.png" alt="send">
+                <form action="export_excel.php" method="post" >
+                    <button class="img-button" type="submit" onclick="reloadPage()">
+                        <img src="button.png" alt="send">
+                    </button>
+                </form>
             </div>
+        <?php endif; ?>
+
             <div class="buttons">
                 <button class="icon-button">
                 <a href="index.php"><span class="material-symbols-outlined">
@@ -166,7 +179,7 @@ color:#48752C;
                 <button class="icon-button" id="add_box">
                     <span class="material-symbols-outlined icon">add_box</span>
                 </button>
-                <button class="icon-button">
+                <button class="icon-button" id="accountButton">
                     <span class="material-symbols-outlined icon">account_circle</span>
                 </button>
             </div>
@@ -177,8 +190,8 @@ color:#48752C;
                 <form method="post" action="log_vehicle.php">
                     <label for="vehicle_type">Tipo de vehiculo</label>
                     <select name="vehicle_type" id="vehicle_type">
-                        <option value="car">Carro</option>
-                        <option value="motorcycle">Motocicleta</option>
+                        <option value="carro">Carro</option>
+                        <option value="motocicleta">Motocicleta</option>
                     </select>
                     <br><br>
                     <label for="tikcet">Numero de ticket:</label>
@@ -194,7 +207,19 @@ color:#48752C;
             </div>
         </div>
 
-        <!-- -->
+        <!-- USER MODAL -->
+        <div id="userModal" class="modal">
+            <div class="modal-content">
+                <span class="close" id="closeUserModal">&times;</span>
+                <h2>User Information</h2>
+                <form id="userForm" action="set_user_name.php" method="post">
+                    <label for="userName">Name:</label>
+                    <input type="text" id="userName" name="userName" required><br><br>
+                    <button type="submit">Save</button>
+                </form>
+                <p id="userStatus"></p>
+            </div>
+        </div>
         <!-- Checkout Modal -->
     <div id="out-vehicle-modal" class="out-modal">
         <div class="out-modal-content">
@@ -249,8 +274,49 @@ document.getElementById('in').value = `${hours}:${minutes}`;
             }
         }
     </script>
+<script>
+  // add user
+  document.getElementById('accountButton').addEventListener('click', function() {
+        document.getElementById('userModal').style.display = 'block';
+    });
 
+    document.getElementById('closeUserModal').addEventListener('click', function() {
+        document.getElementById('userModal').style.display = 'none';
+    });
 
+    window.onclick = function(event) {
+        if (event.target == document.getElementById('userModal')) {
+            document.getElementById('userModal').style.display = 'none';
+        }
+    }
+
+    // Check if user is logged in
+    fetch('check_user_logged_in.php')
+        .then(response => response.json())
+        .then(data => {
+            if (!data.loggedIn) {
+                document.getElementById('userModal').style.display = 'block';
+                document.getElementById('userStatus').innerText = 'No user logged in. Please enter your name.';
+            } else {
+                document.getElementById('userStatus').innerText = 'Logged in as: ' + data.userName;
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    </script>
+<script>
+     async function reloadPage() {
+
+        // Wait for 10 seconds asynchronously
+        await new Promise(resolve => setTimeout(resolve, 4000));
+
+        // After waiting, reload the page
+        window.location.reload();
+        alert("Enviado Correctamente");
+
+    }
+    </script>
 
 </body>
 </html>

@@ -36,7 +36,7 @@ function calculatePrice($duration) {
     $minutes = $duration->i;
     $total_minutes = $hours * 60 + $minutes;
     $type = $result->fetch_assoc();
-    if($type["vehicle_type"] == "car"){
+    if($type["vehicle_type"] == "carro"){
         $price = ceil($total_minutes / 30) * 6; // Round up to the nearest 30 minutes
     }else{
     $price = ceil($total_minutes / 30) * 5; // Round up to the nearest 30 minutes
@@ -128,7 +128,7 @@ color:#48752C;
         </style>
 </head>
 <body>
-    <h2 id="main-title">Sistema de parqueos</h2>
+    <h2 id="main-title">INICIO:Sistema de parqueos</h2>
     <div class="wrapper">
         <div class="table">
          <table>
@@ -158,11 +158,7 @@ color:#48752C;
         </table>
         </div>
         <div id="footer">
-            <div class="img-send">
-                <button>
-                <img src="button.png" alt="send">
-                </button>
-            </div>
+           
             <div class="buttons">
             <form action="previous.php" method="post">
                 <button type="submit" class="icon-button">
@@ -172,19 +168,32 @@ color:#48752C;
                 <button class="icon-button" id="add_box">
                     <span class="material-symbols-outlined icon">add_box</span>
                 </button>
-                <button class="icon-button">
+                <button class="icon-button" id="accountButton">
                     <span class="material-symbols-outlined icon">account_circle</span>
                 </button>
             </div>
         </div>
+        <div id="userModal" class="modal">
+            <div class="modal-content">
+                <span class="close" id="closeUserModal">&times;</span>
+                <h2>Informacion de Turnos</h2>
+                <form id="userForm" action="set_user_name.php" method="post">
+                    <label for="userName">Nombre:</label>
+                    <input type="text" id="userName" name="userName" required><br><br>
+                    <button type="submit">GUARDAR</button>
+                </form>
+                <p id="userStatus"></p>
+            </div>
+        </div>
+
         <div id="add-vehicle-modal" class="modal">
             <div class="modal-content">
                 <span class="close" id="close-modal">&times;</span>
                 <form method="post" action="log_vehicle.php">
                     <label for="vehicle_type">Tipo de vehiculo</label>
                     <select name="vehicle_type" id="vehicle_type">
-                        <option value="car">Carro</option>
-                        <option value="motorcycle">Motocicleta</option>
+                        <option value="carro">Carro</option>
+                        <option value="motocicleta">Motocicleta</option>
                     </select>
                     <br><br>
                     <label for="tikcet">Numero de ticket:</label>
@@ -273,7 +282,7 @@ color:#48752C;
 
                 function calculatePrice(duration, vehicleType) {
                     var totalMinutes = duration.hours * 60 + duration.minutes;
-                    var pricePer30Min = vehicleType === "car" ? 6 : 5;
+                    var pricePer30Min = vehicleType === "carro" ? 6 : 5;
                     var price = Math.ceil(totalMinutes / 30) * pricePer30Min;
                     return price;
                 }
@@ -340,9 +349,43 @@ color:#48752C;
                 document.getElementById('add-vehicle-modal').style.display = 'none';
             }
         }
+
+      
+</script>
+<script>
+  // add user
+  document.getElementById('accountButton').addEventListener('click', function() {
+        document.getElementById('userModal').style.display = 'block';
+    });
+
+    document.getElementById('closeUserModal').addEventListener('click', function() {
+        document.getElementById('userModal').style.display = 'none';
+    });
+
+    window.onclick = function(event) {
+        if (event.target == document.getElementById('userModal')) {
+            document.getElementById('userModal').style.display = 'none';
+        }
+    }
+
+    // Check if user is logged in
+    fetch('check_user_logged_in.php')
+        .then(response => response.json())
+        .then(data => {
+            if (!data.loggedIn) {
+                document.getElementById('userModal').style.display = 'block';
+                document.getElementById('userStatus').innerText = 'No user logged in. Please enter your name.';
+            } else {
+                document.getElementById('userStatus').innerText = 'Logged in as: ' + data.userName;
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    </script>
+
       
 
-    </script>
 
 
 

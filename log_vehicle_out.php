@@ -1,10 +1,22 @@
 <?php
+session_start();
+
 $servername = "localhost";
 $username = "root";
 $password = "";
 $dbname = "mydb";
 
-date_default_timezone_set('America/Mexico_City');
+date_default_timezone_set('America/Denver');
+
+
+if (isset($_SESSION['userName'])) {
+    $user = $_SESSION['userName'];
+} else {
+    echo "Error enviando datos, no hay persona registrada: " . $stmt->error;
+}
+
+
+
 
 $conn = new mysqli($servername, $username, $password, $dbname);
 
@@ -16,13 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     $id = $_POST['ticket_id'];
     $charge = $_POST['charge'];
-    $time = $_POST['out'];  // Assuming 'out' contains the time part
-
-    // Get current date
-    $date = date('Y-m-d');
-
-    // Combine current date and input time
-    $time_out = $date . ' ' . $time;
+    $time_out = date('Y-m-d H:i:s', time());
 
     // Retrieve log_in_id from the log_in table using the ticket_id
     $stmt = $conn->prepare("SELECT vehicle_type, time_in, ticket FROM log_in WHERE id = ? ORDER BY time_in DESC LIMIT 1");
@@ -37,11 +43,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     if ($ticket) {
         // Insert into log_out table
-        $stmt = $conn->prepare("INSERT INTO log_out (log_in_id, vehicle_type, ticket, time_in, time_out, charge) VALUES (?, ?, ?, ?, ?, ?)");
+        $stmt = $conn->prepare("INSERT INTO log_out (log_in_id, vehicle_type, ticket, time_in, time_out, charge, person) VALUES (?,?, ?, ?, ?, ?, ?)");
         if ($stmt === false) {
             die("Prepare failed: " . htmlspecialchars($conn->error));
         }
-        $stmt->bind_param("issssi", $id, $vehicle_type, $ticket, $time_in, $time_out, $charge);
+        $stmt->bind_param("issssis", $id, $vehicle_type, $ticket, $time_in, $time_out, $charge, $user);
 
         if ($stmt->execute() === TRUE) {
             // Delete entry from log_in table

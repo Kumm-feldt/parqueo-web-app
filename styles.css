@@ -5,27 +5,32 @@
     font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif;
     }
   
-  body {
-    font-size: 14px;
+    html, body {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
   }
-  
+
   #main-title {
     font-size: 18px;
     text-align: center;
     margin: 20px 0;
   }
   
-  .wrapper {
-    display: flex;
-    flex-direction: column;
-    justify-content: baseline;
-    height: 90vh;
-    align-items: center;
-  }
-  
-  .table {
-    height: 90%;
-  }
+ 
+.wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+
+.table {
+    flex: 1;
+    width: 90%;
+    overflow-y: auto;
+}
   
   #footer {
     width: 90%;
@@ -42,35 +47,46 @@
     border-collapse: collapse;
   }
   
+/* Zebra striping */
+tr:nth-of-type(odd) { 
+	background: #eee; 
+	}
+
+th { 
+	background: #323232; 
+	color: white; 
+	font-weight: bold; 
+	}
+
+td, th { 
+	text-align: left; 
+	font-size: 16px;
+	}
+
+
   .table table {
     width: 100%;
-    border: 1px solid #ddd;
     font-family: Arial, sans-serif;
   }
-  
-  .table th, .table td {
-    border: 1px solid #ddd;
+  .table td {
     padding: 8px;
     text-align: left;
   }
   
   .tr-headers th {
-    background-color: #f2f2f2;
-    color: black;
+
     font-weight: bold;
   }
   
   .table th {
-    padding-top: 12px;
-    padding-bottom: 12px;
+    padding: 12px 8px;
     text-align: center;
   }
   
-  .table tr:nth-child(even) {
-    background-color: #f9f9f9;
-  }
-  
+
   .table tr:hover {
+    cursor: pointer;
+
     background-color: #ddd;
   }
   /*------------ img ------------*/
@@ -80,7 +96,9 @@
   }
 
   /* Buttons Styles */
-  .buttons {
+  .buttons, .img-button {
+    cursor: pointer;
+
     margin: 20px 0;
     display: flex;
     justify-content: center;
@@ -112,7 +130,7 @@
 
 
 /*--------------- POP UP STYLES ----------------- */
-.modal {
+.modal{
   display: none;
   position: fixed;
   z-index: 1;
@@ -144,7 +162,7 @@
   to {opacity: 1;}
 }
 
-.close, .out-close {
+.close, .out-close{
   color: red;
   float: right;
   font-size: 35px;
@@ -264,18 +282,17 @@ padding: 5px 5px;
   /* Tablets */
   @media only screen and (max-width: 860px) {
    
-    body {
-      color: red;
+    td, th  {
       font-size: 14px;
     }
   
     #main-title {
-      font-size: 16px;
+      font-size: 18px;
       margin: 15px 0;
     }
   
     .table {
-      width: 95%;
+      width: 100%;
     }
   
     .icon {
@@ -289,8 +306,7 @@ padding: 5px 5px;
   @media only screen and (max-width: 600px) {
 
     #main-title {
-      font-size: 14px;
-      color: blue;
+      font-size: 16px;
     }
     .table th, .table td {
       font-size: 12px;
