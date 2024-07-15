@@ -206,7 +206,7 @@ color:#48752C;
                         <option value="motocicleta">Motocicleta</option>
                     </select>
                     <br><br>
-                    <label for="tikcet">Numero de ticket:</label>
+                    <label for="ticket">Numero de ticket:</label>
                     <input type="text" name="ticket" id="ticket" required><br><br>
                     <div class="button-time-div">
                     <label for="in">Hora de Ingreso:</label>

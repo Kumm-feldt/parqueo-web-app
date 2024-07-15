@@ -86,23 +86,8 @@ color:#48752C;
     <h2 id="main-title">INICIO:Sistema de parqueos</h2>
     <div class="wrapper">
       
-        <div id="footer">
-           
-            <div class="buttons">
-            <form action="previous.php" method="post">
-                <button type="submit" class="icon-button">
-                    <span class="material-symbols-outlined icon" style="color: black;">history</span>
-                </button>
-            </form>
-                <button class="icon-button" id="add_box">
-                    <span class="material-symbols-outlined icon">add_box</span>
-                </button>
-                <button class="icon-button" id="accountButton">
-                    <span class="material-symbols-outlined icon">account_circle</span>
-                </button>
-            </div>
-        </div>
-        <div id="userModal" class="modal">
+       
+        <div id="userModal" class="modal" >
             <div class="modal-content">
             <span class="close" id="closeUserModal">&times;</span>
 
@@ -116,10 +101,11 @@ color:#48752C;
             </div>
         </div>
 
-        <div id="add-vehicle-modal" class="modal">
+        <div id="add-vehicle-modal" class="modal show-modal" style="display:flex;">
             <div class="modal-content">
-                <span class="close" id="close-modal">&times;</span>
                 <form method="post" action="log_vehicle_out.php">
+                 <input type="hidden" id="hidden-charge" name="charge">
+
                     <label for="vehicle_type">Tipo de vehiculo</label>
                     <select name="vehicle_type" id="vehicle_type">
                         <option value="carro">Carro</option>
@@ -131,28 +117,43 @@ color:#48752C;
                    
 
                     <div class="button-time-div">
-                    <label for="in">Hora de Ingreso:</label>
+                    <label for="in">Hora de Ingreso:</label><br>
                      <input type="time" name="in" id="in" required>
                     </div>
-                    <div class="button-time-div">
-                    <label for="out">Hora de Salida:</label>
+
+                    <div class="button-time-div time-out-div">
+                    <label for="out">Hora de Salida:</label><br>
                         <input type="time" name="out" id="out-log" required>
                     </div>
+
                     <div id="calculate">Calcular</div>
                     <br>
-                    <div id="hidden-table-price">
-                        <div class="time-div">
-                    <p>Tiempo Transcurrido:</p> <p id="out-duration"></p>
-                    </div>
-                    <div class="price-div">
-                    <p>Precio a Pagar:</p><p id="out-price"> </p>
-                    </div>    
-                </div>
+                    <table id="hidden-table-price">
+                        <tr class="time-div">
+                    <th>Tiempo Transcurrido:</th> <td id="out-duration"></td>
+                      </tr>
+                    <tr class="price-div">
+                    <th>Precio a Pagar:</th><td id="out-price"> </td>
+                    </tr>    
+                    </table>
                     <button type="submit">INGRESAR</button>
                 </form>
             </div>
         </div>
-
+        <div id="footer">
+           
+           <div class="buttons">
+           <form action="previous.php" method="post">
+               <button type="submit" class="icon-button">
+                   <span class="material-symbols-outlined icon" style="color: black;">history</span>
+               </button>
+           </form>
+           
+               <button class="icon-button" id="accountButton">
+                   <span class="material-symbols-outlined icon">account_circle</span>
+               </button>
+           </div>
+       </div>
   
     </div>
          <script>
@@ -247,23 +248,6 @@ color:#48752C;
                 </script>
 
 
-<script>
-    // ADD VEHICLE
-        document.getElementById('add_box').addEventListener('click', function() {
-            document.getElementById('add-vehicle-modal').style.display = 'flex';
-        });
-
-        document.getElementById('close-modal').addEventListener('click', function() {
-            document.getElementById('add-vehicle-modal').style.display = 'none';
-        });
-   
-        window.onclick = function(event) {
-            if (event.target == document.getElementById('add-vehicle-modal')) {
-                document.getElementById('add-vehicle-modal').style.display = 'none';
-            }
-        }
-
-</script>
 
 <script>
   // USER CHECK

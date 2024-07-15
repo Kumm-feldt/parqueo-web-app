@@ -29,27 +29,18 @@ if ($conn->connect_error) {
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
-    $id = $_POST['ticket_id'];
+    $ticket = $_POST['ticket'];
     $charge = $_POST['charge'];
-    $time = $_POST['out'];
-    error_log($time);
+    $time_in_get =  $_POST['in'];
+    $time_out_get = $_POST['out'];
+    $vehicle_type = $_POST['vehicle_type'];
     // Get current date
     $date = date('Y-m-d');
 
     // Combine current date and input time
-    $time_out = $date . ' ' . $time;
+    $time_in = $date . ' ' . $time_in_get;
+    $time_out = $date . ' ' . $time_out_get;
     
-
-    // Retrieve log_in_id from the log_in table using the ticket_id
-    $stmt = $conn->prepare("SELECT vehicle_type, time_in, ticket FROM log_in WHERE id = ? ORDER BY time_in DESC LIMIT 1");
-    if ($stmt === false) {
-        die("Prepare failed: " . htmlspecialchars($conn->error));
-    }
-    $stmt->bind_param("i", $id);
-    $stmt->execute();
-    $stmt->bind_result($vehicle_type, $time_in, $ticket);
-    $stmt->fetch();
-    $stmt->close();
 
     if ($ticket) {
         // Insert into log_out table
@@ -57,21 +48,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if ($stmt === false) {
             die("Prepare failed: " . htmlspecialchars($conn->error));
         }
-        $stmt->bind_param("issssis", $id, $vehicle_type, $ticket, $time_in, $time_out, $charge, $user);
+        $stmt->bind_param("issssis", $ticket, $vehicle_type, $ticket, $time_in, $time_out, $charge, $user);
 
         if ($stmt->execute() === TRUE) {
-            // Delete entry from log_in table
-            $stmt_d = $conn->prepare("DELETE FROM log_in WHERE id = ?");
-            if ($stmt_d === false) {
-                die("Prepare failed: " . htmlspecialchars($conn->error));
-            }
-            $stmt_d->bind_param("i", $id);
-            $stmt_d->execute();
-            $stmt_d->close();
-
             header("Location: index.php");
         } else {
-            echo "Error inserting into log_out: " . $stmt->error;
+            echo "Error insertando: " . $stmt->error;
         }
         $stmt->close();
     } else {
