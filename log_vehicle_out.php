@@ -1,11 +1,15 @@
 <?php
 session_start();
 
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "mydb";
 
+$username = "u659703897_localhost";
+$password = "DT+xgyc|7";
+$dbname = "u659703897_mydb";
+
+// $servername = "localhost";
+//$username = "root";
+//$password = "";
+//$dbname = "mydb";
 date_default_timezone_set('America/Denver');
 
 
@@ -28,7 +32,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     $id = $_POST['ticket_id'];
     $charge = $_POST['charge'];
-    $time_out = date('Y-m-d H:i:s', time());
+    $time = $_POST['out'];
+    error_log($time);
+    // Get current date
+    $date = date('Y-m-d');
+
+    // Combine current date and input time
+    $time_out = $date . ' ' . $time;
+    
 
     // Retrieve log_in_id from the log_in table using the ticket_id
     $stmt = $conn->prepare("SELECT vehicle_type, time_in, ticket FROM log_in WHERE id = ? ORDER BY time_in DESC LIMIT 1");

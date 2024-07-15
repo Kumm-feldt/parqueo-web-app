@@ -1,11 +1,25 @@
 <?php
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "mydb";
+session_start();
+
+$username = "u659703897_localhost";
+$password = "DT+xgyc|7";
+$dbname = "u659703897_mydb";
+
+// $servername = "localhost";
+//$username = "root";
+//$password = "";
+//$dbname = "mydb";
 
 $conn = new mysqli($servername, $username, $password, $dbname);
-date_default_timezone_set('America/Mexico_City');
+date_default_timezone_set('America/Denver');
+
+
+if (!isset($_SESSION['userName']) or trim($_SESSION['userName']) == "") { 
+
+header("Location: index.php");
+
+}else{
+    
 
 // Check connection
 if ($conn->connect_error) {
@@ -88,4 +102,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 }
 
 $conn->close();
+
+}
+
+
 ?>

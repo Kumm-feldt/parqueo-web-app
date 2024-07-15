@@ -1,14 +1,21 @@
 <?php
+session_start();
+
 require 'vendor/autoload.php';
 
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
 
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "mydb";
+$username = "u659703897_localhost";
+$password = "DT+xgyc|7";
+$dbname = "u659703897_mydb";
 
+// $servername = "localhost";
+//$username = "root";
+//$password = "";
+//$dbname = "mydb";
 $conn = new mysqli($servername, $username, $password, $dbname);
 
 if ($conn->connect_error) {
@@ -46,23 +53,9 @@ if ($result->num_rows > 0) {
 }
 
 // Save the Excel file to a temporary location
-$tempFile = tempnam(sys_get_temp_dir(), 'data');
+$tempFile = tempnam(sys_get_temp_dir(), 'data') . '.xlsx';
 $writer = new Xlsx($spreadsheet);
 $writer->save($tempFile);
-
-// Send headers to force download
-header('Content-Description: File Transfer');
-header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-header('Content-Disposition: attachment; filename="datos-' . $date . '.xlsx"');
-header('Content-Transfer-Encoding: binary');
-header('Expires: 0');
-header('Cache-Control: must-revalidate');
-header('Pragma: public');
-header('Content-Length: ' . filesize($tempFile));
-readfile($tempFile);
-
-// Clean up the temporary file
-unlink($tempFile);
 
 // SQL statement to insert all data from log_out into log_out_copy
 $sql_insert = "INSERT INTO total_log_out SELECT * FROM log_out";
@@ -80,4 +73,47 @@ if ($conn->query($sql_insert) === TRUE) {
 }
 
 $conn->close();
+
+// Now send the email with the Excel attachment using PHPMailer
+$mail = new PHPMailer(true);
+
+try {
+    $mail = new PHPMailer;
+    $mail->isSMTP();
+    $mail->SMTPDebug = 0;
+    $mail->Host = 'smtp.hostinger.com';
+    $mail->Port = 587;
+    $mail->SMTPAuth = true;
+    $mail->Username = 'updates@amiparqueo.com';
+    $mail->Password = 'jhkalmi85!A'; 
+    
+    $mail->addReplyTo('updates@amiparqueo.com', 'amiparqueo.com'); // correo creado en hostinger
+    $mail->addAddress('mercadeo@realdelparque.com', 'Mercadeo');
+    $mail->setFrom('updates@amiparqueo.com', 'amiparqueo.com');
+    
+
+    // Attachments
+    $mail->addAttachment($tempFile, 'Data de Vehiculos.xlsx'); // Add attachments
+
+    // Content
+    $mail->isHTML(true); // Set email format to HTML
+    $mail->Subject = 'Data de Vehiculos';
+    $mail->Body    = 'Los datos de tu parqueo estan disponibles. Adjunto encontraras un archivo excel para visualizar';
+    $mail->AltBody = 'Los datos de tu parqueo estan disponibles. Adjunto encontraras un archivo excel para visualizar';
+
+    $mail->send();
+    echo 'Mensaje enviado';
+} catch (Exception $e) {
+    echo "Mensaje no pudo ser enviado. Mailer Error: {$mail->ErrorInfo}";
+}
+// Destroy the current session
+session_unset(); // Unset all session variables
+session_destroy(); // Destroy the session
+
+
+
+// Clean up temporary file
+unlink($tempFile);
+header("Location: index.php");
+
 ?>

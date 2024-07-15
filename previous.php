@@ -1,10 +1,15 @@
 <?php
     date_default_timezone_set('America/Denver');
+    session_start();
 
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "mydb";
+    $username = "u659703897_localhost";
+    $password = "DT+xgyc|7";
+    $dbname = "u659703897_mydb";
+
+   // $servername = "localhost";
+    //$username = "root";
+    //$password = "";
+    //$dbname = "mydb";
 
 $conn = new mysqli($servername, $username, $password, $dbname);
 
@@ -68,6 +73,8 @@ $conn->close();
     <title>Sistema Parqueo</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <link rel="stylesheet" href="styles.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
     <style>
         .material-symbols-outlined {
             font-variation-settings:
@@ -172,7 +179,7 @@ color:#48752C;
 
             <div class="buttons">
                 <button class="icon-button">
-                <a href="index.php"><span class="material-symbols-outlined">
+                <a href="index.php"><span class="material-symbols-outlined icon">
                 home
                 </span></a>
                 </button>
@@ -210,12 +217,13 @@ color:#48752C;
         <!-- USER MODAL -->
         <div id="userModal" class="modal">
             <div class="modal-content">
-                <span class="close" id="closeUserModal">&times;</span>
-                <h2>User Information</h2>
+            <span class="close" id="closeUserModal">&times;</span>
+
+                <h2>Informacion de turnos</h2>
                 <form id="userForm" action="set_user_name.php" method="post">
-                    <label for="userName">Name:</label>
+                    <label for="userName">Nombre:</label>
                     <input type="text" id="userName" name="userName" required><br><br>
-                    <button type="submit">Save</button>
+                    <button type="submit">Guardar</button>
                 </form>
                 <p id="userStatus"></p>
             </div>
@@ -281,7 +289,16 @@ document.getElementById('in').value = `${hours}:${minutes}`;
     });
 
     document.getElementById('closeUserModal').addEventListener('click', function() {
+        fetch('check_user_logged_in.php')
+                .then(response => response.json())
+                .then(data => {
+                    if (!data.loggedIn) {
+
+                    }else{
         document.getElementById('userModal').style.display = 'none';
+
+                }})
+            
     });
 
     window.onclick = function(event) {
@@ -290,19 +307,21 @@ document.getElementById('in').value = `${hours}:${minutes}`;
         }
     }
 
-    // Check if user is logged in
-    fetch('check_user_logged_in.php')
-        .then(response => response.json())
-        .then(data => {
-            if (!data.loggedIn) {
-                document.getElementById('userModal').style.display = 'block';
-                document.getElementById('userStatus').innerText = 'No user logged in. Please enter your name.';
-            } else {
-                document.getElementById('userStatus').innerText = 'Logged in as: ' + data.userName;
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
+    document.addEventListener('DOMContentLoaded', function() {
+            // Check if user is logged in
+            fetch('check_user_logged_in.php')
+                .then(response => response.json())
+                .then(data => {
+                    if (!data.loggedIn) {
+                        document.getElementById('userModal').style.display = 'block';
+                        document.getElementById('userStatus').innerText = 'No hay turno ingresado. Ingrese su nombre.';
+                    } else {
+                        document.getElementById('userStatus').innerText = 'Turno: ' + data.userName;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
         });
     </script>
 <script>
