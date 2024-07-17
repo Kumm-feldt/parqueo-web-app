@@ -1,25 +1,22 @@
 <?php
 session_start();
 
-  //$username = "u659703897_localhost";
-    //$password = "DT+xgyc|7";
-    //$dbname = "u659703897_mydb";
+$username = "u659703897_localhost";
+$password = "DT+xgyc|7";
+$dbname = "u659703897_mydb";
 
-    $servername = "localhost";
-    $username = "root";
-    $password = "";
-    $dbname = "mydb";
+//  $servername = "localhost";
+//  $username = "root";
+// $password = "";
+// $dbname = "mydb";
 date_default_timezone_set('America/Denver');
 
 
-if (isset($_SESSION['userName'])) {
-    $user = $_SESSION['userName'];
-} else {
-    echo "Error enviando datos, no hay persona registrada: " . $stmt->error;
-}
+if (!isset($_SESSION['userName']) or trim($_SESSION['userName']) == "") { 
 
-
-
+    header("Location: index.php");
+    
+    }else{
 
 $conn = new mysqli($servername, $username, $password, $dbname);
 
@@ -35,6 +32,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $vehicle_type = $_POST['vehicle_type'];
     $park_type = $_POST['tipo_parqueo'];
 
+    $user = $_SESSION['userName'];
+    
       // Get current date
       $date = date('Y-m-d');
 
@@ -76,4 +75,5 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 }
 
 $conn->close();
+}
 ?>

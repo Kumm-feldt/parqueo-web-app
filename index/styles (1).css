@@ -130,7 +130,6 @@ td, th {
 
 
 /*--------------- POP UP STYLES ----------------- */
-
 .modal{
   display: none;
   position: fixed;
@@ -158,7 +157,6 @@ td, th {
   font-family: Arial, sans-serif;
 }
 
-
 @keyframes fadeIn {
   from {opacity: 0;}
   to {opacity: 1;}
@@ -180,7 +178,7 @@ td, th {
   cursor: pointer;
 }
 
-#in, #out-log{
+#in{
   width: 70%;
 }
 .get-time-button {
@@ -277,14 +275,8 @@ padding: 5px 5px;
   color: #333333;
 }
 
-.time-out-div{
-  padding-top: 30px;
-}
 
   
-
-
-
   /* Media Queries */
   
   /* Tablets */
@@ -310,7 +302,6 @@ padding: 5px 5px;
     .material-symbols-outlined {
       font-size: 28px; /* Adjust the size as needed */
             }
-
   }
   @media only screen and (max-width: 600px) {
 
@@ -324,7 +315,9 @@ padding: 5px 5px;
       display: flex;
       flex-direction: column;
     }
-   
+    #in{
+      width: 100%;
+    }
     .get-time-button {
  
       width: 100%;
@@ -333,8 +326,6 @@ padding: 5px 5px;
 .table {
   width: 95%;
 }
-
-
   }
 
 

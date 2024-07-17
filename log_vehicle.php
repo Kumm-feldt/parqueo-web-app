@@ -1,14 +1,14 @@
 <?php
 session_start();
 
-  //$username = "u659703897_localhost";
-    //$password = "DT+xgyc|7";
-    //$dbname = "u659703897_mydb";
+$username = "u659703897_localhost";
+$password = "DT+xgyc|7";
+$dbname = "u659703897_mydb";
 
-    $servername = "localhost";
-    $username = "root";
-    $password = "";
-    $dbname = "mydb";
+//  $servername = "localhost";
+//  $username = "root";
+// $password = "";
+// $dbname = "mydb";
 
 $conn = new mysqli($servername, $username, $password, $dbname);
 date_default_timezone_set('America/Denver');

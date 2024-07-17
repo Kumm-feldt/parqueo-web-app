@@ -4,15 +4,14 @@ session_start();
     date_default_timezone_set('America/Denver');
 
     
-    //$username = "u659703897_localhost";
-    //$password = "DT+xgyc|7";
-    //$dbname = "u659703897_mydb";
+    $username = "u659703897_localhost";
+    $password = "DT+xgyc|7";
+    $dbname = "u659703897_mydb";
 
-    $servername = "localhost";
-    $username = "root";
-    $password = "";
-    $dbname = "mydb";
-
+  //  $servername = "localhost";
+  //  $username = "root";
+   // $password = "";
+   // $dbname = "mydb";
 $conn = new mysqli($servername, $username, $password, $dbname);
 
 if ($conn->connect_error) {
@@ -80,6 +79,92 @@ if ($conn->connect_error) {
         .price-icon{
 color:#48752C;
         }    
+
+        
+.show-modal{
+  position: relative;
+  z-index: 0;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: white;
+
+  overflow: auto;
+  justify-content: center;
+  align-items: center;
+}
+
+.show-modal .modal-content{
+  border: 1px solid ;
+  background-color: rgba(255, 255, 255, 0.651);
+  box-shadow: none;
+}
+
+/* calculator table*/
+#hidden-table-price {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 25px 0;
+  font-size: 18px;
+  text-align: left;
+}
+
+#hidden-table-price th, 
+#hidden-table-price td {
+  padding: 12px 15px;
+}
+
+#hidden-table-price tr {
+  border-bottom: 1px solid #dddddd;
+}
+
+#hidden-table-price th {
+  background-color: #009879;
+  color: #ffffff;
+  width: 50%;
+}
+
+#hidden-table-price td {
+  background-color: #f3f3f3;
+}
+
+.time-div:hover, 
+.price-div:hover {
+  background-color: #f1f1f1;
+}
+
+#calculate {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  text-align: center;
+  
+}
+
+#calculate {
+  margin-top: 20px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+#calculate:hover {
+  background-color: #054d02;
+}
+#out-log{
+  width: 70%;
+}
+@media only screen and (max-width: 600px) {
+    #out-log, #in{
+      width: 90%;
+    }
+    .time-out-div{
+  padding-top: 0px;
+}
+}
+
+
         </style>
 </head>
 <body>
@@ -179,7 +264,7 @@ function toggleRequiredAttribute(enable) {
         }
     }
 
-    
+
     document.addEventListener('DOMContentLoaded', function () {
         const temporalRadio = document.getElementById('temporal');
         const eventoRadio = document.getElementById('evento');
