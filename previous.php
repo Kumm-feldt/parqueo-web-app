@@ -38,8 +38,14 @@ function calculateDuration($time_in, $time_out) {
     // Format the duration into a readable string
     $hours = $diff->h + ($diff->days * 24);
     $minutes = $diff->i;
+    if($hours == 0 and $minutes == 0){
+    return "-";
 
-    return "$hours horas y $minutes min";
+    }else{
+        return "$hours horas y $minutes min";
+
+    }
+
 }
 
 
@@ -142,6 +148,8 @@ color:#48752C;
                     <th>Tiempo transcurrido</th>
                     <th>Dinero Cobrado</th>
                     <th>Turno</th>
+                    <th>Tipo</th>
+
 
 
 
@@ -158,6 +166,8 @@ color:#48752C;
                             <td><?php echo calculateDuration($row['time_in'], $row['time_out']) ?></td>
                             <td><?php echo htmlspecialchars($row['charge']); ?></td>
                             <td><?php echo htmlspecialchars($row['person']); ?></td>
+                            <td><?php echo htmlspecialchars($row['park_type']); ?></td>
+
 
                           
                     </tr>
@@ -183,34 +193,10 @@ color:#48752C;
                 home
                 </span></a>
                 </button>
-                <button class="icon-button" id="add_box">
-                    <span class="material-symbols-outlined icon">add_box</span>
-                </button>
+              
                 <button class="icon-button" id="accountButton">
                     <span class="material-symbols-outlined icon">account_circle</span>
                 </button>
-            </div>
-        </div>
-        <div id="add-vehicle-modal" class="modal">
-            <div class="modal-content">
-                <span class="close" id="close-modal">&times;</span>
-                <form method="post" action="log_vehicle.php">
-                    <label for="vehicle_type">Tipo de vehiculo</label>
-                    <select name="vehicle_type" id="vehicle_type">
-                        <option value="carro">Carro</option>
-                        <option value="motocicleta">Motocicleta</option>
-                    </select>
-                    <br><br>
-                    <label for="tikcet">Numero de ticket:</label>
-                    <input type="text" name="ticket" id="ticket" required><br><br>
-                    <div class="button-time-div">
-                    <label for="in">Hora de Ingreso:</label>
-                     <input type="time" name="in" id="in" required>
-                     <button type="button" class="get-time-button" id="get-time">Get Current Time</button>
-                     </div>
-                    <br>
-                    <button type="submit">INGRESAR</button>
-                </form>
             </div>
         </div>
 

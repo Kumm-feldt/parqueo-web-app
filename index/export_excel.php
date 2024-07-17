@@ -25,8 +25,6 @@ if ($conn->connect_error) {
 $sql = "SELECT * FROM log_out";
 $result = $conn->query($sql);
 
-
-
 // Get current date
 $date = date('Y-m-d');
 
@@ -39,9 +37,7 @@ $sheet->setCellValue('A1', 'Ticket')
       ->setCellValue('C1', 'Hora de Ingreso')
       ->setCellValue('D1', 'Hora de Salida')
       ->setCellValue('E1', 'Total')
-      ->setCellValue('F1', 'Turno')
-      ->setCellValue('G1', 'Tipo');
-
+      ->setCellValue('F1', 'Turno');
 
 $row = 2;
 if ($result->num_rows > 0) {
@@ -51,9 +47,7 @@ if ($result->num_rows > 0) {
               ->setCellValue('C' . $row, $data['time_in'])
               ->setCellValue('D' . $row, $data['time_out'])
               ->setCellValue('E' . $row, $data['charge'])
-              ->setCellValue('F' . $row, $data['person'])
-              ->setCellValue('G' . $row, $data['park_type']);
-
+              ->setCellValue('F' . $row, $data['person']);
         $row++;
     }
 }
@@ -95,7 +89,6 @@ try {
     
     $mail->addReplyTo('updates@amiparqueo.com', 'amiparqueo.com'); // correo creado en hostinger
     $mail->addAddress('mercadeo@realdelparque.com', 'Mercadeo');
-    
     $mail->setFrom('updates@amiparqueo.com', 'amiparqueo.com');
     
 

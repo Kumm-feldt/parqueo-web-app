@@ -114,7 +114,14 @@ color:#48752C;
                     <br><br>
                     <label for="ticket">Numero de ticket:</label>
                     <input type="text" name="ticket" id="ticket" required><br><br>
-                   
+                   <div class="options-radio">
+                   <input type="radio" id="temporal" name="tipo_parqueo" value="Temporal" checked="checked">
+                    <label for="temporal">Temporal</label><br>
+                    <input type="radio" id="evento" name="tipo_parqueo" value="Evento">
+                    <label for="evento">Evento</label><br>
+                    <input type="radio" id="dia_noche" name="tipo_parqueo" value="Dia y noche">
+                    <label for="dia_noche">Dia y noche</label>
+                   </div>
 
                     <div class="button-time-div">
                     <label for="in">Hora de Ingreso:</label><br>
@@ -156,12 +163,82 @@ color:#48752C;
        </div>
   
     </div>
-         <script>
 
+    <script>
+
+function toggleRequiredAttribute(enable) {
+        const inTimeInput = document.getElementById('in');
+        const outTimeInput = document.getElementById('out-log');
+
+        if (enable) {
+            inTimeInput.required = true;
+            outTimeInput.required = true;
+        } else {
+            inTimeInput.required = false;
+            outTimeInput.required = false;
+        }
+    }
+
+    
+    document.addEventListener('DOMContentLoaded', function () {
+        const temporalRadio = document.getElementById('temporal');
+        const eventoRadio = document.getElementById('evento');
+        const diaNocheRadio = document.getElementById('dia_noche');
+        const timeDivs = document.querySelectorAll('.button-time-div, #calculate');
+
+        var outDuration = document.getElementById("out-duration");
+        var outPrice = document.getElementById("out-price");
+
+        var timeIn = document.getElementById("in");
+        var timeOut =  document.getElementById("out-log");
+
+        function toggleTimeDivs() {
+            if (temporalRadio.checked) {
+                timeDivs.forEach(div => div.style.display = 'block');
+            } else {
+                timeDivs.forEach(div => div.style.display = 'none');
+            }
+
+            if (eventoRadio.checked) {
+                outDuration.innerText = "Evento";
+                outPrice.innerText = "Q. 45.00";
+                document.getElementById("hidden-charge").value = 45;
+                toggleRequiredAttribute(false);
+
+
+            }
+            else if(diaNocheRadio.checked){
+                outDuration.innerText = "Dia y noche";
+                outPrice.innerText = "Q. 60.00";
+
+                document.getElementById("hidden-charge").value = 60;
+                toggleRequiredAttribute(false);
+
+
+            }else{
+                outDuration.innerText = "";
+                outPrice.innerText = "";
+                toggleRequiredAttribute(true);
+
+            }
+        }
+
+        // Add event listeners to the radio buttons
+        temporalRadio.addEventListener('change', toggleTimeDivs);
+        eventoRadio.addEventListener('change', toggleTimeDivs);
+        diaNocheRadio.addEventListener('change', toggleTimeDivs);
+
+        // Initial check to set the correct visibility on page load
+        toggleTimeDivs();
+    });
+</script>
+
+         <script>
+           
             // Calculate
             document.getElementById('calculate').addEventListener('click', function() {
                     // Get time logs
-                    var vehicleType = document.getElementById("vehicle-type");
+                    var vehicleType = document.getElementById("vehicle_type").value;
                     var rowId = document.getElementById("ticket").value;
 
                     var timeIn = document.getElementById("in").value;
@@ -181,9 +258,10 @@ color:#48752C;
                     outDuration.innerText = durationFormatted;
                     outPrice.innerText = "Q. " + price + ".00";
                     document.getElementById("hidden-charge").value = price;
-                    document.getElementById("hidden-out").value = duration.hours + ":" + duration.minutes ;
+                    //document.getElementById("hidden-out").value = duration.hours + ":" + duration.minutes ;
 
             });
+        
 
             function calculateDuration(startTime, endTime) {
                 // Split the input string into individual times
@@ -210,6 +288,7 @@ color:#48752C;
 
 
                 function calculatePrice(duration, vehicleType) {
+                    console.log("vehicletype " + vehicleType);
                     var totalMinutes = duration.hours * 60 + duration.minutes;
                     var pricePer30Min = vehicleType === "carro" ? 6 : 5;
                     var price = Math.ceil(totalMinutes / 30) * pricePer30Min;

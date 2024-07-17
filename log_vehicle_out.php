@@ -31,24 +31,38 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     $ticket = $_POST['ticket'];
     $charge = $_POST['charge'];
-    $time_in_get =  $_POST['in'];
-    $time_out_get = $_POST['out'];
-    $vehicle_type = $_POST['vehicle_type'];
-    // Get current date
-    $date = date('Y-m-d');
 
-    // Combine current date and input time
-    $time_in = $date . ' ' . $time_in_get;
-    $time_out = $date . ' ' . $time_out_get;
-    
+    $vehicle_type = $_POST['vehicle_type'];
+    $park_type = $_POST['tipo_parqueo'];
+
+      // Get current date
+      $date = date('Y-m-d');
+
+
+    // Check which radio button was selected
+    if ($park_type == 'Temporal') {
+        $time_in_get =  $_POST['in'];
+        $time_out_get = $_POST['out'];
+
+        $time_in = $date . ' ' . $time_in_get;
+        $time_out = $date . ' ' . $time_out_get;
+
+
+
+    } else  {
+        $time_in = $date ;
+        $time_out = $date;
+
+    }
+
 
     if ($ticket) {
         // Insert into log_out table
-        $stmt = $conn->prepare("INSERT INTO log_out (log_in_id, vehicle_type, ticket, time_in, time_out, charge, person) VALUES (?,?, ?, ?, ?, ?, ?)");
+        $stmt = $conn->prepare("INSERT INTO log_out (log_in_id, vehicle_type, ticket, time_in, time_out, charge, person, park_type) VALUES (?,?, ?, ?, ?, ?, ?, ?)");
         if ($stmt === false) {
             die("Prepare failed: " . htmlspecialchars($conn->error));
         }
-        $stmt->bind_param("issssis", $ticket, $vehicle_type, $ticket, $time_in, $time_out, $charge, $user);
+        $stmt->bind_param("issssiss", $ticket, $vehicle_type, $ticket, $time_in, $time_out, $charge, $user, $park_type);
 
         if ($stmt->execute() === TRUE) {
             header("Location: index.php");
