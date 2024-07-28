@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Custom Time Picker</title>
+    <link rel="stylesheet" href="timepicker.css">
+</head>
+<body>
+    <div class="time-picker">
+        <div class="time-display" id="timeDisplay">12:00</div>
+        <div class="time-controls">
+            <div class="hour-controls">
+                <button onclick="increaseHour()">▲</button>
+                <span id="hour">12</span>
+                <button onclick="decreaseHour()">▼</button>
+            </div>
+            <div class="minute-controls">
+                <button onclick="increaseMinute()">▲</button>
+                <span id="minute">00</span>
+                <button onclick="decreaseMinute()">▼</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="timepicker.js"></script>
+</body>
+</html>

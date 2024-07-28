@@ -1,14 +1,16 @@
 <?php
     date_default_timezone_set('America/Denver');
     session_start();
+    
     $username = "u659703897_localhost";
     $password = "DT+xgyc|7";
     $dbname = "u659703897_mydb";
-
-  //  $servername = "localhost";
-  //  $username = "root";
-   // $password = "";
-   // $dbname = "mydb";
+    
+     //$servername = "localhost";
+      // $username = "root";
+     // $password = "";
+     // $dbname = "mydb";
+    //$conn = new mysqli($servername, $username, $password, $dbname);
 
 $conn = new mysqli($servername, $username, $password, $dbname);
 
@@ -131,9 +133,30 @@ $conn->close();
         .price-icon{
 color:#48752C;
         }    
+        
+#logo{
+    width: 90px;
+    height: auto;
+    margin-left: 30px;
+    
+}
+@media only screen and (max-width: 945px){
+    .logoimage{
+    display: flex;
+    justify-content: center;
+    padding-left: 0px;
+    
+    }
+}
         </style>
 </head>
 <body>
+<header>
+        <div class="logoimage">
+        <img id="logo" src="LOGO.png" alt="logo">
+        </div>
+  
+</header>
     <h2 id="main-title">HISTORIAL EN TURNO ACTUAL</h2>
     <div class="wrapper">
         <div class="table">
@@ -143,9 +166,8 @@ color:#48752C;
                     <th>Vehiculo</th>
                     <th>Ticket</th>
                     <th>Hora de entrada</th>
-                    <th>Hora de salida</th>
                     <th>Tiempo transcurrido</th>
-                    <th>Dinero Cobrado</th>
+                    <th>Total Cobrado</th>
                     <th>Turno</th>
                     <th>Tipo</th>
 
@@ -161,7 +183,6 @@ color:#48752C;
                     <td><?php echo htmlspecialchars($row['vehicle_type']); ?></td>
                             <td><?php echo htmlspecialchars($row['ticket']); ?></td>
                             <td><?php echo htmlspecialchars($row['time_in']); ?></td>
-                            <td><?php echo htmlspecialchars($row['time_out']); ?></td>
                             <td><?php echo calculateDuration($row['time_in'], $row['time_out']) ?></td>
                             <td><?php echo htmlspecialchars($row['charge']); ?></td>
                             <td><?php echo htmlspecialchars($row['person']); ?></td>

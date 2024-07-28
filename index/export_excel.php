@@ -89,6 +89,7 @@ try {
     
     $mail->addReplyTo('updates@amiparqueo.com', 'amiparqueo.com'); // correo creado en hostinger
     $mail->addAddress('mercadeo@realdelparque.com', 'Mercadeo');
+
     $mail->setFrom('updates@amiparqueo.com', 'amiparqueo.com');
     
 

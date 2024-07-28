@@ -4,15 +4,15 @@ session_start();
     date_default_timezone_set('America/Denver');
 
     
-    $username = "u659703897_localhost";
-    $password = "DT+xgyc|7";
-    $dbname = "u659703897_mydb";
+$username = "u659703897_localhost";
+$password = "DT+xgyc|7";
+$dbname = "u659703897_mydb";
 
-  //  $servername = "localhost";
-  //  $username = "root";
-   // $password = "";
-   // $dbname = "mydb";
-$conn = new mysqli($servername, $username, $password, $dbname);
+ //$servername = "localhost";
+  // $username = "root";
+ // $password = "";
+ // $dbname = "mydb";
+//$conn = new mysqli($servername, $username, $password, $dbname);
 
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
@@ -26,6 +26,8 @@ if ($conn->connect_error) {
     <title>Sistema Parqueo</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <link rel="stylesheet" href="styles.css">
+    <link href="https://cdn.jsdelivr.net/npm/flowbite@2.4.1/dist/flowbite.min.css" rel="stylesheet" />
+
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <style>
@@ -164,10 +166,32 @@ color:#48752C;
 }
 }
 
+#logo{
+    width: 90px;
+    height: auto;
+    margin-left: 30px;
+    
+}
+@media only screen and (max-width: 945px){
+    .logoimage{
+    display: flex;
+    justify-content: center;
+    padding-left: 0px;
 
+    }
+}
         </style>
+
+
+
 </head>
 <body>
+    <header>
+        <div class="logoimage">
+        <img id="logo" src="LOGO.png" alt="logo">
+        </div>
+  
+</header>
     <h2 id="main-title">INICIO:Sistema de parqueos</h2>
     <div class="wrapper">
       
@@ -196,27 +220,46 @@ color:#48752C;
                         <option value="carro">Carro</option>
                         <option value="motocicleta">Motocicleta</option>
                     </select>
-                    <br><br>
+                    <br>
+                    <label for="rating">Cantidad de sellos (Max 6)</label>
+                    <input type="range" id="rating" name="rating" min="0" max="6" step="1" value="0" oninput="document.getElementById('ratingValue').innerText = this.value + ' Sellos';">
+                    <span id="ratingValue">0 Sellos</span>
+
+                    <br>
                     <label for="ticket">Numero de ticket:</label>
                     <input type="text" name="ticket" id="ticket" required><br><br>
                    <div class="options-radio">
-                   <input type="radio" id="temporal" name="tipo_parqueo" value="Temporal" checked="checked">
-                    <label for="temporal">Temporal</label><br>
-                    <input type="radio" id="evento" name="tipo_parqueo" value="Evento">
-                    <label for="evento">Evento</label><br>
-                    <input type="radio" id="dia_noche" name="tipo_parqueo" value="Dia y noche">
-                    <label for="dia_noche">Dia y noche</label>
+                   <input type="radio" id="temporal" name="tipo_parqueo" value="Por Hora" checked="checked">
+                    <label for="temporal">Por Hora</label><br>
+                    <input type="radio" id="evento" name="tipo_parqueo" value="Tarifa Evento">
+                    <label for="evento">Tarifa Evento</label><br>
+                    <input type="radio" id="dia_noche" name="tipo_parqueo" value="Tarifa dia/noche">
+                    <label for="dia_noche">Tarifa dia/noche</label><br>
+                    <input type="radio" id="anulado" name="tipo_parqueo" value="Anulado">
+                    <label for="anulado">Anulado</label>
                    </div>
 
-                    <div class="button-time-div">
-                    <label for="in">Hora de Ingreso:</label><br>
-                     <input type="time" name="in" id="in" required>
+                     <div class="button-time-div" style="padding-top: 10px;">
+                    <label for="in" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Hora de Ingreso:</label>
+                    <div class="flex">
+                        <input type="time" name="in" id="in" class="rounded-none rounded-s-lg bg-gray-50 border text-gray-900 leading-none focus:ring-blue-500 focus:border-blue-500 block flex-1 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" value="00:00" required>
+                      
                     </div>
+                    
+                    </div>
+                   
+                    <div id="out-div" class="button-time-div time-out-div" style="padding-top: 10px; display:none;">
+                    <label for="out" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Hora de Salida:</label>
+                    <div class="flex">
+                        <input type="time" name="out" id="out-log" class="rounded-none rounded-s-lg bg-gray-50 border text-gray-900 leading-none focus:ring-blue-500 focus:border-blue-500 block flex-1 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" value="00:00" required>
+                      
+                    </div>
+                    <label for="placa">Placa</label>
 
-                    <div class="button-time-div time-out-div">
-                    <label for="out">Hora de Salida:</label><br>
-                        <input type="time" name="out" id="out-log" required>
-                    </div>
+                    <input type="text" id="placa" name="placa">
+                   
+                    </div> 
+
 
                     <div id="calculate">Calcular</div>
                     <br>
@@ -249,43 +292,71 @@ color:#48752C;
   
     </div>
 
-    <script>
 
+
+
+
+    <script>
+function getCurrentTime() {
+  const now = new Date();
+  let hours = now.getHours();
+  let minutes = now.getMinutes();
+  let seconds = now.getSeconds();
+
+  // Pad single digit numbers with a leading zero
+  hours = hours < 10 ? '0' + hours : hours;
+  minutes = minutes < 10 ? '0' + minutes : minutes;
+  seconds = seconds < 10 ? '0' + seconds : seconds;
+console.log("time " + hours + ":"+minutes);
+  return `${hours}:${minutes}`;
+}
 function toggleRequiredAttribute(enable) {
         const inTimeInput = document.getElementById('in');
-        const outTimeInput = document.getElementById('out-log');
+       const outTimeInput = document.getElementById('out-log');
 
         if (enable) {
-            inTimeInput.required = true;
-            outTimeInput.required = true;
+         inTimeInput.required = true;
+           // outTimeInput.required = true;
         } else {
-            inTimeInput.required = false;
-            outTimeInput.required = false;
+         inTimeInput.required = false;
+        outTimeInput.required = false;
         }
     }
 
 
     document.addEventListener('DOMContentLoaded', function () {
+        // hidden out
+        const outDiv = document.getElementById("out-div");
+
         const temporalRadio = document.getElementById('temporal');
         const eventoRadio = document.getElementById('evento');
         const diaNocheRadio = document.getElementById('dia_noche');
+        const anuladoRadio = document.getElementById('anulado');
+
         const timeDivs = document.querySelectorAll('.button-time-div, #calculate');
 
         var outDuration = document.getElementById("out-duration");
         var outPrice = document.getElementById("out-price");
 
         var timeIn = document.getElementById("in");
-        var timeOut =  document.getElementById("out-log");
+     var timeOut =  document.getElementById("out-log");
+      var timeOut =  getCurrentTime();
+
 
         function toggleTimeDivs() {
-            if (temporalRadio.checked) {
+            if (temporalRadio.checked){
                 timeDivs.forEach(div => div.style.display = 'block');
+                outDiv.style.display = 'none';
+            } 
+            else if(anuladoRadio.checked) {
+                timeDivs.forEach(div => div.style.display = 'block');
+
             } else {
                 timeDivs.forEach(div => div.style.display = 'none');
             }
 
             if (eventoRadio.checked) {
-                outDuration.innerText = "Evento";
+                outDuration.innerText = "Tarifa Evento";
                 outPrice.innerText = "Q. 45.00";
                 document.getElementById("hidden-charge").value = 45;
                 toggleRequiredAttribute(false);
@@ -293,14 +364,19 @@ function toggleRequiredAttribute(enable) {
 
             }
             else if(diaNocheRadio.checked){
-                outDuration.innerText = "Dia y noche";
+                outDuration.innerText = "Tarifa dia/noche";
                 outPrice.innerText = "Q. 60.00";
 
                 document.getElementById("hidden-charge").value = 60;
                 toggleRequiredAttribute(false);
 
 
-            }else{
+            }else if(anuladoRadio.checked){
+                outDuration.innerText = "-";
+                outPrice.innerText = "Q. 0.00";
+                document.getElementById("hidden-charge").value = 0;
+            }
+            else{
                 outDuration.innerText = "";
                 outPrice.innerText = "";
                 toggleRequiredAttribute(true);
@@ -312,6 +388,8 @@ function toggleRequiredAttribute(enable) {
         temporalRadio.addEventListener('change', toggleTimeDivs);
         eventoRadio.addEventListener('change', toggleTimeDivs);
         diaNocheRadio.addEventListener('change', toggleTimeDivs);
+        anuladoRadio.addEventListener('change', toggleTimeDivs);
+
 
         // Initial check to set the correct visibility on page load
         toggleTimeDivs();
@@ -319,6 +397,7 @@ function toggleRequiredAttribute(enable) {
 </script>
 
          <script>
+        const anuladoRadio = document.getElementById('anulado');
            
             // Calculate
             document.getElementById('calculate').addEventListener('click', function() {
@@ -327,7 +406,16 @@ function toggleRequiredAttribute(enable) {
                     var rowId = document.getElementById("ticket").value;
 
                     var timeIn = document.getElementById("in").value;
-                    var timeOut =  document.getElementById("out-log").value;
+                    if(anuladoRadio.checked){
+                        var timeOut =  document.getElementById("out-log").value;
+
+                    }else{
+                        var timeOut =  getCurrentTime();
+
+                    }
+                    console.log("timeOut current: " + timeOut);
+                    console.log("timeIn current: " + timeIn);
+
 
                    // var timeOutUpdated = updatedTimeOut(timeOut.value);
 
@@ -341,16 +429,20 @@ function toggleRequiredAttribute(enable) {
                     var durationFormatted = duration.hours + " horas " + duration.minutes + " min";
 
                     outDuration.innerText = durationFormatted;
-                    outPrice.innerText = "Q. " + price + ".00";
-                    document.getElementById("hidden-charge").value = price;
+                    if(anuladoRadio.checked){
+                        outPrice.innerText = "Q. 0.00";
+                        document.getElementById("hidden-charge").value = 0;
+                    }else{
+                        outPrice.innerText = "Q. " + price + ".00";
+                        document.getElementById("hidden-charge").value = price;
+                    }
+                   
                     //document.getElementById("hidden-out").value = duration.hours + ":" + duration.minutes ;
 
             });
         
 
             function calculateDuration(startTime, endTime) {
-                // Split the input string into individual times
-
                 // Function to convert time (HH:MM) to minutes since midnight
                 function timeToMinutes(time) {
                     const [hours, minutes] = time.split(':').map(Number);
@@ -362,21 +454,35 @@ function toggleRequiredAttribute(enable) {
                 const endMinutes = timeToMinutes(endTime);
 
                 // Calculate the difference in minutes
-                const diffMinutes = endMinutes - startMinutes;
+                let diffMinutes = endMinutes - startMinutes;
+
+                // Adjust if the time period crosses midnight
+                if (diffMinutes < 0) {
+                    diffMinutes += 24 * 60; // Add 24 hours worth of minutes
+                }
 
                 // Convert the difference back to hours and minutes
                 const hours = Math.floor(diffMinutes / 60);
                 const minutes = diffMinutes % 60;
 
                 return { hours, minutes };
-                }
+            }
 
 
                 function calculatePrice(duration, vehicleType) {
-                    console.log("vehicletype " + vehicleType);
+                    if (vehicleType == 'carro'){
+                        var rating = document.getElementById('rating').value * 6;
+
+                    }else{
+                        var rating = document.getElementById('rating').value * 5;
+                    }
+
                     var totalMinutes = duration.hours * 60 + duration.minutes;
                     var pricePer30Min = vehicleType === "carro" ? 6 : 5;
-                    var price = Math.ceil(totalMinutes / 30) * pricePer30Min;
+                    var price = (Math.ceil(totalMinutes / 30) * pricePer30Min) - rating;
+                    if(price < 0){
+                        price = 0;
+                    }
                     return price;
                 }
 
@@ -461,6 +567,7 @@ function toggleRequiredAttribute(enable) {
 
 
 
+<script src="https://cdn.jsdelivr.net/npm/flowbite@2.4.1/dist/flowbite.min.js"></script>
 
 </body>
 </html>

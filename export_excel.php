@@ -7,15 +7,15 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
+$username = "u659703897_localhost";
+$password = "DT+xgyc|7";
+$dbname = "u659703897_mydb";
 
-  $username = "u659703897_localhost";
-    $password = "DT+xgyc|7";
-    $dbname = "u659703897_mydb";
-
-  //  $servername = "localhost";
-  //  $username = "root";
-   // $password = "";
-   // $dbname = "mydb";
+ //$servername = "localhost";
+  // $username = "root";
+ // $password = "";
+ // $dbname = "mydb";
+//$conn = new mysqli($servername, $username, $password, $dbname);
 $conn = new mysqli($servername, $username, $password, $dbname);
 
 if ($conn->connect_error) {
@@ -40,7 +40,8 @@ $sheet->setCellValue('A1', 'Ticket')
       ->setCellValue('D1', 'Hora de Salida')
       ->setCellValue('E1', 'Total')
       ->setCellValue('F1', 'Turno')
-      ->setCellValue('G1', 'Tipo');
+      ->setCellValue('G1', 'Tipo')
+      ->setCellValue('H1', 'Placa');
 
 
 $row = 2;
@@ -52,7 +53,8 @@ if ($result->num_rows > 0) {
               ->setCellValue('D' . $row, $data['time_out'])
               ->setCellValue('E' . $row, $data['charge'])
               ->setCellValue('F' . $row, $data['person'])
-              ->setCellValue('G' . $row, $data['park_type']);
+              ->setCellValue('G' . $row, $data['park_type'])
+              ->setCellValue('H' . $row, $data['placa']);
 
         $row++;
     }
@@ -94,7 +96,10 @@ try {
     $mail->Password = 'jhkalmi85!A'; 
     
     $mail->addReplyTo('updates@amiparqueo.com', 'amiparqueo.com'); // correo creado en hostinger
-    $mail->addAddress('mercadeo@realdelparque.com', 'Mercadeo');
+   $mail->addAddress('mercadeo@realdelparque.com', 'Mercadeo');
+   $mail->addAddress('administracion@realdelparque.com', 'Administracion');
+
+    //$mail->addAddress('anthonykenneth007@gmail.com', 'antonio');
     
     $mail->setFrom('updates@amiparqueo.com', 'amiparqueo.com');
     
