@@ -1,17 +1,15 @@
 <?php
     date_default_timezone_set('America/Denver');
     session_start();
-    
+   
     $username = "u659703897_localhost";
     $password = "DT+xgyc|7";
     $dbname = "u659703897_mydb";
     
-     //$servername = "localhost";
-      // $username = "root";
-     // $password = "";
-     // $dbname = "mydb";
-    //$conn = new mysqli($servername, $username, $password, $dbname);
-
+    //$servername = "localhost";
+    //$username = "root";
+    //$password = "";
+    //$dbname = "mydb";
 $conn = new mysqli($servername, $username, $password, $dbname);
 
 if ($conn->connect_error) {
@@ -39,6 +37,8 @@ function calculateDuration($time_in, $time_out) {
     // Format the duration into a readable string
     $hours = $diff->h + ($diff->days * 24);
     $minutes = $diff->i;
+
+    error_log("previos.php" . $hours);
     if($hours == 0 and $minutes == 0){
     return "-";
 

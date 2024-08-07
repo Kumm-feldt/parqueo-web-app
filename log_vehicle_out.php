@@ -1,14 +1,14 @@
 <?php
 session_start();
+   
 $username = "u659703897_localhost";
 $password = "DT+xgyc|7";
 $dbname = "u659703897_mydb";
 
- //$servername = "localhost";
-  // $username = "root";
- // $password = "";
- // $dbname = "mydb";
-//$conn = new mysqli($servername, $username, $password, $dbname);
+//$servername = "localhost";
+//$username = "root";
+//$password = "";
+//$dbname = "mydb";
 date_default_timezone_set('America/Denver');
 
 
@@ -25,11 +25,10 @@ if ($conn->connect_error) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-
-  
     $ticket = $_POST['ticket'];
-      // Check if the ticket already exists
-      if (checkTicket($conn, $ticket)) {
+
+    // Check if the ticket already exists
+    if (checkTicket($conn, $ticket)) {
         exit();
     }
     $charge = $_POST['charge'];
@@ -49,12 +48,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Check which radio button was selected
     if ($park_type == 'Por Hora' or $park_type == 'Anulado' ) {
         $time_in_get =  $_POST['in'];
-        $time_out_get = $_POST['out'];
+        if($park_type == 'Por Hora'){
+            $time_out_get = getNow();
+        }else{
+            $time_out_get = $_POST['out'];
+            $charge = 0;
+        }
+
 
         $time_in = $date . ' ' . $time_in_get;
         $time_out = $date . ' ' . $time_out_get;
 
-        if($park_type == "Por Hora" and $charge == 0){
+        if($park_type == "Por Hora"){
             $duration = calculateDuration($time_in);
             $charge = calculatePrice($duration, $vehicle_type, $num_sellos);
 
@@ -90,6 +95,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 }
 
 $conn->close();
+}
+function getNow() {
+    // Get the current time in 'H:i' format
+    $currentTime = date('H:i');
+    return $currentTime;
 }
 
 //function to calculate duration in minutes

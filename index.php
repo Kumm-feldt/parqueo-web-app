@@ -4,15 +4,14 @@ session_start();
     date_default_timezone_set('America/Denver');
 
     
-$username = "u659703897_localhost";
-$password = "DT+xgyc|7";
-$dbname = "u659703897_mydb";
-
- //$servername = "localhost";
-  // $username = "root";
- // $password = "";
- // $dbname = "mydb";
-//$conn = new mysqli($servername, $username, $password, $dbname);
+    $username = "u659703897_localhost";
+    $password = "DT+xgyc|7";
+    $dbname = "u659703897_mydb";
+    
+    //$servername = "localhost";
+    //$username = "root";
+    //$password = "";
+    //$dbname = "mydb";
 
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
@@ -24,9 +23,37 @@ if ($conn->connect_error) {
 <html>
 <head>
     <title>Sistema Parqueo</title>
+    <!-- Include Bootstrap CDN -->
+	<link href=
+"https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
+		rel="stylesheet">
+	<script src=
+"https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js">
+	</script>
+	<script src=
+"https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js">
+	</script>
+
+	<!-- Include Moment.js CDN -->
+	<script type="text/javascript" src=
+"https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment.min.js">
+	</script>
+
+	<!-- Include Bootstrap DateTimePicker CDN -->
+	<link
+		href=
+"https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker.min.css"
+		rel="stylesheet">
+
+	<script src=
+"https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js">
+		</script>
+    <!-- CDN and CSS -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <link rel="stylesheet" href="styles.css">
     <link href="https://cdn.jsdelivr.net/npm/flowbite@2.4.1/dist/flowbite.min.css" rel="stylesheet" />
+  
+
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -239,21 +266,23 @@ color:#48752C;
                     <label for="anulado">Anulado</label>
                    </div>
 
+                   <!-- Time in / Time out-->
+                   
                      <div class="button-time-div" style="padding-top: 10px;">
-                    <label for="in" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Hora de Ingreso:</label>
+                    <label for="in" >Hora de Ingreso:</label>
                     <div class="flex">
-                        <input type="time" name="in" id="in" class="rounded-none rounded-s-lg bg-gray-50 border text-gray-900 leading-none focus:ring-blue-500 focus:border-blue-500 block flex-1 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" value="00:00" required>
-                      
+                    <input type="time" name="in" id="in"  value="00:00" required>
                     </div>
                     
                     </div>
                    
                     <div id="out-div" class="button-time-div time-out-div" style="padding-top: 10px; display:none;">
-                    <label for="out" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Hora de Salida:</label>
+                    <label for="out" >Hora de Salida:</label>
                     <div class="flex">
-                        <input type="time" name="out" id="out-log" class="rounded-none rounded-s-lg bg-gray-50 border text-gray-900 leading-none focus:ring-blue-500 focus:border-blue-500 block flex-1 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" value="00:00" required>
-                      
+                    <input type="time" name="out" id="out-log"  value="00:00" required>
                     </div>
+
+
                     <label for="placa">Placa</label>
 
                     <input type="text" id="placa" name="placa">
@@ -307,7 +336,6 @@ function getCurrentTime() {
   hours = hours < 10 ? '0' + hours : hours;
   minutes = minutes < 10 ? '0' + minutes : minutes;
   seconds = seconds < 10 ? '0' + seconds : seconds;
-console.log("time " + hours + ":"+minutes);
   return `${hours}:${minutes}`;
 }
 function toggleRequiredAttribute(enable) {
@@ -339,8 +367,8 @@ function toggleRequiredAttribute(enable) {
         var outPrice = document.getElementById("out-price");
 
         var timeIn = document.getElementById("in");
-     var timeOut =  document.getElementById("out-log");
-      var timeOut =  getCurrentTime();
+        var timeOut =  document.getElementById("out-log");
+        var timeOut =  getCurrentTime();
 
 
         function toggleTimeDivs() {
@@ -405,16 +433,17 @@ function toggleRequiredAttribute(enable) {
                     var vehicleType = document.getElementById("vehicle_type").value;
                     var rowId = document.getElementById("ticket").value;
 
-                    var timeIn = document.getElementById("in").value;
+                    var timeIn = (document.getElementById("in").value);
+                    
+
                     if(anuladoRadio.checked){
-                        var timeOut =  document.getElementById("out-log").value;
+                        var timeOut =  (document.getElementById("out-log").value);
 
                     }else{
                         var timeOut =  getCurrentTime();
 
                     }
-                    console.log("timeOut current: " + timeOut);
-                    console.log("timeIn current: " + timeIn);
+               
 
 
                    // var timeOutUpdated = updatedTimeOut(timeOut.value);
@@ -441,32 +470,65 @@ function toggleRequiredAttribute(enable) {
 
             });
         
+   function calculateDuration(startTime, endTime) {
+    
+    // function to conver to 24 hour format
+        function convertTo24HourFormat(time12h) {
+        // Split the input time into time and period (AM/PM)
+        let [time, period] = time12h.split(' ');
+        let [hours, minutes] = time.split(':');
+        hours = parseInt(hours, 10);
 
-            function calculateDuration(startTime, endTime) {
-                // Function to convert time (HH:MM) to minutes since midnight
-                function timeToMinutes(time) {
-                    const [hours, minutes] = time.split(':').map(Number);
-                    return hours * 60 + minutes;
-                }
+        // Handle 12 AM case
+        if (period === 'am' && hours === 12) {
+            hours = 0;
+        }
+        // Handle PM cases except for 12 PM
+        else if (period === 'pm' && hours !== 12) {
+            hours += 12;
+        }
 
-                // Convert start and end times to minutes
-                const startMinutes = timeToMinutes(startTime);
-                const endMinutes = timeToMinutes(endTime);
+        // Format the hours and minutes to always have two digits
+        hours = hours.toString().padStart(2, '0');
+        minutes = minutes.padStart(2, '0');
 
-                // Calculate the difference in minutes
-                let diffMinutes = endMinutes - startMinutes;
+        return `${hours}:${minutes}`;
+    }
 
-                // Adjust if the time period crosses midnight
-                if (diffMinutes < 0) {
-                    diffMinutes += 24 * 60; // Add 24 hours worth of minutes
-                }
 
-                // Convert the difference back to hours and minutes
-                const hours = Math.floor(diffMinutes / 60);
-                const minutes = diffMinutes % 60;
+    function timeToMinutes(time) {
+        time = convertTo24HourFormat(time);
+        // Split the time into its components
+        let [hours, minutes] = time.split(':').map(Number);
 
-                return { hours, minutes };
-            }
+        return hours * 60 + minutes;
+    }
+
+
+    startMinutes = timeToMinutes(startTime);
+    endMinutes = timeToMinutes(endTime);
+    
+
+
+    // Calculate the difference in minutes
+    let diffMinutes = endMinutes - startMinutes;
+
+
+    // Adjust if the time period crosses midnight
+    if (diffMinutes < 0) {
+
+        //diffMinutes += 12 * 60; // Add 12 hours worth of minutes
+            diffMinutes += 24 * 60; // Add 24 hours worth of minutes
+        
+
+    }
+
+    // Convert the difference back to hours and minutes
+    const hours = Math.floor(diffMinutes / 60);
+    const minutes = diffMinutes % 60;
+
+    return { hours, minutes };
+}
 
 
                 function calculatePrice(duration, vehicleType) {
@@ -513,6 +575,14 @@ function toggleRequiredAttribute(enable) {
                     const formattedDateTime = timeOut.toISOString().slice(0, 19).replace('T', ' ');
 
                     return formattedDateTime;
+                }
+                function formatTime(time){
+                    // Split the time and the AM/PM part
+                var parts = time.split(' ');
+
+                // The first part is the time in 'hh:mm' format
+                var correctTime = parts[0];
+                return correctTime;
                 }
 
                 </script>
@@ -569,5 +639,7 @@ function toggleRequiredAttribute(enable) {
 
 <script src="https://cdn.jsdelivr.net/npm/flowbite@2.4.1/dist/flowbite.min.js"></script>
 
+
 </body>
 </html>
+
