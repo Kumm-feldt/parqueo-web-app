@@ -1,17 +1,13 @@
 <?php
 session_start();
 
+
     date_default_timezone_set('America/Denver');
 
     
-    $username = "u659703897_localhost";
-    $password = "DT+xgyc|7";
-    $dbname = "u659703897_mydb";
-    
-    //$servername = "localhost";
-    //$username = "root";
-    //$password = "";
-    //$dbname = "mydb";
+
+include 'conn.php';
+
 
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
@@ -248,9 +244,9 @@ color:#48752C;
                         <option value="motocicleta">Motocicleta</option>
                     </select>
                     <br>
-                    <label for="rating">Cantidad de sellos (Max 6)</label>
-                    <input type="range" id="rating" name="rating" min="0" max="6" step="1" value="0" oninput="document.getElementById('ratingValue').innerText = this.value + ' Sellos';">
-                    <span id="ratingValue">0 Sellos</span>
+                    <label for="rating">Cantidad de Stickers (Max 6)</label>
+                    <input type="range" id="rating" name="rating" min="0" max="6" step="1" value="0" oninput="document.getElementById('ratingValue').innerText = this.value + ' Stickers';">
+                    <span id="ratingValue">0 Stickers</span>
 
                     <br>
                     <label for="ticket">Numero de ticket:</label>

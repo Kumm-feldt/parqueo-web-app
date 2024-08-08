@@ -2,19 +2,7 @@
     date_default_timezone_set('America/Denver');
     session_start();
    
-    $username = "u659703897_localhost";
-    $password = "DT+xgyc|7";
-    $dbname = "u659703897_mydb";
-    
-    //$servername = "localhost";
-    //$username = "root";
-    //$password = "";
-    //$dbname = "mydb";
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
+    include 'conn.php';
 
 // Fetch data from the database
 $sql = "SELECT * FROM log_out";
@@ -166,6 +154,8 @@ color:#48752C;
                     <th>Vehiculo</th>
                     <th>Ticket</th>
                     <th>Hora de entrada</th>
+                    <th>Hora de salida</th>
+
                     <th>Tiempo transcurrido</th>
                     <th>Total Cobrado</th>
                     <th>Turno</th>
@@ -183,6 +173,8 @@ color:#48752C;
                     <td><?php echo htmlspecialchars($row['vehicle_type']); ?></td>
                             <td><?php echo htmlspecialchars($row['ticket']); ?></td>
                             <td><?php echo htmlspecialchars($row['time_in']); ?></td>
+                            <td><?php echo htmlspecialchars($row['time_out']); ?></td>
+
                             <td><?php echo calculateDuration($row['time_in'], $row['time_out']) ?></td>
                             <td><?php echo htmlspecialchars($row['charge']); ?></td>
                             <td><?php echo htmlspecialchars($row['person']); ?></td>

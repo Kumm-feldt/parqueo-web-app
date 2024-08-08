@@ -1,26 +1,16 @@
 <?php
 session_start();
+date_default_timezone_set('America/Denver');
 
-require 'vendor/autoload.php';
+require '../vendor/autoload.php';
 
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
-$username = "u659703897_localhost";
-$password = "DT+xgyc|7";
-$dbname = "u659703897_mydb";
 
- //$servername = "localhost";
-  // $username = "root";
- // $password = "";
- // $dbname = "mydb";
-//$conn = new mysqli($servername, $username, $password, $dbname);
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
+include_once("export_excel_db.php");
+include("conn.php");
 
 $sql = "SELECT * FROM log_out";
 $result = $conn->query($sql);
@@ -29,6 +19,9 @@ $result = $conn->query($sql);
 
 // Get current date
 $date = date('Y-m-d');
+
+$user = $_SESSION['userName'];
+
 
 $spreadsheet = new Spreadsheet();
 $sheet = $spreadsheet->getActiveSheet();
@@ -61,9 +54,12 @@ if ($result->num_rows > 0) {
 }
 
 // Save the Excel file to a temporary location
-$tempFile = tempnam(sys_get_temp_dir(), 'data') . '.xlsx';
+$tempFile = tempnam(sys_get_temp_dir(), 'data'.$date) . '.xlsx';
 $writer = new Xlsx($spreadsheet);
 $writer->save($tempFile);
+
+export_excel_db($conn, $user, $spreadsheet, $date);
+
 
 // SQL statement to insert all data from log_out into log_out_copy
 $sql_insert = "INSERT INTO total_log_out SELECT * FROM log_out";
@@ -96,16 +92,17 @@ try {
     $mail->Password = 'jhkalmi85!A'; 
     
     $mail->addReplyTo('updates@amiparqueo.com', 'amiparqueo.com'); // correo creado en hostinger
-   $mail->addAddress('mercadeo@realdelparque.com', 'Mercadeo');
-   $mail->addAddress('administracion@realdelparque.com', 'Administracion');
+  //$mail->addAddress('mercadeo@realdelparque.com', 'Mercadeo');
+ //  $mail->addAddress('administracion@realdelparque.com', 'Administracion');
+  
 
-    //$mail->addAddress('anthonykenneth007@gmail.com', 'antonio');
+   $mail->addAddress('anthonykenneth007@gmail.com', 'antonio');
     
     $mail->setFrom('updates@amiparqueo.com', 'amiparqueo.com');
     
 
     // Attachments
-    $mail->addAttachment($tempFile, 'Data de Vehiculos.xlsx'); // Add attachments
+    $mail->addAttachment($tempFile, 'Data de Vehiculos - ' . $date . '.xlsx'); // Add attachments
 
     // Content
     $mail->isHTML(true); // Set email format to HTML

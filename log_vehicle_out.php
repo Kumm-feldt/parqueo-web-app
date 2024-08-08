@@ -1,14 +1,8 @@
 <?php
 session_start();
    
-$username = "u659703897_localhost";
-$password = "DT+xgyc|7";
-$dbname = "u659703897_mydb";
+include 'conn.php';
 
-//$servername = "localhost";
-//$username = "root";
-//$password = "";
-//$dbname = "mydb";
 date_default_timezone_set('America/Denver');
 
 
@@ -18,11 +12,6 @@ if (!isset($_SESSION['userName']) or trim($_SESSION['userName']) == "") {
     
     }else{
 
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $ticket = $_POST['ticket'];
@@ -60,7 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $time_out = $date . ' ' . $time_out_get;
 
         if($park_type == "Por Hora"){
-            $duration = calculateDuration($time_in);
+            $duration = calculateDuration($time_in, $time_out);
             $charge = calculatePrice($duration, $vehicle_type, $num_sellos);
 
         }
@@ -102,17 +91,36 @@ function getNow() {
     return $currentTime;
 }
 
-//function to calculate duration in minutes
-function calculateDuration($time_in) {
-    $time_in = new DateTime($time_in);
-    $now = new DateTime();
-    $diff = $now->diff($time_in);
 
-    // Total minutes of duration
-    $total_minutes = $diff->h * 60 + $diff->i;
 
-    return $total_minutes;
+function calculateDuration($startTime, $endTime) {
+    // Function to convert time to minutes
+    function timeToMinutes($time) {
+        // Split the time into its components
+        list($date, $time) = explode(' ', $time);
+        list($hours, $minutes, $seconds) = explode(':', $time);
+        $hours = (int)$hours;
+        $minutes = (int)$minutes;
+
+        return $hours * 60 + $minutes;
+    }
+
+    $startMinutes = timeToMinutes($startTime);
+    $endMinutes = timeToMinutes($endTime);
+
+    // Calculate the difference in minutes
+    $diffMinutes = $endMinutes - $startMinutes;
+
+    // Adjust if the time period crosses midnight
+    if ($diffMinutes < 0) {
+        $diffMinutes += 24 * 60; // Add 24 hours worth of minutes
+    }
+
+    error_log("minutes " . $diffMinutes);
+    return $diffMinutes;
 }
+
+
 
 // Function to calculate price based on duration and vehicle type
 function calculatePrice($duration, $vehicle_type, $num_sellos) {
