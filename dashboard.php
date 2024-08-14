@@ -259,9 +259,7 @@ color:#48752C;
                     <input type="radio" id="dia_noche" name="tipo_parqueo" value="Tarifa dia/noche">
                     <label for="dia_noche">Tarifa dia/noche</label><br>
                     <input type="radio" id="anulado" name="tipo_parqueo" value="Anulado">
-                    <label for="anulado">Anulado</label><br>
-                    <input type="radio" id="perdido" name="tipo_parqueo" value="Ticket Perdido">
-                    <label for="perdido">Ticket Perdido</label>
+                    <label for="anulado">Anulado</label>
                    </div>
 
                    <!-- Time in / Time out-->
@@ -281,13 +279,12 @@ color:#48752C;
                     </div>
 
 
-                   
+                    <label for="placa">Placa</label>
+
+                    <input type="text" id="placa" name="placa">
                    
                     </div> 
-                    <div class="placa-div">
-                    <label id="placa-label" for="placa">Placa</label> <br>
-                    <input type="text" id="placa" name="placa">
-                    </div>
+
 
                     <div id="calculate">Calcular</div>
                     <br>
@@ -359,8 +356,6 @@ function toggleRequiredAttribute(enable) {
         const eventoRadio = document.getElementById('evento');
         const diaNocheRadio = document.getElementById('dia_noche');
         const anuladoRadio = document.getElementById('anulado');
-        const perdidoRadio = document.getElementById('perdido');
-
 
         const timeDivs = document.querySelectorAll('.button-time-div, #calculate');
 
@@ -371,30 +366,17 @@ function toggleRequiredAttribute(enable) {
         var timeOut =  document.getElementById("out-log");
         var timeOut =  getCurrentTime();
 
-        var placaInput = document.querySelector('.placa-div');
-
 
         function toggleTimeDivs() {
             if (temporalRadio.checked){
                 timeDivs.forEach(div => div.style.display = 'block');
                 outDiv.style.display = 'none';
-                placaInput.style.display = 'none';
-
             } 
             else if(anuladoRadio.checked) {
                 timeDivs.forEach(div => div.style.display = 'block');
-                placaInput.style.display = 'block';
 
-
-            } else if(perdidoRadio.checked){
+            } else {
                 timeDivs.forEach(div => div.style.display = 'none');
-
-                placaInput.style.display = 'block';
-            }
-            else {
-                timeDivs.forEach(div => div.style.display = 'none');
-                placaInput.style.display = 'none';
-
             }
 
             if (eventoRadio.checked) {
@@ -417,11 +399,6 @@ function toggleRequiredAttribute(enable) {
                 outDuration.innerText = "-";
                 outPrice.innerText = "Q. 0.00";
                 document.getElementById("hidden-charge").value = 0;
-            }else if(perdidoRadio.checked){
-                outDuration.innerText = "Ticket Perdido";
-                outPrice.innerText = "Q. 150.00";
-
-                document.getElementById("hidden-charge").value = 150;
             }
             else{
                 outDuration.innerText = "";
@@ -436,8 +413,6 @@ function toggleRequiredAttribute(enable) {
         eventoRadio.addEventListener('change', toggleTimeDivs);
         diaNocheRadio.addEventListener('change', toggleTimeDivs);
         anuladoRadio.addEventListener('change', toggleTimeDivs);
-        perdidoRadio.addEventListener('change', toggleTimeDivs);
-
 
 
         // Initial check to set the correct visibility on page load

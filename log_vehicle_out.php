@@ -60,7 +60,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $time_out = $date;
 
     }
-   if ($park_type != 'Anulado'){
+   if ($park_type != 'Anulado' or $park_type != 'Ticket Perdidos'){
     $placa = "-";
    }
 

@@ -17,25 +17,45 @@ if ($result->num_rows > 0) {
 $noData = true;
 }
 
-function calculateDuration($time_in, $time_out) {
-    $time_in_dt = new DateTime($time_in);
-    $time_out_dt = new DateTime($time_out);
-    $diff = $time_out_dt->diff($time_in_dt);
 
-    // Format the duration into a readable string
-    $hours = $diff->h + ($diff->days * 24);
-    $minutes = $diff->i;
+   // Function to convert time to minutes
+   function timeToMinutes($time) {
+    // Split the time into its components
+    list($date, $time) = explode(' ', $time);
+    list($hours, $minutes, $seconds) = explode(':', $time);
+    $hours = (int)$hours;
+    $minutes = (int)$minutes;
 
-    error_log("previos.php" . $hours);
-    if($hours == 0 and $minutes == 0){
-    return "-";
+    return $hours * 60 + $minutes;
+}
+function calculateDuration($startTime, $endTime) {
+ 
 
-    }else{
-        return "$hours horas y $minutes min";
+    $startMinutes = timeToMinutes($startTime);
+    $endMinutes = timeToMinutes($endTime);
 
+    // Calculate the difference in minutes
+    $diffMinutes = $endMinutes - $startMinutes;
+
+    // Adjust if the time period crosses midnight
+    if ($diffMinutes < 0) {
+        $diffMinutes += 24 * 60; // Add 24 hours worth of minutes
     }
+    $hours = floor($diffMinutes / 60); // Calculate the total hours
+    $minutes = $diffMinutes % 60; // Calculate the remaining minutes
+
+    error_log("checking" . $hours . " and " .$minutes );
+
+    if($hours == 0 and $minutes == 0){
+        return "-";
+    
+        }else{
+            return "$hours horas y $minutes min";
+    
+        }
 
 }
+
 
 
 
