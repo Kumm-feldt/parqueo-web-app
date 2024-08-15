@@ -4,7 +4,8 @@ session_start();
 
     date_default_timezone_set('America/Denver');
 
-    
+ // Retrieve the last selected user from the session, if available
+$selected_user = isset($_SESSION['selected_user']) ? $_SESSION['selected_user'] : '';   
 
 include 'conn.php';
 
@@ -19,7 +20,7 @@ if ($conn->connect_error) {
 <html>
 <head>
     <title>Sistema Parqueo</title>
-    <!-- Include Bootstrap CDN -->
+    <!-- Include Bootstrap CDN 
 	<link href=
 "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
 		rel="stylesheet">
@@ -30,12 +31,12 @@ if ($conn->connect_error) {
 "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js">
 	</script>
 
-	<!-- Include Moment.js CDN -->
+	 Include Moment.js CDN 
 	<script type="text/javascript" src=
 "https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment.min.js">
 	</script>
 
-	<!-- Include Bootstrap DateTimePicker CDN -->
+	 Include Bootstrap DateTimePicker CDN 
 	<link
 		href=
 "https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker.min.css"
@@ -44,11 +45,14 @@ if ($conn->connect_error) {
 	<script src=
 "https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js">
 		</script>
-    <!-- CDN and CSS -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-    <link rel="stylesheet" href="styles.css">
-    <link href="https://cdn.jsdelivr.net/npm/flowbite@2.4.1/dist/flowbite.min.css" rel="stylesheet" />
+   CDN and CSS 
+    
+     -->
+     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+
+     <link href="https://cdn.jsdelivr.net/npm/flowbite@2.4.1/dist/flowbite.min.css" rel="stylesheet" /> 
   
+   <link rel="stylesheet" href="styles.css">
 
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -221,21 +225,32 @@ color:#48752C;
        
         <div id="userModal" class="modal" >
             <div class="modal-content">
+
+          
+
             <span class="close" id="closeUserModal">&times;</span>
 
-                <h2>Informacion de Turnos</h2>
-                <form id="userForm" action="set_user_name.php" method="post">
-                    <label for="userName">Nombre:</label>
-                    <input type="text" id="userName" name="userName" required><br><br>
-                    <button type="submit">GUARDAR</button>
-                </form>
-                <p id="userStatus"></p>
+                <h2>Ajustes No Disponibles</h2>
+                
             </div>
         </div>
 
         <div id="add-vehicle-modal" class="modal show-modal" style="display:flex;">
             <div class="modal-content">
                 <form method="post" action="log_vehicle_out.php">
+
+                <!-- ------------------ USER ------------------------- -->
+                <label for="users"><strong> -- Turno --</strong></label>
+                <select name="users" id="users">
+                    <option value="Jose Lopez" <?php if ($selected_user == "Jose Lopez") echo 'selected'; ?>>Jose Lopez</option>
+                    <option value="Alex Vasquez" <?php if ($selected_user == "Alex Vasquez") echo 'selected'; ?>>Alex Vasquez</option>
+                    <option value="Armando Hernandez" <?php if ($selected_user == "Armando Hernandez") echo 'selected'; ?>>Armando Hernandez</option>
+                    <option value="Ivan Lopez" <?php if ($selected_user == "Ivan Lopez") echo 'selected'; ?>>Ivan Lopez</option>
+                    <option value="Soemia Monzon" <?php if ($selected_user == "Soemia Monzon") echo 'selected'; ?>>Soemia Monzon</option>
+                    <option value="Yenifer Calderas" <?php if ($selected_user == "Yenifer Calderas") echo 'selected'; ?>>Yenifer Calderas</option>
+                </select>
+
+
                  <input type="hidden" id="hidden-charge" name="charge">
 
                     <label for="vehicle_type">Tipo de vehiculo</label>
@@ -313,7 +328,8 @@ color:#48752C;
            </form>
            
                <button class="icon-button" id="accountButton">
-                   <span class="material-symbols-outlined icon">account_circle</span>
+                
+                   <span class="material-symbols-outlined icon">settings</span>
                </button>
            </div>
        </div>
@@ -616,18 +632,18 @@ function toggleRequiredAttribute(enable) {
         document.getElementById('userModal').style.display = 'block';
     });
 
-    document.getElementById('closeUserModal').addEventListener('click', function() {
-        fetch('check_user_logged_in.php')
-                .then(response => response.json())
-                .then(data => {
-                    if (!data.loggedIn) {
+//    document.getElementById('closeUserModal').addEventListener('click', function() {
+  //      fetch('check_user_logged_in.php')
+     //           .then(response => response.json())
+       //         .then(data => {
+         //           if (!data.loggedIn) {
 
-                    }else{
-        document.getElementById('userModal').style.display = 'none';
+           //         }else{
+       // document.getElementById('userModal').style.display = 'none';
 
-                }})
+         //       }})
             
-    });
+   // });
 
 
     window.onclick = function(event) {
@@ -636,22 +652,22 @@ function toggleRequiredAttribute(enable) {
         }
     }
 
-    document.addEventListener('DOMContentLoaded', function() {
+   // document.addEventListener('DOMContentLoaded', function() {
             // Check if user is logged in
-            fetch('check_user_logged_in.php')
-                .then(response => response.json())
-                .then(data => {
-                    if (!data.loggedIn) {
-                        document.getElementById('userModal').style.display = 'block';
-                        document.getElementById('userStatus').innerText = 'No hay turno ingresado. Ingrese su nombre.';
-                    } else {
-                        document.getElementById('userStatus').innerText = 'Turno: ' + data.userName;
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
-        });
+     //       fetch('check_user_logged_in.php')
+      //          .then(response => response.json())
+       //         .then(data => {
+       //             if (!data.loggedIn) {
+       //                 document.getElementById('userModal').style.display = 'block';
+       //                 document.getElementById('userStatus').innerText = 'No hay turno ingresado. Ingrese su nombre.';
+        //            } else {
+         //               document.getElementById('userStatus').innerText = 'Turno: ' + data.userName;
+         //           }
+         //       })
+          //      .catch(error => {
+          //          console.error('Error:', error);
+           //     });
+       // });
     </script>
 
       

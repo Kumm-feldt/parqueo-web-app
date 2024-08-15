@@ -5,13 +5,18 @@ include 'conn.php';
 
 date_default_timezone_set('America/Denver');
 
+$user = $_POST['users'];
 
-if (!isset($_SESSION['userName']) or trim($_SESSION['userName']) == "") { 
+
+if (empty(trim($user))) { 
 
     header("Location: index.php");
     
     }else{
 
+$_SESSION['selected_user'] = $user;
+// Retrieve the last selected user from the session, if available
+$selected_user = isset($_SESSION['selected_user']) ? $_SESSION['selected_user'] : '';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $ticket = $_POST['ticket'];
@@ -24,11 +29,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     $vehicle_type = $_POST['vehicle_type'];
     $park_type = $_POST['tipo_parqueo'];
+
     $placa = $_POST['placa'];
     $num_sellos = $_POST['rating']; // Number of "sellos" from the form
 
 
-    $user = $_SESSION['userName'];
     
       // Get current date
       $date = date('Y-m-d');

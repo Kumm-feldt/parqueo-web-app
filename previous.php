@@ -227,7 +227,7 @@ color:#48752C;
                 </button>
               
                 <button class="icon-button" id="accountButton">
-                    <span class="material-symbols-outlined icon">account_circle</span>
+                    <span class="material-symbols-outlined icon">settings</span>
                 </button>
             </div>
         </div>
@@ -235,15 +235,11 @@ color:#48752C;
         <!-- USER MODAL -->
         <div id="userModal" class="modal">
             <div class="modal-content">
+        
             <span class="close" id="closeUserModal">&times;</span>
 
-                <h2>Informacion de turnos</h2>
-                <form id="userForm" action="set_user_name.php" method="post">
-                    <label for="userName">Nombre:</label>
-                    <input type="text" id="userName" name="userName" required><br><br>
-                    <button type="submit">Guardar</button>
-                </form>
-                <p id="userStatus"></p>
+                <h2>Ajustes no disponibles</h2>
+                
             </div>
         </div>
         <!-- Checkout Modal -->
@@ -306,18 +302,19 @@ document.getElementById('in').value = `${hours}:${minutes}`;
         document.getElementById('userModal').style.display = 'block';
     });
 
-    document.getElementById('closeUserModal').addEventListener('click', function() {
-        fetch('check_user_logged_in.php')
-                .then(response => response.json())
-                .then(data => {
-                    if (!data.loggedIn) {
+    
+//    document.getElementById('closeUserModal').addEventListener('click', function() {
+  //      fetch('check_user_logged_in.php')
+     //           .then(response => response.json())
+       //         .then(data => {
+         //           if (!data.loggedIn) {
 
-                    }else{
-        document.getElementById('userModal').style.display = 'none';
+           //         }else{
+       // document.getElementById('userModal').style.display = 'none';
 
-                }})
+         //       }})
             
-    });
+   // });
 
     window.onclick = function(event) {
         if (event.target == document.getElementById('userModal')) {
@@ -325,22 +322,22 @@ document.getElementById('in').value = `${hours}:${minutes}`;
         }
     }
 
-    document.addEventListener('DOMContentLoaded', function() {
+   // document.addEventListener('DOMContentLoaded', function() {
             // Check if user is logged in
-            fetch('check_user_logged_in.php')
-                .then(response => response.json())
-                .then(data => {
-                    if (!data.loggedIn) {
-                        document.getElementById('userModal').style.display = 'block';
-                        document.getElementById('userStatus').innerText = 'No hay turno ingresado. Ingrese su nombre.';
-                    } else {
-                        document.getElementById('userStatus').innerText = 'Turno: ' + data.userName;
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
-        });
+     //       fetch('check_user_logged_in.php')
+      //          .then(response => response.json())
+       //         .then(data => {
+       //             if (!data.loggedIn) {
+       //                 document.getElementById('userModal').style.display = 'block';
+       //                 document.getElementById('userStatus').innerText = 'No hay turno ingresado. Ingrese su nombre.';
+        //            } else {
+         //               document.getElementById('userStatus').innerText = 'Turno: ' + data.userName;
+         //           }
+         //       })
+          //      .catch(error => {
+          //          console.error('Error:', error);
+           //     });
+       // });
     </script>
 <script>
      async function reloadPage() {
