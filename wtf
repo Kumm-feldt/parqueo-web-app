@@ -1,24 +1,67 @@
 <?php
-error_reporting(E_ALL);
-ini_set('log_errors', 1);
-ini_set('error_log', 'error.log');
-
-
 session_start();
 date_default_timezone_set('America/Denver');
 
-require 'vendor/autoload.php'; // make sure to change this between qa/production
-
-
-
+require '../vendor/autoload.php';
 
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
+use PhpOffice\PhpSpreadsheet\Writer\Csv;
+
+function export_excel_db($conn, $username, $spreadsheet, $date){
+
+    
+    $created_date = date('Y-m-d');
+    $created_time = date('H:i:s');
+
+    
+    $tempFile = tempnam(sys_get_temp_dir(), 'data - '.$date) . '.csv';
+    $writer = new Csv($spreadsheet);
+    $writer->save($tempFile);
+
+// Read the file contents
+$file_data = file_get_contents($tempFile);
+$file_name = 'data - ' . $date . '.csv';
+
+
+    // Prepare the SQL statement
+    $stmt = $conn->prepare("INSERT INTO excel_files (created_date, created_time, username, file_data, file_name) VALUES (?, ?, ?, ?, ?)");
+    $stmt->bind_param("sssss", $created_date, $created_time, $username, $file_data, $file_name);
+    
+    if ($stmt->execute()) {
+        echo "New record created successfully";
+    } else {
+        echo "Error: " . $stmt->error;
+    }
+        // Clean up the temporary file
+        unlink($tempFile);
+    
+}
+
+
+
 
 include_once("export_excel_db.php");
-include("conn.php");
+//include("conn.php");
+$username = "u659703897_localhost";
+$password = "DT+xgyc|7";
+$dbname = "u659703897_mydb";
+
+ //$servername = "localhost";
+  // $username = "root";
+ // $password = "";
+ // $dbname = "mydb";
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
 
 $sql = "SELECT * FROM log_out";
 $result = $conn->query($sql);
@@ -36,6 +79,7 @@ if (isset($_SESSION['selected_user'])) {
     $user = "-";
 }
 
+error_log("After the session");
 
 $spreadsheet = new Spreadsheet();
 $sheet = $spreadsheet->getActiveSheet();
@@ -74,7 +118,10 @@ $writer->save($tempFile);
 
 export_excel_db($conn, $user, $spreadsheet, $date);
 
-error_log("just checking");
+
+error_log("After the export excel db");
+
+
 // SQL statement to insert all data from log_out into log_out_copy
 $sql_insert = "INSERT INTO total_log_out SELECT * FROM log_out";
 
@@ -106,11 +153,11 @@ try {
     $mail->Password = 'jhkalmi85!A'; 
     
     $mail->addReplyTo('updates@amiparqueo.com', 'amiparqueo.com'); // correo creado en hostinger
-  $mail->addAddress('mercadeo@realdelparque.com', 'Mercadeo');
-  $mail->addAddress('administracion@realdelparque.com', 'Administracion');
+  //$mail->addAddress('mercadeo@realdelparque.com', 'Mercadeo');
+  //$mail->addAddress('administracion@realdelparque.com', 'Administracion');
   
 
- $mail->addAddress('anthonykenneth007@gmail.com', 'antonio');
+  $mail->addAddress('anthonykenneth007@gmail.com', 'antonio');
     
     $mail->setFrom('updates@amiparqueo.com', 'amiparqueo.com');
     
