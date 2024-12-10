@@ -1,50 +1,53 @@
+-- Table: log_out
+CREATE TABLE log_out (
+    id INT(11) AUTO_INCREMENT PRIMARY KEY,
+    user_id INT(11),
+    vehicle_type VARCHAR(20),
+    ticket VARCHAR(20),
+    time_in DATETIME,
+    time_out DATETIME,
+    charge INT(11),
+    person VARCHAR(255),
+    park_type VARCHAR(50),
+    placa TEXT
+);
 
-
-use parqueo;
+-- Table: users
 CREATE TABLE users (
     id INT(11) AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
-    email VARCHAR(255) NOT NULL UNIQUE,
+    name VARCHAR(255),
+    email VARCHAR(255),
     company_name VARCHAR(255),
     phone_number VARCHAR(20),
-    password VARCHAR(255) NOT NULL,  -- Make sure to hash the passwords before storing them
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    password VARCHAR(255),
+    created_at TIMESTAMP,
+    authorized_user VARCHAR(255),
+    authorized_user_password VARCHAR(255)
 );
+
+-- Table: user_login
 CREATE TABLE user_login (
     id INT(11) AUTO_INCREMENT PRIMARY KEY,
-    user_id INT(11) NOT NULL,
-    login_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    ip_address VARCHAR(45),  -- To store the IP address of the user logging in
-    FOREIGN KEY (user_id) REFERENCES users(id)
+    user_id INT(11),
+    login_time TIMESTAMP,
+    ip_address VARCHAR(45)
 );
+
+-- Table: excel_files
 CREATE TABLE excel_files (
     id INT(11) AUTO_INCREMENT PRIMARY KEY,
-    user_id INT(11) NOT NULL,
+    user_id INT(11),
     created_date DATE,
     created_time TIME,
     username VARCHAR(255),
     file_data LONGBLOB,
-    file_name VARCHAR(255),
-    FOREIGN KEY (user_id) REFERENCES users(id)
-);
--- Create the `log_out` table with `user_id`
-CREATE TABLE log_out (
-    id INT(11) AUTO_INCREMENT PRIMARY KEY,
-    user_id INT(11) NOT NULL,  -- References the user who logged out the vehicle
-    vehicle_type VARCHAR(20),
-    ticket VARCHAR(20),
-    time_in DATETIME,
-    time_out DATETIME,
-    charge INT(11),
-    person VARCHAR(255),
-    park_type VARCHAR(50),
-    placa TEXT,
-    FOREIGN KEY (user_id) REFERENCES users(id)  -- Ensures that this log-out is associated with a specific user
+    file_name VARCHAR(255)
 );
 
+-- Table: total_log_out
 CREATE TABLE total_log_out (
     id INT(11) AUTO_INCREMENT PRIMARY KEY,
-    user_id INT(11) NOT NULL,  -- References the user who logged out the vehicle
+    user_id INT(11),
     vehicle_type VARCHAR(20),
     ticket VARCHAR(20),
     time_in DATETIME,
@@ -52,8 +55,7 @@ CREATE TABLE total_log_out (
     charge INT(11),
     person VARCHAR(255),
     park_type VARCHAR(50),
-    placa TEXT,
-    FOREIGN KEY (user_id) REFERENCES users(id)  -- Ensures that this log-out is associated with a specific user
+    placa TEXT
 );
 
 
