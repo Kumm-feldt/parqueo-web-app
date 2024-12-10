@@ -1,0 +1,229 @@
+.material-symbols-outlined {
+    font-variation-settings:
+    'FILL' 0,
+    'wght' 400,
+    'GRAD' 0,
+    'opsz' 24
+}
+
+
+.out-modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+    justify-content: center;
+    align-items: center;
+}
+
+.out-modal-content {
+    background-color: #fefefe;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 500px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    animation: fadeIn 0.5s;
+}
+
+
+@keyframes fadeIn {
+    from {opacity: 0;}
+    to {opacity: 1;}
+}
+
+
+.get-time-button {
+    margin-left: 10px;
+    padding: 5px 10px;
+    font-size: 14px;
+    cursor: pointer;
+}
+.price-icon{
+color:#48752C;
+}    
+
+
+.show-modal{
+position: relative;
+z-index: 0;
+left: 0;
+top: 0;
+width: 100%;
+height: 100%;
+background-color: white;
+
+overflow: auto;
+justify-content: center;
+align-items: center;
+}
+
+.show-modal .modal-content{
+background-color: rgba(255, 255, 255, 0.651);
+box-shadow: none;
+}
+
+/* calculator table*/
+#hidden-table-price {
+width: 100%;
+border-collapse: collapse;
+margin: 25px 0;
+font-size: 18px;
+text-align: left;
+}
+
+#hidden-table-price th, 
+#hidden-table-price td {
+padding: 12px 15px;
+}
+
+#hidden-table-price tr {
+border-bottom: 1px solid #dddddd;
+}
+
+#hidden-table-price th {
+background-color: #009879;
+color: #ffffff;
+width: 50%;
+}
+
+#hidden-table-price td {
+background-color: #f3f3f3;
+}
+
+.time-div:hover, 
+.price-div:hover {
+background-color: #f1f1f1;
+}
+
+#calculate {
+padding: 10px;
+border: 1px solid #ccc;
+border-radius: 5px;
+text-align: center;
+
+}
+
+#calculate {
+margin-top: 20px;
+background-color: #0E8B25;
+color: white;
+border: none;
+cursor: pointer;
+}
+#calculate:hover {
+background-color: #054d02;
+}
+#out-log{
+width: 70%;
+}
+
+#logo{
+width: 90px;
+height: auto;
+margin-left: 30px;
+
+}
+
+
+/* new design INDEX*/
+.col-flex{
+    display: flex;
+    flex-direction: column;
+}
+
+.wrapper-row{
+    justify-content: space-between;
+}
+
+.second-col{
+    background-color: #EBF7EB;
+    margin: 15px 10px;
+    padding: 10px 40px;
+    border-radius: 20px;
+    width: 400px;
+    height: 400px;
+
+}
+.first-col{
+    margin-top: 15px;
+    margin-right: 10px;
+    width: 400px;
+}
+.sub-flex .exeptional{
+    margin-left: 15px;
+    }
+
+    
+.sub-flex select{
+margin-right: 15px;
+}
+.sub-flex select, .sub-flex input{
+width:50%;
+    }
+   /* Customize the track color */
+#rating {
+    accent-color: #0E8B25;
+
+}
+
+[type=checkbox], [type=radio]{
+    color: #0E8B25;
+}
+@media only screen and (max-width: 945px){
+    .logoimage{
+    display: flex;
+    justify-content: center;
+    padding-left: 0px;
+    
+    }
+    }
+@media only screen and (max-width: 700px){
+    .modal-content{
+        width: 92%;
+    }
+    .sub-flex{
+        flex-direction: row;
+    }
+    .range-input label{
+        width: 100%;
+    }
+
+}
+
+
+@media only screen and (max-width: 625px) {
+    .modal-content{
+        width: 80%;
+    }
+    .time-out-div{
+    padding-top: 0px;
+    }
+    
+    
+    .row-flex{
+    flex-direction: column;    
+    }
+    
+    .second-col {
+        width: 400px;
+        margin: 15px 0;
+        height: 350px;
+    }
+    
+ 
+   
+    .col-flex select{
+        margin-right: 20px;
+    }
+    #out-log, #in {
+        width: 100%;
+    }
+    }
+    

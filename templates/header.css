@@ -1,0 +1,61 @@
+.h__container {
+  font-family: acumin-pro, system-ui, sans-serif;
+
+  max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    align-items: center;  /* Aligns items vertically */
+    justify-content: space-between; /* Spaces out the logo and nav */
+}
+img{
+  width: 50%;
+  height: auto;
+}
+
+.header {
+  background-color: #ffffff;
+  padding: 20px 0;
+}
+
+.header__logo a {
+  color: #28282B;
+  font-size: 24px;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.header__nav {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.header__nav-list {
+  list-style: none;
+  display: flex;
+  align-items: center;
+}
+
+.header__nav-item {
+  margin-left: 20px;
+}
+
+.header__nav-link {
+  color: #28282B;
+  text-decoration: none;
+  font-size: 18px;
+  transition: color 0.3s ease;
+}
+
+.header__nav-link:hover {
+  color: #0d0d0d;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .header__nav {
+      display: none;
+  }
+}
+
+

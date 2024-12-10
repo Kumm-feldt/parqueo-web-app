@@ -3,10 +3,10 @@
 //$password = "DT+xgyc|7";
 //$dbname = "u659703897_mydb";
 
- $servername = "localhost";
-   $username = "root";
-  $password = "";
-  $dbname = "mydb";
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "parqueo";
 $conn = new mysqli($servername, $username, $password, $dbname);
 
 

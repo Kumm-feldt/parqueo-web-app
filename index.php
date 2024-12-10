@@ -1,6 +1,11 @@
 <?php
 session_start();
+if (!isset($_SESSION['user_id'])) {
+   header('Location: login.php');
+   exit;
+}
 
+$user_id = $_SESSION['user_id'];
 
     date_default_timezone_set('America/Guatemala');
 
@@ -20,255 +25,90 @@ if ($conn->connect_error) {
 <html>
 <head>
     <title>Sistema Parqueo</title>
-    <!-- Include Bootstrap CDN 
-	<link href=
-"https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
-		rel="stylesheet">
-	<script src=
-"https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js">
-	</script>
-	<script src=
-"https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js">
-	</script>
-
-	 Include Moment.js CDN 
-	<script type="text/javascript" src=
-"https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment.min.js">
-	</script>
-
-	 Include Bootstrap DateTimePicker CDN 
-	<link
-		href=
-"https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker.min.css"
-		rel="stylesheet">
-
-	<script src=
-"https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js">
-		</script>
-   CDN and CSS 
-    
-     -->
+ 
      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 
      <link href="https://cdn.jsdelivr.net/npm/flowbite@2.4.1/dist/flowbite.min.css" rel="stylesheet" /> 
   
-   <link rel="stylesheet" href="styles.css">
+   <link rel="stylesheet" href="/css/styles.css">
+   <link rel="icon" href="images/favicon.ico" type="image/x-icon">
 
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <style>
-        .material-symbols-outlined {
-            font-variation-settings:
-            'FILL' 0,
-            'wght' 400,
-            'GRAD' 0,
-            'opsz' 24
-        }
-
-
-        .out-modal {
-            display: none;
-            position: fixed;
-            z-index: 1;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgba(0, 0, 0, 0.4);
-            justify-content: center;
-            align-items: center;
-        }
-
-        .out-modal-content {
-            background-color: #fefefe;
-            margin: auto;
-            padding: 20px;
-            border: 1px solid #888;
-            width: 80%;
-            max-width: 500px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-            animation: fadeIn 0.5s;
-        }
-
-
-        @keyframes fadeIn {
-            from {opacity: 0;}
-            to {opacity: 1;}
-        }
-
-       
-        .get-time-button {
-            margin-left: 10px;
-            padding: 5px 10px;
-            font-size: 14px;
-            cursor: pointer;
-        }
-        .price-icon{
-color:#48752C;
-        }    
-
-        
-.show-modal{
-  position: relative;
-  z-index: 0;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background-color: white;
-
-  overflow: auto;
-  justify-content: center;
-  align-items: center;
-}
-
-.show-modal .modal-content{
-  border: 1px solid ;
-  background-color: rgba(255, 255, 255, 0.651);
-  box-shadow: none;
-}
-
-/* calculator table*/
-#hidden-table-price {
-  width: 100%;
-  border-collapse: collapse;
-  margin: 25px 0;
-  font-size: 18px;
-  text-align: left;
-}
-
-#hidden-table-price th, 
-#hidden-table-price td {
-  padding: 12px 15px;
-}
-
-#hidden-table-price tr {
-  border-bottom: 1px solid #dddddd;
-}
-
-#hidden-table-price th {
-  background-color: #009879;
-  color: #ffffff;
-  width: 50%;
-}
-
-#hidden-table-price td {
-  background-color: #f3f3f3;
-}
-
-.time-div:hover, 
-.price-div:hover {
-  background-color: #f1f1f1;
-}
-
-#calculate {
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  text-align: center;
-  
-}
-
-#calculate {
-  margin-top: 20px;
-  background-color: #4CAF50;
-  color: white;
-  border: none;
-  cursor: pointer;
-}
-#calculate:hover {
-  background-color: #054d02;
-}
-#out-log{
-  width: 70%;
-}
-@media only screen and (max-width: 600px) {
-    #out-log, #in{
-      width: 90%;
-    }
-    .time-out-div{
-  padding-top: 0px;
-}
-}
-
-#logo{
-    width: 90px;
-    height: auto;
-    margin-left: 30px;
+   <link rel="stylesheet" href="/css/index.css">
     
-}
-@media only screen and (max-width: 945px){
-    .logoimage{
-    display: flex;
-    justify-content: center;
-    padding-left: 0px;
-
-    }
-}
-        </style>
-
 
 
 </head>
 <body>
     <header>
         <div class="logoimage">
-        <img id="logo" src="LOGO.png" alt="logo">
+      <a href="index.php">  <img id="logo"<?php echo " src= /logos/img_user_" .$user_id.".png " ?> alt="logo"> </a>
         </div>
-  
-</header>
-    <h2 id="main-title">INICIO:Sistema de parqueos</h2>
+    </header>
+  <!--  <h2 id="main-title">INICIO:Sistema de parqueos</h2>-->
     <div class="wrapper">
       
        
-        <div id="userModal" class="modal" >
-            <div class="modal-content">
-
-          
-
-            <span class="close" id="closeUserModal">&times;</span>
-
-                <h2>Ajustes No Disponibles</h2>
-                
-            </div>
-        </div>
+     
 
         <div id="add-vehicle-modal" class="modal show-modal" style="display:flex;">
             <div class="modal-content">
-                <form method="post" action="log_vehicle_out.php">
-
-                <!-- ------------------ USER ------------------------- -->
-                <label for="users"><strong> -- Turno --</strong></label>
+                <form method="post" action="/processes/log_vehicle_out.php">
+                <div class="col-flex">
+                <label for="users"><strong> Turno</strong></label>
                 <select name="users" id="users">
-                    <option value="Alex Vasquez" <?php if ($selected_user == "Alex Vasquez") echo 'selected'; ?>>Alex Vasquez</option>
-                    <option value="Armando Hernandez" <?php if ($selected_user == "Armando Hernandez") echo 'selected'; ?>>Armando Hernandez</option>
-                    <option value="Ivan Lopez" <?php if ($selected_user == "Ivan Lopez") echo 'selected'; ?>>Ivan Lopez</option>
-                    <option value="Soemia Monzon" <?php if ($selected_user == "Soemia Monzon") echo 'selected'; ?>>Soemia Monzon</option>
-                    <option value="Yenifer Calderas" <?php if ($selected_user == "Yenifer Calderas") echo 'selected'; ?>>Yenifer Calderas</option>
-                    <option value="Esdras Liquez" <?php if ($selected_user == "Esdras Liquez") echo 'selected'; ?>>Esdras Liquez                    </option>
-                    <option value="Werner Luther" <?php if ($selected_user == "Werner Luther") echo 'selected'; ?>>Werner Luther</option>
-                
-                </select>
+               
+                <?php
+                    // Query to get employee list
+                    $sql_workers = "SELECT * FROM workers WHERE user_id = ?"; // Use correct column names
+                    $stm = $conn->prepare($sql_workers);  // Prepare the statement
+                    $stm->bind_param('i', $_SESSION['user_id']); // Bind the user_id parameter from session
 
+                    // Execute the statement
+                    if ($stm->execute()) {
+                        $result = $stm->get_result();  // Get the result set from the prepared statement
+
+                        // Check if the result contains data
+                        if ($result->num_rows > 0) {
+                            // Fetch and display data
+                            while ($row = $result->fetch_assoc()) {
+                                $user_n = $row['worker_name'];
+                                $selected = ($selected_user == $user_n) ? "selected" : ""; 
+                                echo "<option value='$user_n' $selected>$user_n</option>";
+                            }
+                        }
+                    }
+                    ?>          
+                </select>
+                </div>
+                <div class="row-flex wrapper-row">
+                <div class="col-flex first-col">
+            
 
                  <input type="hidden" id="hidden-charge" name="charge">
 
-                    <label for="vehicle_type">Tipo de vehiculo</label>
-                    <select name="vehicle_type" id="vehicle_type">
-                        <option value="carro">Carro</option>
-                        <option value="motocicleta">Motocicleta</option>
-                    </select>
-                    <br>
+                    
+                 
+                    <div class="row-flex sub-flex">
+                        <label for="vehicle_type">Tipo de vehiculo</label>
+                        <label for="ticket" class="exeptional">Numero de ticket:</label>
+                    </div>
+                    <div class="row-flex sub-flex">
+                        <select name="vehicle_type" id="vehicle_type">
+                            <option value="carro">Carro</option>
+                            <option value="motocicleta">Motocicleta</option>
+                        </select>
+                        <input type="text" name="ticket" id="ticket" required>
+                    </div>
+                
+
+                    <div class="col-flex range-input">
                     <label for="rating">Cantidad de Stickers (Max 20)</label>
-                    <input type="number" id="rating" name="rating" min="0" max="20" step="1" value = "0">
-                    <!-- <input type="range" id="rating" name="rating" min="0" max="6" step="1" value="0" oninput="document.getElementById('ratingValue').innerText = this.value + ' Stickers';">
-                    <span id="ratingValue">0 Stickers</span>
-                    -->
-                    <br>
-                    <label for="ticket">Numero de ticket:</label>
-                    <input type="text" name="ticket" id="ticket" required><br><br>
+                    <input type="number" id="rating" name="rating" min="0" max="20"  value="0" >
+                    </div>
+                  <br>
                    <div class="options-radio">
                    <input type="radio" id="temporal" name="tipo_parqueo" value="Por Hora" checked="checked">
                     <label for="temporal">Por Hora</label><br>
@@ -281,6 +121,7 @@ color:#48752C;
                     <input type="radio" id="perdido" name="tipo_parqueo" value="Ticket Perdido">
                     <label for="perdido">Ticket Perdido</label>
                    </div>
+                   <br>
 
                    <!-- Time in / Time out-->
                    
@@ -298,42 +139,77 @@ color:#48752C;
                     <input type="time" name="out" id="out-log"  value="00:00" required>
                     </div>
 
-
-                   
-                   
                     </div> 
+
+
                     <div class="placa-div">
                     <label id="placa-label" for="placa">Placa</label> <br>
                     <input type="text" id="placa" name="placa">
                     </div>
 
+                    </div>
+
+                    <!-- SECOND COLUMN -->
+                    <div class="col-flex second-col">
                     <div id="calculate">Calcular</div>
                     <br>
-                    <table id="hidden-table-price">
-                        <tr class="time-div">
-                    <th>Tiempo Transcurrido:</th> <td id="out-duration"></td>
-                      </tr>
-                    <tr class="price-div">
-                    <th>Precio a Pagar:</th><td id="out-price"> </td>
-                    </tr>    
-                    </table>
-                    <button type="submit">INGRESAR</button>
+                        <table id="hidden-table-price">
+                            <tr class="time-div">
+                        <th>Tiempo Transcurrido:</th> <td id="out-duration"></td>
+                        </tr>
+                        <tr class="price-div">
+                        <th>Precio a Pagar:</th><td id="out-price"> </td>
+                        </tr>    
+                        </table>
+                        <button type="submit">INGRESAR</button>
+                    </div>
+
+
+                    </div>
                 </form>
             </div>
         </div>
+
+
+
+
+
         <div id="footer">
            
            <div class="buttons">
-           <button class="icon-button">
-
            <a href="previous.php" >
+               <button type="submit" class="icon-button">
                    <span class="material-symbols-outlined icon" style="color: black;">history</span>
-            </a>
-</button>
+               </button>
+                </a>
+       
            
-            <button class="icon-button" id="accountButton">
-                    <span class="material-symbols-outlined icon">settings</span>
+            <?php
+            if($_SESSION['m_u'] == true){
+                echo "
+                   
+                <a href='historial.php'>
+                <button type='submit' class='icon-button' id='accountButton'>
+                    <span class='material-symbols-outlined icon'>manage_search</span>
                 </button>
+            </a>
+             <a href='settings.php' >
+           
+               <button type='submit' class='icon-button' id='accountButton'>
+                
+                   <span class='material-symbols-outlined icon'>settings</span>
+               </button>
+                </a>
+            
+            
+            ";
+            }
+            ?>
+            <a href="logout.php" >
+                <button type="submit" class="icon-button" id="accountButton">
+                    <span class="material-symbols-outlined icon">logout</span>
+                </button>
+            </a>
            </div>
        </div>
   
@@ -483,6 +359,10 @@ function toggleRequiredAttribute(enable) {
                         var timeOut =  getCurrentTime();
 
                     }
+               
+
+
+                   // var timeOutUpdated = updatedTimeOut(timeOut.value);
 
                     // Calculate duration and price
                     var duration = calculateDuration(timeIn, timeOut);
@@ -494,7 +374,6 @@ function toggleRequiredAttribute(enable) {
                     var durationFormatted = duration.hours + " horas " + duration.minutes + " min";
 
                     outDuration.innerText = durationFormatted;
-
                     if(anuladoRadio.checked){
                         outPrice.innerText = "Q. 0.00";
                         document.getElementById("hidden-charge").value = 0;
@@ -503,11 +382,7 @@ function toggleRequiredAttribute(enable) {
                         document.getElementById("hidden-charge").value = price;
                     }
                    
-                    setTimeout(function() {
-                        document.querySelector('form').submit(); // This submits the form
-                    }, 15000); // 15000 milliseconds = 15 seconds
-
-
+                    //document.getElementById("hidden-out").value = duration.hours + ":" + duration.minutes ;
 
             });
         
@@ -558,6 +433,7 @@ function toggleRequiredAttribute(enable) {
     // Adjust if the time period crosses midnight
     if (diffMinutes < 0) {
 
+        //diffMinutes += 12 * 60; // Add 12 hours worth of minutes
             diffMinutes += 24 * 60; // Add 24 hours worth of minutes
         
 
@@ -573,14 +449,14 @@ function toggleRequiredAttribute(enable) {
 
                 function calculatePrice(duration, vehicleType) {
                     if (vehicleType == 'carro'){
-                        var rating = document.getElementById('rating').value * 7;
+                        var rating = document.getElementById('rating').value * 6;
 
                     }else{
                         var rating = document.getElementById('rating').value * 5;
                     }
 
                     var totalMinutes = duration.hours * 60 + duration.minutes;
-                    var pricePer30Min = vehicleType === "carro" ? 7 : 5;
+                    var pricePer30Min = vehicleType === "carro" ? 6 : 5;
                     var price = (Math.ceil(totalMinutes / 30) * pricePer30Min) - rating;
                     if(price < 0){
                         price = 0;
@@ -635,6 +511,18 @@ function toggleRequiredAttribute(enable) {
         document.getElementById('userModal').style.display = 'block';
     });
 
+ document.getElementById('closeUserModal').addEventListener('click', function() {
+  //      fetch('check_user_logged_in.php')
+     //           .then(response => response.json())
+       //         .then(data => {
+         //           if (!data.loggedIn) {
+
+           //         }else{
+       document.getElementById('userModal').style.display = 'none';
+
+         //       }})
+            
+ });
 
 
     window.onclick = function(event) {
@@ -642,6 +530,7 @@ function toggleRequiredAttribute(enable) {
             document.getElementById('userModal').style.display = 'none';
         }
     }
+
 
     </script>
 

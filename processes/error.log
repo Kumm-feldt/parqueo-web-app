@@ -1,0 +1,15 @@
+[21-Oct-2024 22:58:49 America/Denver] PHP Warning:  require(vendor/autoload.php): failed to open stream: No such file or directory in C:\Users\antho\OneDrive\Documents\coeus\processes\export_excel.php on line 10
+[21-Oct-2024 22:58:49 America/Denver] PHP Fatal error:  require(): Failed opening required 'vendor/autoload.php' (include_path='C:\xampp\php\PEAR') in C:\Users\antho\OneDrive\Documents\coeus\processes\export_excel.php on line 10
+[21-Oct-2024 23:00:15 America/Denver] PHP Warning:  require(vendor/autoload.php): failed to open stream: No such file or directory in C:\Users\antho\OneDrive\Documents\coeus\processes\export_excel.php on line 10
+[21-Oct-2024 23:00:15 America/Denver] PHP Fatal error:  require(): Failed opening required 'vendor/autoload.php' (include_path='C:\xampp\php\PEAR') in C:\Users\antho\OneDrive\Documents\coeus\processes\export_excel.php on line 10
+[21-Oct-2024 23:00:44 America/Denver] PHP Warning:  require(vendor/autoload.php): failed to open stream: No such file or directory in C:\Users\antho\OneDrive\Documents\coeus\processes\export_excel_db.php on line 2
+[21-Oct-2024 23:00:44 America/Denver] PHP Fatal error:  require(): Failed opening required 'vendor/autoload.php' (include_path='C:\xampp\php\PEAR') in C:\Users\antho\OneDrive\Documents\coeus\processes\export_excel_db.php on line 2
+[21-Oct-2024 23:01:22 America/Denver] PHP Notice:  session_start(): A session had already been started - ignoring in C:\Users\antho\OneDrive\Documents\coeus\processes\export_excel_db.php on line 3
+[21-Oct-2024 23:01:22 America/Denver] PHP Warning:  include(/../conn.php): failed to open stream: No such file or directory in C:\Users\antho\OneDrive\Documents\coeus\processes\export_excel.php on line 21
+[21-Oct-2024 23:01:22 America/Denver] PHP Warning:  include(): Failed opening '/../conn.php' for inclusion (include_path='C:\xampp\php\PEAR') in C:\Users\antho\OneDrive\Documents\coeus\processes\export_excel.php on line 21
+[21-Oct-2024 23:01:22 America/Denver] PHP Notice:  Undefined variable: conn in C:\Users\antho\OneDrive\Documents\coeus\processes\export_excel.php on line 26
+[21-Oct-2024 23:01:22 America/Denver] PHP Fatal error:  Uncaught Error: Call to a member function prepare() on null in C:\Users\antho\OneDrive\Documents\coeus\processes\export_excel.php:26
+Stack trace:
+#0 {main}
+  thrown in C:\Users\antho\OneDrive\Documents\coeus\processes\export_excel.php on line 26
+[21-Oct-2024 23:02:12 America/Denver] just checking
