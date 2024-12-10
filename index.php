@@ -573,14 +573,14 @@ function toggleRequiredAttribute(enable) {
 
                 function calculatePrice(duration, vehicleType) {
                     if (vehicleType == 'carro'){
-                        var rating = document.getElementById('rating').value * 7;
+                        var rating = document.getElementById('rating').value * 8;
 
                     }else{
                         var rating = document.getElementById('rating').value * 5;
                     }
 
                     var totalMinutes = duration.hours * 60 + duration.minutes;
-                    var pricePer30Min = vehicleType === "carro" ? 7 : 5;
+                    var pricePer30Min = vehicleType === "carro" ? 8 : 5;
                     var price = (Math.ceil(totalMinutes / 30) * pricePer30Min) - rating;
                     if(price < 0){
                         price = 0;

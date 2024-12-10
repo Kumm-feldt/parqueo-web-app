@@ -145,14 +145,14 @@ function calculateDuration($startTime, $endTime) {
 // Function to calculate price based on duration and vehicle type
 function calculatePrice($duration, $vehicle_type, $num_sellos = 0) {
 
-    $base_rate = $vehicle_type == "carro" ?  7: 5; // 7Q for cars, 5Q for motorcycles
+    $base_rate = $vehicle_type == "carro" ?  8: 5; // 8Q for cars, 5Q for motorcycles
 
     // Calculate the base price
     $base_price = ceil($duration / 30) * $base_rate; // Round up to the nearest 30 minutes
 
     if($num_sellos != 0){
     // Calculate the discount
-    $discount = $num_sellos * ($vehicle_type == "carro" ? 7 : 5);
+    $discount = $num_sellos * ($vehicle_type == "carro" ? 8 : 5);
     }else{
         $discount = 0;
     }
