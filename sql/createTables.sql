@@ -55,3 +55,50 @@ CREATE TABLE total_log_out (
     placa TEXT,
     FOREIGN KEY (user_id) REFERENCES users(id)  -- Ensures that this log-out is associated with a specific user
 );
+
+
+-- other tables
+-- Table: workers
+CREATE TABLE workers (
+    id INT(11) AUTO_INCREMENT PRIMARY KEY,
+    user_id INT(11),
+    worker_name VARCHAR(255)
+);
+
+-- Table: vehicle_events
+CREATE TABLE vehicle_events (
+    id INT(11) AUTO_INCREMENT PRIMARY KEY,
+    user_id INT(11),
+    vehicle_type VARCHAR(50),
+    event VARCHAR(50)
+);
+
+-- Table: password_reset_temp
+CREATE TABLE password_reset_temp (
+    email VARCHAR(250),
+    key VARCHAR(250),
+    expDate DATETIME
+);
+
+-- Table: logos
+CREATE TABLE logos (
+    id INT(11) AUTO_INCREMENT PRIMARY KEY,
+    user_id INT(11),
+    logo_path VARCHAR(255)
+);
+
+-- Table: log_in
+CREATE TABLE log_in (
+    id INT(11) AUTO_INCREMENT PRIMARY KEY,
+    vehicle_type VARCHAR(20),
+    ticket VARCHAR(20),
+    time_in DATETIME,
+    user_id INT(11)
+);
+
+-- Table: forward_emails
+CREATE TABLE forward_emails (
+    id INT(11) AUTO_INCREMENT PRIMARY KEY,
+    user_id INT(11),
+    email VARCHAR(255)
+);
