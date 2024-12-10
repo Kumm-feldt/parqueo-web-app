@@ -1,6 +1,6 @@
 <?php
-require 'vendor/autoload.php'; // Make sure to switch between qa/production
-date_default_timezone_set('America/Denver');
+require 'vendor/autoload.php'; // Make sure you have included the autoloader for PHPSpreadsheet
+date_default_timezone_set('America/Guatemala');
 
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;

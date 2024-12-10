@@ -2,7 +2,7 @@
 session_start();
 
 
-    date_default_timezone_set('America/Denver');
+    date_default_timezone_set('America/Guatemala');
 
  // Retrieve the last selected user from the session, if available
 $selected_user = isset($_SESSION['selected_user']) ? $_SESSION['selected_user'] : '';   
@@ -242,12 +242,14 @@ color:#48752C;
                 <!-- ------------------ USER ------------------------- -->
                 <label for="users"><strong> -- Turno --</strong></label>
                 <select name="users" id="users">
-                    <option value="Jose Lopez" <?php if ($selected_user == "Jose Lopez") echo 'selected'; ?>>Jose Lopez</option>
                     <option value="Alex Vasquez" <?php if ($selected_user == "Alex Vasquez") echo 'selected'; ?>>Alex Vasquez</option>
                     <option value="Armando Hernandez" <?php if ($selected_user == "Armando Hernandez") echo 'selected'; ?>>Armando Hernandez</option>
                     <option value="Ivan Lopez" <?php if ($selected_user == "Ivan Lopez") echo 'selected'; ?>>Ivan Lopez</option>
                     <option value="Soemia Monzon" <?php if ($selected_user == "Soemia Monzon") echo 'selected'; ?>>Soemia Monzon</option>
                     <option value="Yenifer Calderas" <?php if ($selected_user == "Yenifer Calderas") echo 'selected'; ?>>Yenifer Calderas</option>
+                    <option value="Esdras Liquez" <?php if ($selected_user == "Esdras Liquez") echo 'selected'; ?>>Esdras Liquez                    </option>
+                    <option value="Werner Luther" <?php if ($selected_user == "Werner Luther") echo 'selected'; ?>>Werner Luther</option>
+                
                 </select>
 
 
@@ -259,10 +261,11 @@ color:#48752C;
                         <option value="motocicleta">Motocicleta</option>
                     </select>
                     <br>
-                    <label for="rating">Cantidad de Stickers (Max 6)</label>
-                    <input type="range" id="rating" name="rating" min="0" max="6" step="1" value="0" oninput="document.getElementById('ratingValue').innerText = this.value + ' Stickers';">
+                    <label for="rating">Cantidad de Stickers (Max 20)</label>
+                    <input type="number" id="rating" name="rating" min="0" max="20" step="1" value = "0">
+                    <!-- <input type="range" id="rating" name="rating" min="0" max="6" step="1" value="0" oninput="document.getElementById('ratingValue').innerText = this.value + ' Stickers';">
                     <span id="ratingValue">0 Stickers</span>
-
+                    -->
                     <br>
                     <label for="ticket">Numero de ticket:</label>
                     <input type="text" name="ticket" id="ticket" required><br><br>
@@ -321,16 +324,16 @@ color:#48752C;
         <div id="footer">
            
            <div class="buttons">
-           <form action="previous.php" method="post">
-               <button type="submit" class="icon-button">
+           <button class="icon-button">
+
+           <a href="previous.php" >
                    <span class="material-symbols-outlined icon" style="color: black;">history</span>
-               </button>
-           </form>
+            </a>
+</button>
            
-               <button class="icon-button" id="accountButton">
-                
-                   <span class="material-symbols-outlined icon">settings</span>
-               </button>
+            <button class="icon-button" id="accountButton">
+                    <span class="material-symbols-outlined icon">settings</span>
+                </button>
            </div>
        </div>
   
@@ -480,10 +483,6 @@ function toggleRequiredAttribute(enable) {
                         var timeOut =  getCurrentTime();
 
                     }
-               
-
-
-                   // var timeOutUpdated = updatedTimeOut(timeOut.value);
 
                     // Calculate duration and price
                     var duration = calculateDuration(timeIn, timeOut);
@@ -495,6 +494,7 @@ function toggleRequiredAttribute(enable) {
                     var durationFormatted = duration.hours + " horas " + duration.minutes + " min";
 
                     outDuration.innerText = durationFormatted;
+
                     if(anuladoRadio.checked){
                         outPrice.innerText = "Q. 0.00";
                         document.getElementById("hidden-charge").value = 0;
@@ -503,7 +503,11 @@ function toggleRequiredAttribute(enable) {
                         document.getElementById("hidden-charge").value = price;
                     }
                    
-                    //document.getElementById("hidden-out").value = duration.hours + ":" + duration.minutes ;
+                    setTimeout(function() {
+                        document.querySelector('form').submit(); // This submits the form
+                    }, 15000); // 15000 milliseconds = 15 seconds
+
+
 
             });
         
@@ -554,7 +558,6 @@ function toggleRequiredAttribute(enable) {
     // Adjust if the time period crosses midnight
     if (diffMinutes < 0) {
 
-        //diffMinutes += 12 * 60; // Add 12 hours worth of minutes
             diffMinutes += 24 * 60; // Add 24 hours worth of minutes
         
 
@@ -570,14 +573,14 @@ function toggleRequiredAttribute(enable) {
 
                 function calculatePrice(duration, vehicleType) {
                     if (vehicleType == 'carro'){
-                        var rating = document.getElementById('rating').value * 6;
+                        var rating = document.getElementById('rating').value * 7;
 
                     }else{
                         var rating = document.getElementById('rating').value * 5;
                     }
 
                     var totalMinutes = duration.hours * 60 + duration.minutes;
-                    var pricePer30Min = vehicleType === "carro" ? 6 : 5;
+                    var pricePer30Min = vehicleType === "carro" ? 7 : 5;
                     var price = (Math.ceil(totalMinutes / 30) * pricePer30Min) - rating;
                     if(price < 0){
                         price = 0;
@@ -632,18 +635,6 @@ function toggleRequiredAttribute(enable) {
         document.getElementById('userModal').style.display = 'block';
     });
 
-//    document.getElementById('closeUserModal').addEventListener('click', function() {
-  //      fetch('check_user_logged_in.php')
-     //           .then(response => response.json())
-       //         .then(data => {
-         //           if (!data.loggedIn) {
-
-           //         }else{
-       // document.getElementById('userModal').style.display = 'none';
-
-         //       }})
-            
-   // });
 
 
     window.onclick = function(event) {
@@ -652,22 +643,6 @@ function toggleRequiredAttribute(enable) {
         }
     }
 
-   // document.addEventListener('DOMContentLoaded', function() {
-            // Check if user is logged in
-     //       fetch('check_user_logged_in.php')
-      //          .then(response => response.json())
-       //         .then(data => {
-       //             if (!data.loggedIn) {
-       //                 document.getElementById('userModal').style.display = 'block';
-       //                 document.getElementById('userStatus').innerText = 'No hay turno ingresado. Ingrese su nombre.';
-        //            } else {
-         //               document.getElementById('userStatus').innerText = 'Turno: ' + data.userName;
-         //           }
-         //       })
-          //      .catch(error => {
-          //          console.error('Error:', error);
-           //     });
-       // });
     </script>
 
       

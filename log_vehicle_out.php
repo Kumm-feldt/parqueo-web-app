@@ -3,27 +3,30 @@ session_start();
    
 include 'conn.php';
 
-date_default_timezone_set('America/Denver');
+date_default_timezone_set('America/Guatemala');
 
 $user = $_POST['users'];
 
-
-if (empty(trim($user))) { 
+if (empty(trim($user)) || empty(trim($_POST['ticket']))) { 
 
     header("Location: index.php");
     
     }else{
+       
 
 $_SESSION['selected_user'] = $user;
 // Retrieve the last selected user from the session, if available
 $selected_user = isset($_SESSION['selected_user']) ? $_SESSION['selected_user'] : '';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+
     $ticket = $_POST['ticket'];
+    error_log("->" .$ticket);
 
     // Check if the ticket already exists
-    if (checkTicket($conn, $ticket)) {
+    if (checkTicket($conn, $ticket) or empty(trim($ticket)) ) {
         exit();
+
     }
     $charge = $_POST['charge'];
 
@@ -54,39 +57,51 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $time_out = $date . ' ' . $time_out_get;
 
         if($park_type == "Por Hora"){
+
             $duration = calculateDuration($time_in, $time_out);
+    
             $charge = calculatePrice($duration, $vehicle_type, $num_sellos);
+          
+            if($charge == 0){
+                $park_type = "Cortesia";
+            }
 
         }
-
 
     } else  {
         $time_in = $date ;
         $time_out = $date;
 
     }
+
    if ($park_type != 'Anulado' or $park_type != 'Ticket Perdidos'){
     $placa = "-";
    }
 
     if ($ticket) {
+
         // Insert into log_out table
         $stmt = $conn->prepare("INSERT INTO log_out (log_in_id, vehicle_type, ticket, time_in, time_out, charge, person, park_type, placa) VALUES (?,?, ?, ?, ?, ?, ?, ?, ?)");
         if ($stmt === false) {
+
             die("Prepare failed: " . htmlspecialchars($conn->error));
         }
         $stmt->bind_param("issssisss", $ticket, $vehicle_type, $ticket, $time_in, $time_out, $charge, $user, $park_type, $placa);
 
         if ($stmt->execute() === TRUE) {
+
             header("Location: index.php");
         } else {
             echo "Error insertando: " . $stmt->error;
         }
         $stmt->close();
     } else {
-        echo "Error: Ticket ID not found in log_in table. ticket: ". $ticket. " id: ". $id;
+        echo "Error: Ticket ID not found in log_in table.";
     }
-}
+    }else{
+        echo "Error: Algo salio mal.";
+
+    }
 
 $conn->close();
 }
@@ -128,14 +143,20 @@ function calculateDuration($startTime, $endTime) {
 
 
 // Function to calculate price based on duration and vehicle type
-function calculatePrice($duration, $vehicle_type, $num_sellos) {
-    $base_rate = $vehicle_type == "carro" ? 6 : 5; // 6Q for cars, 5Q for motorcycles
+function calculatePrice($duration, $vehicle_type, $num_sellos = 0) {
+
+    $base_rate = $vehicle_type == "carro" ?  7: 5; // 7Q for cars, 5Q for motorcycles
 
     // Calculate the base price
     $base_price = ceil($duration / 30) * $base_rate; // Round up to the nearest 30 minutes
 
+    if($num_sellos != 0){
     // Calculate the discount
-    $discount = $num_sellos * ($vehicle_type == "carro" ? 6 : 5);
+    $discount = $num_sellos * ($vehicle_type == "carro" ? 7 : 5);
+    }else{
+        $discount = 0;
+    }
+
 
     // Final price after discount
     $final_price = max(0, $base_price - $discount); // Ensure the final price is not negative
@@ -144,16 +165,7 @@ function calculatePrice($duration, $vehicle_type, $num_sellos) {
 }
 
 function checkTicket($conn, $ticket_p) {
-    // Check log_in table
-    $stmt = $conn->prepare("SELECT ticket FROM log_in WHERE ticket = ?");
-    if (!$stmt) {
-        die("Error preparing statement (log_in): " . $conn->error);
-    }
-    $stmt->bind_param("s", $ticket_p);
-    if (!$stmt->execute()) {
-        die("Error executing statement (log_in): " . $stmt->error);
-    }
-    $stmt->store_result();
+   
 
     // Check log_out table
     $stmt_log_out = $conn->prepare("SELECT ticket FROM log_out WHERE ticket = ?");
@@ -166,17 +178,15 @@ function checkTicket($conn, $ticket_p) {
     }
     $stmt_log_out->store_result();
 
-    if ($stmt->num_rows > 0 || $stmt_log_out->num_rows > 0) {
+    if ( $stmt_log_out->num_rows > 0) {
 echo "<div style='text-align: center; padding-top:50px;'>";
 echo "<p>TICKET: " . $ticket_p . " ya fue usado por hoy, por favor ingresa uno nuevo. </p><br>";
 echo "<button> <a href='index.php'>Ingresa nuevo ticket</a> </button>";
 echo "</div>";
 
-        $stmt->close();
         $stmt_log_out->close();
         return true;
     } else {
-        $stmt->close();
         $stmt_log_out->close();
         return false;
     }

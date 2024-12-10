@@ -10,6 +10,7 @@
 <body>
     <div class="container">
         <h1>Historial de archivos</h1>
+    
         <table>
             <thead>
                 <tr>

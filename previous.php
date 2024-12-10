@@ -1,5 +1,5 @@
 <?php
-    date_default_timezone_set('America/Denver');
+    date_default_timezone_set('America/Guatemala');
     session_start();
     error_reporting(E_ALL);
     ini_set('log_errors', 1);
@@ -169,11 +169,31 @@ color:#48752C;
   
 </header>
     <h2 id="main-title">HISTORIAL EN TURNO ACTUAL</h2>
+<div class="search-bar">
+
+    <form method="GET" action="previous.php">
+            <input type="text" name="search" placeholder="Buscar..." required>
+            <button class="search-button"type="submit"><span class="material-symbols-outlined">
+            search
+            </span>
+            </button>
+            <a href="previous.php" class="refresh-button">
+                      <span class="material-symbols-outlined">
+                    refresh
+                    </span>
+                 
+
+                </a>  
+    </form>
+  
+
+</div>
     <div class="wrapper">
         <div class="table">
          <table>
             <thead>
                 <tr class="tr-headers">
+                    <th>No.</th>
                     <th>Vehiculo</th>
                     <th>Ticket</th>
                     <th>Hora de entrada</th>
@@ -189,10 +209,72 @@ color:#48752C;
 
                 </tr>
             </thead>
+            <tbody id="search-table">
+
+                <?php
+                    if($_SERVER["REQUEST_METHOD"] == "GET") {
+                       // Database connection (update with your database credentials)
+                    include 'conn.php';
+                    try {
+                        $pdo = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
+                        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+                        // Check if search term is provided
+                        if (isset($_GET['search'])) {
+                            $search = $_GET['search'];
+
+                            // Prepare SQL query with a wildcard search
+                            $stmt = $pdo->prepare("SELECT * FROM log_out WHERE ticket LIKE :search");
+                            $stmt->execute(['search' => '%' . $search . '%']);
+
+                            // Fetch results
+                            $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+                            // Display results
+
+                            if ($results) {
+
+                                echo '<tr><td colspan="8">Resultados:</td></tr>';
+
+                                // Loop through each result row and output data in the table
+                                foreach ($results as $row) {
+
+                                    echo '<tr class="vehicle-row" id="' . htmlspecialchars($row["id"]) . '">
+                                    <td> - </td>
+                                        
+                                    <td>' . htmlspecialchars($row["vehicle_type"]) . '</td>
+                                        <td>' . htmlspecialchars($row["ticket"]) . '</td>
+                                        <td>' . htmlspecialchars($row["time_in"]) . '</td>
+                                        <td>' . htmlspecialchars($row["time_out"]) . '</td>
+                                        <td>' . calculateDuration($row["time_in"], $row["time_out"]) . '</td>
+                                        <td>' . htmlspecialchars($row["charge"]) . '</td>
+                                        <td>' . htmlspecialchars($row["person"]) . '</td>
+                                        <td>' . htmlspecialchars($row["park_type"]) . '</td>
+                                    </tr>';
+                                }
+                                    echo '<tr><td colspan="9" style="text-align: center;">___________________________________________________________________________</td></tr>';
+                            } else {
+                            echo '<tr><td  colspan="9">No resultados encontrados.</td> </tr>' ;
+                            }
+                        }
+                    } catch (PDOException $e) {
+                        echo "Error: " . $e->getMessage();
+                    }
+
+                    
+                    }
+                        ?>
+            
+        </tbody>
             <tbody>
-                <?php foreach ($data as $row): ?>
+                <?php 
+                    $counter = 1;
+                
+                foreach ($data as $row): ?>
                     
                     <tr class="vehicle-row" id="<?php echo htmlspecialchars($row['id']); ?>">
+                    <td><?php echo $counter; ?></td>
+                    
                     <td><?php echo htmlspecialchars($row['vehicle_type']); ?></td>
                             <td><?php echo htmlspecialchars($row['ticket']); ?></td>
                             <td><?php echo htmlspecialchars($row['time_in']); ?></td>
@@ -204,7 +286,7 @@ color:#48752C;
                             <td><?php echo htmlspecialchars($row['park_type']); ?></td>
 
 
-                          
+                          <?php $counter++;?>
                     </tr>
                  
                 <?php endforeach; ?>
@@ -214,8 +296,8 @@ color:#48752C;
         <div id="footer">
         <?php if ($noData == false): ?>
             <div class="img-send">
-                <form action="export_excel.php" method="post" >
-                    <button class="img-button" type="submit" onclick="reloadPage()">
+                <form action="export_excel.php" method="post" onsubmit="return checkPasscode(event)">
+                    <button class="img-button" type="submit">
                         <img src="button.png" alt="send">
                     </button>
                 </form>
@@ -306,43 +388,26 @@ document.getElementById('in').value = `${hours}:${minutes}`;
     });
 
     
-//    document.getElementById('closeUserModal').addEventListener('click', function() {
-  //      fetch('check_user_logged_in.php')
-     //           .then(response => response.json())
-       //         .then(data => {
-         //           if (!data.loggedIn) {
-
-           //         }else{
-       // document.getElementById('userModal').style.display = 'none';
-
-         //       }})
-            
-   // });
 
     window.onclick = function(event) {
         if (event.target == document.getElementById('userModal')) {
             document.getElementById('userModal').style.display = 'none';
         }
     }
+    function checkPasscode(event) {
+    // Prompt the user for a passcode
+    const passcode = prompt("Ingresa el codigo:");
 
-   // document.addEventListener('DOMContentLoaded', function() {
-            // Check if user is logged in
-     //       fetch('check_user_logged_in.php')
-      //          .then(response => response.json())
-       //         .then(data => {
-       //             if (!data.loggedIn) {
-       //                 document.getElementById('userModal').style.display = 'block';
-       //                 document.getElementById('userStatus').innerText = 'No hay turno ingresado. Ingrese su nombre.';
-        //            } else {
-         //               document.getElementById('userStatus').innerText = 'Turno: ' + data.userName;
-         //           }
-         //       })
-          //      .catch(error => {
-          //          console.error('Error:', error);
-           //     });
-       // });
-    </script>
-<script>
+    // Validate the passcode
+    if (passcode === "1234") {
+        alert("Enviado Correctamente");
+        return true; // Allow form submission
+    } else {
+        alert("Codigo incorrecto. Se cancela el envio.");
+        return false; // Prevent form submission
+    }
+}
+
      async function reloadPage() {
 
         // Wait for 10 seconds asynchronously
@@ -350,7 +415,6 @@ document.getElementById('in').value = `${hours}:${minutes}`;
 
         // After waiting, reload the page
         window.location.reload();
-        alert("Enviado Correctamente");
 
     }
     </script>
