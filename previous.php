@@ -120,11 +120,31 @@
          </div>
       </header>
       <h2 id="main-title">HISTORIAL EN TURNO ACTUAL</h2>
+      <div class="search-bar">
+
+            <form method="GET" action="previous.php">
+                    <input type="text" name="search" placeholder="Buscar..." required>
+                    <button class="search-button"type="submit"><span class="material-symbols-outlined">
+                    search
+                    </span>
+                    </button>
+                    <a href="previous.php" class="refresh-button">
+                            <span class="material-symbols-outlined">
+                            refresh
+                            </span>
+                        
+
+                        </a>  
+            </form>
+        
+
+        </div>
       <div class="wrapper">
          <div class="table">
             <table>
                <thead>
                   <tr class="tr-headers">
+                  <th>No.</th>
                      <th>Vehiculo</th>
                      <th>Ticket</th>
                      <th>Hora de entrada</th>
@@ -135,8 +155,73 @@
                      <th>Tipo</th>
                   </tr>
                </thead>
+               <tbody id="search-table">
+
+                <?php
+                    if($_SERVER["REQUEST_METHOD"] == "GET") {
+                       // Database connection (update with your database credentials)
+                    include 'conn.php';
+              
+                        // Check if search term is provided
+                        if (isset($_GET['search'])) {
+                            $search = $_GET['search'];
+
+                          // Prepare your SQL query
+                            $sql = "SELECT * FROM log_out WHERE ticket LIKE ? AND user_id = ?";
+
+                            // Prepare the statement
+                            $stmt = $conn->prepare($sql);
+
+                            // Bind parameters
+                            $stmt->bind_param("ss", $search, $user_id);
+
+                            // Set parameters
+                            $search = '%' . $_GET['search'] . '%';
+                            $user_id = 'your_user_id'; // Replace with actual user ID
+
+                            // Execute the query
+                            $stmt->execute();
+
+                            // Get the result set
+                            $results= $stmt->get_result();
+
+                            if ($results) {
+                            // Fetch and display results
+                            echo '<tr><td colspan="8">Resultados:</td></tr>';
+
+                            while ($row = $results->fetch_assoc()) {
+                                echo '<tr class="vehicle-row" id="' . htmlspecialchars($row["id"]) . '">
+                                <td> - </td>
+                                    
+                                <td>' . htmlspecialchars($row["vehicle_type"]) . '</td>
+                                    <td>' . htmlspecialchars($row["ticket"]) . '</td>
+                                    <td>' . htmlspecialchars($row["time_in"]) . '</td>
+                                    <td>' . htmlspecialchars($row["time_out"]) . '</td>
+                                    <td>' . calculateDuration($row["time_in"], $row["time_out"]) . '</td>
+                                    <td>' . htmlspecialchars($row["charge"]) . '</td>
+                                    <td>' . htmlspecialchars($row["person"]) . '</td>
+                                    <td>' . htmlspecialchars($row["park_type"]) . '</td>
+                                </tr>';
+                            }
+                            echo '<tr><td colspan="9" style="text-align: center;">___________________________________________________________________________</td></tr>';   
+                            } else {
+                            echo '<tr><td  colspan="9">No resultados encontrados.</td> </tr>' ;
+                            }
+                        }
+                   
+
+                    
+                    }
+                        ?>
+            
+        </tbody>
                <tbody>
-                  <?php foreach ($data as $row): ?>
+                
+                  <?php foreach ($data as $row): 
+                    $counter = 1;
+                    ?>
+                     <tr class="vehicle-row" id="<?php echo htmlspecialchars($row['id']); ?>">
+                     <td><?php echo $counter; ?></td>
                   <tr class="vehicle-row" id="<?php echo htmlspecialchars($row['id']); ?>">
                      <td><?php echo htmlspecialchars($row['vehicle_type']); ?></td>
                      <td><?php echo htmlspecialchars($row['ticket']); ?></td>
@@ -146,6 +231,8 @@
                      <td><?php echo htmlspecialchars($row['charge']); ?></td>
                      <td><?php echo htmlspecialchars($row['person']); ?></td>
                      <td><?php echo htmlspecialchars($row['park_type']); ?></td>
+                     <?php $counter++;?>
+
                   </tr>
                   <?php endforeach; ?>
                </tbody>

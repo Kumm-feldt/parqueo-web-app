@@ -22,3 +22,4 @@
 [05-Nov-2024 19:21:29 America/Denver] checking19 and 21
 [05-Nov-2024 20:06:06 America/Denver] checking11 and 2
 [05-Nov-2024 20:06:06 America/Denver] checking19 and 21
+[11-Dec-2024 19:29:39 America/Denver] PHP Warning:  Undefined variable $results in /Users/anthony/Documents/GitHub/parqueo-web-app/previous.php on line 188

@@ -119,7 +119,7 @@ include 'templates/header.php';
     </div>
 </div>
 </main>
-<script src="login/login.js"></script>
+<script src="scripts/login.js"></script>
 
 <?php
 include 'templates/footer.php';?>
