@@ -1,3 +1,4 @@
+use parqueo;
 -- Table: log_out
 CREATE TABLE log_out (
     id INT(11) AUTO_INCREMENT PRIMARY KEY,
@@ -78,7 +79,7 @@ CREATE TABLE vehicle_events (
 -- Table: password_reset_temp
 CREATE TABLE password_reset_temp (
     email VARCHAR(250),
-    key VARCHAR(250),
+    `key` VARCHAR(250),
     expDate DATETIME
 );
 
