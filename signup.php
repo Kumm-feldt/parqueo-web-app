@@ -35,7 +35,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     
         // Insert data into the database
         $sql = "INSERT INTO users (name, email, company_name, phone_number, password) VALUES ('$name', '$email', '$company_name', '$phone_number', '$hashed_password')";
+       
+       
         if ($conn->query($sql) === TRUE) {
+             $sql_get_id = "SELECT id FROM users WHERE email = '$email'";
+             $result = $conn->query($sql_get_id);
+
+             if ($result->num_rows == 1) {
+                 // Fetch user data
+                 $user = $result->fetch_assoc();
+                $user_id = $user["id"];
+                 $sql_fixed_events = "INSERT INTO fixed_events (user_id) VALUES ($user_id)";
+                 $conn->query($sql_fixed_events);
+             }
+
+            
             $_SESSION['message'] = "Usted se ha registrado correctamente.";
     
         } else {

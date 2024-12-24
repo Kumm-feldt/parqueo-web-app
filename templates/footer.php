@@ -19,15 +19,15 @@
   
         <ul class="nav__ul">
           <li>
-            <a href="#">Our Services</a>
+          <a href="www.cleverinstance.com">Our Services</a>
           </li>
   
           <li>
-            <a href="#">Insights</a>
+          <a href="www.cleverinstance.com">Insights</a>
           </li>
               
           <li>
-            <a href="#">About Us</a>
+          <a href="www.cleverinstance.com">About Us</a>
           </li>
         </ul>
       </li>
@@ -37,29 +37,30 @@
         
         <ul class="nav__ul nav__ul--extra">
           <li>
-            <a href="#">Webpage Design</a>
+            <a href="www.cleverinstance.com">Webpage Development</a>
           </li>
           
           <li>
-            <a href="#">Parking Services</a>
+          <a href="www.cleverinstance.com">Parking Services</a>
           </li>
           
           <li>
-            <a href="#">Whatsapp Chatbots</a>
+          <a href="www.cleverinstance.com">Whatsapp Chatbots</a>
           </li>
           
           <li>
-            <a href="#">Automation</a>
+          <a href="www.cleverinstance.com">Automation</a>
           </li>
           
           <li>
-            <a href="#">Inventory and Checkouts</a>
+          <a href="www.cleverinstance.com">CRM Services</a>
           </li>
           
       
         </ul>
       </li>
       
+      <!--
       <li class="nav__item">
         <h2 class="nav__title">Legal</h2>
         
@@ -77,10 +78,13 @@
           </li>
         </ul>
       </li>
+      -->
     </ul>
     
     <div class="legal">
-      <p>&copy; 2024 Anthony Kummerfeldt. All rights reserved.</p>
+      <p>&copy; 2024 Anthony Kummerfeldt. All rights reserved. <a href="www.cleverinstance.com" style="color: white;">CLEVER INSTANCE</a></p>
+      
+
       
       
     </div>

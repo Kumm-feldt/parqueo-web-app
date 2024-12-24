@@ -369,14 +369,80 @@ tr:nth-of-type(odd) {
 }
   
 
-/* Additional form and table layout adjustments for responsiveness */
-@media (max-width: 600px) {
-    #s-table-employees, form, .s-forward-emails  {
-        width: 100%;
+
+
+
+/* Flexbox for the form */
+.event-form {
+    display: flex;
+    flex-direction: row; /* Default: Row layout */
+    gap: 10px; /* Spacing between elements */
+    align-items: center; /* Vertically align items */
+    justify-content: flex-start; /* Align items to the start */
+}
+
+/* Inputs and button styling */
+.event-form .s-inputs {
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    flex: 1; /* Allow inputs to grow/shrink */
+}
+
+.event-form .s-button {
+    padding: 10px 20px;
+    font-size: 16px;
+
+
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+
+
+/* Mobile layout: switch to column */
+@media (max-width: 768px) {
+    .event-form {
+        flex-direction: column; /* Switch to column layout */
+        align-items: stretch; /* Stretch inputs to fill width */
     }
 
-    form input[type="text"], .s-button {
-        width: 100%;
-        margin: 5px 0;
+    .event-form .s-inputs {
+        margin-bottom: 10px; /* Add spacing between inputs */
+    }
+}
+
+
+/*============= dynamic inputs ==================*/
+/* Container for inputs */
+.dynamic-inputs {
+    display: flex;
+    flex-wrap: wrap; /* Wrap inputs to new rows if needed */
+    gap: 16px; /* Spacing between inputs */
+    justify-content: flex-start; /* Align inputs to the left */
+}
+
+/* Flex items (inputs) */
+.dynamic-inputs .s-inputs {
+    flex: 1 1 calc(33.33% - 16px); /* Three items per row */
+    max-width: calc(33.33% - 16px);
+    min-width: 150px; /* Ensure inputs remain usable on small screens */
+    box-sizing: border-box;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+    .dynamic-inputs .s-inputs {
+    flex: 1 1 calc(50% - 16px); /* Three items per row */
+    max-width: 100%;
+
+        flex: 1 1 100%; /* Stack inputs vertically */
     }
 }

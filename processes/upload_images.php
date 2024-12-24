@@ -38,11 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $uploadOk = 0;
         }
 
-        // Check if file already exists (this check might not be strictly necessary given unique filename generation)
-        if (file_exists($targetFile)) {
-            $_SESSION['error_message'] = "Sorry, the file already exists.";
-            $uploadOk = 0;
-        }
+   
 
         // Check file size (limit set to 5MB)
         if ($_FILES["logo"]["size"] > 5000000) {

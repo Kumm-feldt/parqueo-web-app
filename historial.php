@@ -86,9 +86,9 @@ if (!isset($_SESSION['user_id'])) {
         <div id="footer">
            
            <div class="buttons">
-           <a href="previous.php" >
+           <a href="index.php" >
                <button type="submit" class="icon-button">
-                   <span class="material-symbols-outlined icon" style="color: black;">history</span>
+                   <span class="material-symbols-outlined icon" style="color: black;">home</span>
                </button>
                 </a>
        
@@ -97,9 +97,9 @@ if (!isset($_SESSION['user_id'])) {
             if($_SESSION['m_u'] == true){
                 echo "
                    
-                <a href='historial.php'>
+                <a href='previous.php'>
                 <button type='submit' class='icon-button' id='accountButton'>
-                    <span class='material-symbols-outlined icon'>manage_search</span>
+                    <span class='material-symbols-outlined icon'>history</span>
                 </button>
             </a>
              <a href='settings.php' >

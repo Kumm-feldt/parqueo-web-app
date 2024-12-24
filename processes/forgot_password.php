@@ -22,7 +22,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     );
     $expDate = date("Y-m-d H:i:s",$expFormat);
 
-    $key = md5(2418*2+$email);
+    $key = md5((2418*2).($email));
     
     $addKey = substr(md5(uniqid(rand(),1)),3,10);
     

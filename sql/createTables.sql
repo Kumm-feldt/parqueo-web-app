@@ -1,3 +1,34 @@
+
+-- Table: events v.1.1
+CREATE TABLE events (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL, -- Assuming every event must have a user
+    event VARCHAR(255) NOT NULL, -- Assuming event name cannot be null
+    price DECIMAL(10, 2) NOT NULL, -- Using DECIMAL for prices for precision
+    FOREIGN KEY (user_id) REFERENCES users(id) -- Assuming you have a `users` table
+);
+
+-- Table: events_fixed v.1.2
+CREATE TABLE fixed_events (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL, -- Assuming every event must have a user
+    hora INT DEFAULT 0,
+    evento INT DEFAULT 0,
+    dia_y_noche INT DEFAULT 0,
+    anulado INT DEFAULT 0,
+    perdido INT DEFAULT 0,
+   
+    FOREIGN KEY (user_id) REFERENCES users(id) -- Assuming you have a `users` table
+);
+-- Table: vehicles
+
+CREATE TABLE vehicles(
+id INT AUTO_INCREMENT PRIMARY KEY,
+user_id INT NOT NULL,
+vehicle VARCHAR(255) NOT NULL,
+price INT
+)
+    
 -- Table: log_out
 CREATE TABLE log_out (
     id INT(11) AUTO_INCREMENT PRIMARY KEY,

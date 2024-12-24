@@ -59,6 +59,9 @@
 
       <meta name="viewport" content="width=device-width, initial-scale=1">
    </head>
+
+
+
    <body>
       <div id="s-wrapper">
          <!-- Header -->    
@@ -165,6 +168,7 @@
                            }
                            ?>
                      </div>
+
                      <?php  
                         if (isset($_SESSION['error_message'])){
                             $error_message = $_SESSION['error_message'];
@@ -216,7 +220,7 @@
                      </tbody>
                   </table>
                     <!-- Add email -->
-                    <form action="processes/add_employee.php" method="POST">
+                    <form action="processes/add_employee.php" method="POST" >
                     <input type="hidden" name="form_type" value="email">
 
                      <input type="text" id="email_form" name="email_form" placeholder="Email" class="s-inputs">
@@ -253,31 +257,84 @@
                   </table>
                   <div class="s-prices">
                         <h3 class="s-h3">Precios</h3>
-                        <form action="#">
-                        <input class="s-inputs" type="number" placeholder="Carro">
-                        <button class="s-button" type="submit">Actualizar</button>
-                        </form>
-                        <!-- ================= -->
-                        <form action="#">
-                        <input class="s-inputs" type="number" placeholder="Motocicleta">
-                        <button class="s-button" type="submit">Actualizar</button>
-                        </form>
-                        <!-- ================= -->
-                        <form action="#">
-                        <input class="s-inputs" type="number" placeholder="Eventos">
-                        <button class="s-button" type="submit">Actualizar</button>
-                        </form>
-                         <!-- ================= -->
-                        <form action="#">
-                        <input class="s-inputs" type="number" placeholder="DiaYNoche">
-                        <button  class="s-button" type="submit">Actualizar</button>
-                        </form>
-                         <!-- ================= -->
-                         <form action="#">
-                        <input class="s-inputs" type="number" placeholder="Perdido">
-                        <button  class="s-button" type="submit">Actualizar</button>
-                        </form>
+                        
 
+
+                        <?php
+
+                        $sql = "SELECT hora, evento, dia_y_noche, anulado, perdido FROM fixed_events WHERE user_id = ?";
+                        $stmt = $conn->prepare($sql); // Prepare the statement to prevent SQL injection
+                        
+                        // Check if the statement was prepared successfully
+                        if ($stmt) {
+                            $stmt->bind_param('i', $user_id); // 'i' denotes the type as integer
+                            $stmt->execute(); // Execute the query
+                            $result = $stmt->get_result();
+                           
+                            if ($result->num_rows < 1) {
+                             // Output error if the query failed
+                                echo   "Agrega Eventos";
+                            } else {
+                                // Proceed with fetching and displaying data
+                               
+                                echo '
+                                <form action="processes/events.php" method="POST" class="event-form">
+                                    <input type="hidden" name="form_type" value="update_event">
+                                    <div class="dynamic-inputs">'; // Add the wrapper div
+                            
+                                    while ($row = $result->fetch_assoc()) {
+                                       foreach ($row as $column_title => $value) {
+                                           
+                                          if($column_title === 'dia_y_noche'){
+                                             $column_title = "dia y noche";
+                                          }
+                                          echo '
+                                             
+                           
+                                                   <input style="margin: 16px 0px 16px 14px;" 
+                                                          class="s-inputs" 
+                                                          type="text" 
+                                                          placeholder="' . htmlspecialchars($column_title) . ": Q.". $value . '.00" 
+                                                          name="' . htmlspecialchars($column_title) . '">
+                                           
+                                           ';
+                                       }
+                                   }
+                                   
+                            
+                                echo '
+                                    </div> <!-- Close the wrapper div -->
+                                    <input type="submit" value="Actualizar" class="s-button"> 
+                                </form>';
+                            
+                            
+                            }
+                           
+                        
+                            $stmt->close(); // Close the statement
+                        }
+                        
+                        ?>
+
+            <h3 class="s-h3">Vehiculos</h3>
+
+                 <form action="processes/events.php" method="POST" class="event-form">
+                  <input type="hidden" name="form_type" value="add_vehicles">
+                  <input style="margin: 16px 0px 16px 14px; "type="text" id="vehicle_name" name="vehicle_name" placeholder="Vehiculo" class="s-inputs">
+                  <input style="margin: 16px 0px 16px 14px; " type="number" id="vehicle_price" name="vehicle_price" placeholder="Precio por Hora" class="s-inputs">
+                  <input  style="margin: 16px 0px 16px 14px; "type="submit" value="Agregar" class="s-button">
+               </form>
+
+                     
+<!--
+                 <form action="processes/events.php" method="POST" class="event-form">
+                  <input type="hidden" name="form_type" value="add_event">
+                  <input style="margin: 16px 0px 16px 14px; "type="text" id="event_name" name="event_name" placeholder="Evento" class="s-inputs">
+                  <input style="margin: 16px 0px 16px 14px; " type="number" id="event_price" name="event_price" placeholder="Precio" class="s-inputs">
+                  <input  style="margin: 16px 0px 16px 14px; "type="submit" value="Agregar" class="s-button">
+               </form>
+
+                     -->
                         
                     </div>
                </div>
