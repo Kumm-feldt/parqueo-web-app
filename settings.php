@@ -262,7 +262,7 @@
 
                         <?php
 
-                        $sql = "SELECT hora, evento, dia_y_noche, anulado, perdido FROM fixed_events WHERE user_id = ?";
+                        $sql = "SELECT evento, dia_y_noche, anulado, perdido FROM fixed_events WHERE user_id = ?";
                         $stmt = $conn->prepare($sql); // Prepare the statement to prevent SQL injection
                         
                         // Check if the statement was prepared successfully

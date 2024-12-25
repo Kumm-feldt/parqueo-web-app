@@ -129,13 +129,34 @@ function calculateDuration($startTime, $endTime) {
 
 // Function to calculate price based on duration and vehicle type
 function calculatePrice($duration, $vehicle_type, $num_sellos) {
-    $base_rate = $vehicle_type == "carro" ? 6 : 5; // 6Q for cars, 5Q for motorcycles
+    $sql = "SELECT vehicle, price FROM vehicles WHERE user_id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param('i', $user_id);
+    
+    // Execute the query
+    $stmt->execute();
+    
+    $result = $stmt->get_result();
+    
+    if ($result->num_rows > 0) {
+    
+        while ($row = $result->fetch_assoc()){
+            $vehicle = $row["vehicle"];
+            if($vehicle === $vehicle_type){
+            $base_rate = $row["price"];
+                return;
+            }    
+                    
+        }
+    
+    
+    }
 
     // Calculate the base price
     $base_price = ceil($duration / 30) * $base_rate; // Round up to the nearest 30 minutes
 
     // Calculate the discount
-    $discount = $num_sellos * ($vehicle_type == "carro" ? 6 : 5);
+    $discount = $num_sellos * ($base_rate);
 
     // Final price after discount
     $final_price = max(0, $base_price - $discount); // Ensure the final price is not negative
@@ -150,7 +171,7 @@ function calculatePrice($duration, $vehicle_type, $num_sellos) {
 
 // ***********************************************
 
-// does this work?
+
 function checkTicket($conn, $ticket_p) {
     // Check log_in table
     $stmt = $conn->prepare("SELECT ticket FROM log_in WHERE ticket = ? and user_id = ?");

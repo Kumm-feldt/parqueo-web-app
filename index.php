@@ -112,16 +112,37 @@
                         </div>
                         <br>
                         <div class="options-radio">
-                           <input type="radio" id="temporal" name="tipo_parqueo" value="Por Hora" checked="checked">
+                        <?php
+
+                            $sql = "SELECT * FROM fixed_events WHERE user_id = ?";
+                              $stmt = $conn->prepare($sql);
+                              $stmt->bind_param('i', $user_id);
+                              
+                              // Execute the query
+                              $stmt->execute();
+                              
+                              $result = $stmt->get_result();
+                              
+                              if ($result->num_rows > 0) {
+                                $row = $result->fetch_assoc();
+                                echo '
+                                <input type="radio" id="temporal"  name="tipo_parqueo" value="Por Hora" checked="checked">
                            <label for="temporal">Por Hora</label><br>
-                           <input type="radio" id="evento" name="tipo_parqueo" value="Tarifa Evento">
+                           <input type="radio" id="evento" name="tipo_parqueo" data-price="' . $row["evento"] .  '" value="Tarifa Evento">
                            <label for="evento">Tarifa Evento</label><br>
-                           <input type="radio" id="dia_noche" name="tipo_parqueo" value="Tarifa dia/noche">
+                           <input type="radio" id="dia_noche" name="tipo_parqueo" data-price="' . $row["dia_y_noche"] .  '" value="Tarifa dia/noche">
                            <label for="dia_noche">Tarifa dia/noche</label><br>
-                           <input type="radio" id="anulado" name="tipo_parqueo" value="Anulado">
+                           <input type="radio" id="anulado" name="tipo_parqueo" data-price="' . $row["anulado"] .  '"  value="Anulado">
                            <label for="anulado">Anulado</label><br>
-                           <input type="radio" id="perdido" name="tipo_parqueo" value="Ticket Perdido">
+                           <input type="radio" id="perdido" name="tipo_parqueo" data-price="' . $row["perdido"] .  '"  value="Ticket Perdido">
                            <label for="perdido">Ticket Perdido</label>
+                                
+                                
+                                ';
+                              }
+
+                              ?>
+                           
                         </div>
                         <br>
                         <!-- Time in / Time out-->
@@ -226,6 +247,18 @@
              }
          }
          
+         function getSelectedPrice() {
+            const selectedRadio = document.querySelector('input[name="tipo_parqueo"]:checked'); // Get selected radio
+            if (selectedRadio) {
+                const price = selectedRadio.getAttribute('data-price'); // Retrieve the data-price attribute
+                console.log("PRICE:", price);
+                return price;
+            } else {
+                console.log("No radio button selected.");
+                return null;
+            }
+        }
+
          
          document.addEventListener('DOMContentLoaded', function () {
              // hidden out
@@ -249,6 +282,8 @@
          
              var placaInput = document.querySelector('.placa-div');
          
+
+            
          
              function toggleTimeDivs() {
                  if (temporalRadio.checked){
@@ -272,32 +307,35 @@
                      placaInput.style.display = 'none';
          
                  }
-         
+                let price_vehicle = getSelectedPrice();
                  if (eventoRadio.checked) {
                      outDuration.innerText = "Tarifa Evento";
-                     outPrice.innerText = "Q. 45.00";
-                     document.getElementById("hidden-charge").value = 45;
+                     outPrice.innerText = "Q."+  price_vehicle + ".00";
+                     document.getElementById("hidden-charge").value = price_vehicle;
                      toggleRequiredAttribute(false);
          
          
                  }
                  else if(diaNocheRadio.checked){
+
                      outDuration.innerText = "Tarifa dia/noche";
-                     outPrice.innerText = "Q. 60.00";
+                     outPrice.innerText = "Q." +price_vehicle+".00";
          
-                     document.getElementById("hidden-charge").value = 60;
+                     document.getElementById("hidden-charge").value = price_vehicle;
                      toggleRequiredAttribute(false);
          
          
                  }else if(anuladoRadio.checked){
+
                      outDuration.innerText = "-";
-                     outPrice.innerText = "Q. 0.00";
-                     document.getElementById("hidden-charge").value = 0;
+                     outPrice.innerText = "Q." + price_vehicle +".00";
+                     document.getElementById("hidden-charge").value = price_vehicle;
                  }else if(perdidoRadio.checked){
+                    
                      outDuration.innerText = "Ticket Perdido";
-                     outPrice.innerText = "Q. 150.00";
+                     outPrice.innerText = "Q."+price_vehicle +".00";
          
-                     document.getElementById("hidden-charge").value = 150;
+                     document.getElementById("hidden-charge").value = price_vehicle;
                  }
                  else{
                      outDuration.innerText = "";
@@ -429,18 +467,14 @@
          
          
                  function calculatePrice(duration, vehicleType) {
+                
+                    var selectElement = document.getElementById('vehicle_type'); // Reference the <select> element
+                    var selectedOption = selectElement.options[selectElement.selectedIndex]; // Get the selected <option>
+                    var price_vehicle = selectedOption.getAttribute('data-price'); // Retrieve the data-price attribute           
+                
 
-                    document.getElementById('vehicle-select').addEventListener('change', function () {
-                        const selectedOption = this.options[this.selectedIndex];
-                        const price = selectedOption.getAttribute('data-price');
-                        console.log('Selected vehicle price:', price);
-                    });
-
-                    let price_vehicle = document.getElementById('rating').label;
-                    var rating = document.getElementById('rating').value * price_vehicle;
-                    
-                    console.log("price: " + price_vehicle);
-                     
+                 
+                    var rating = document.getElementById('rating').value * price_vehicle;                     
          
                      var totalMinutes = duration.hours * 60 + duration.minutes;
                      var pricePer30Min = price_vehicle;
@@ -478,35 +512,7 @@
          
                  
       </script>
-      <script>
-         // USER CHECK
-         document.getElementById('accountButton').addEventListener('click', function() {
-               document.getElementById('userModal').style.display = 'block';
-           });
-         
-         document.getElementById('closeUserModal').addEventListener('click', function() {
-         //      fetch('check_user_logged_in.php')
-            //           .then(response => response.json())
-              //         .then(data => {
-                //           if (!data.loggedIn) {
-         
-                  //         }else{
-              document.getElementById('userModal').style.display = 'none';
-         
-                //       }})
-                   
-         });
-         
-         
-           window.onclick = function(event) {
-               if (event.target == document.getElementById('userModal')) {
-                   document.getElementById('userModal').style.display = 'none';
-               }
-           }
-         
-         
-           
-      </script>
+
       <script src="https://cdn.jsdelivr.net/npm/flowbite@2.4.1/dist/flowbite.min.js"></script>
    </body>
 </html>
