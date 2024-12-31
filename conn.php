@@ -7,7 +7,6 @@ $servername = "localhost:3306";
 $username = "root";
 $password = "";
 $dbname = "parqueo";
-$conn = new mysqli($servername, $username, $password, $dbname);
 
 
 $conn = new mysqli($servername, $username, $password, $dbname);

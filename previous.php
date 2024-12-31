@@ -1,5 +1,5 @@
 <?php
-   date_default_timezone_set('America/Denver');
+   date_default_timezone_set('America/Guatemala');
    session_start();
    error_reporting(E_ALL);
    ini_set('log_errors', 1);
@@ -96,7 +96,7 @@
    return "$hours hora" . ($hours != 1 ? 's' : '') . " y $minutes min" . ($minutes != 1 ? 's' : '') . ".";
    
    }
-   
+   $counter = 1;
    $conn->close();
    ?>
 <!DOCTYPE html>
@@ -108,16 +108,26 @@
       <meta name="viewport" content="width=device-width, initial-scale=1">
       <link rel="stylesheet" href="/css/previous.css">
     <link rel="icon" href="images/favicon.ico" type="image/x-icon">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+
 
    </head>
    <body>
       <header>
-         <div class="logoimage">
-           <?php echo "             
-                                   <img src='logos/img_user_".$user_id.".png' alt='Company Logo' id='logo' class='s-logo-circle'>
-
-"?>
-         </div>
+      <div class="logoimage">
+    <a href="index.php">
+        <img id="logo" 
+             <?php 
+                    $logoPath = "/logos/img_user_" . $user_id . ".png";
+                    echo "src='" . (file_exists($_SERVER['DOCUMENT_ROOT'] . $logoPath) ? $logoPath : "/logos/default.png") . "'"; 
+                    ?> 
+                    alt="logo">
+                
+            </a>
+            <h2>amiparqueo</h2>
+        </div>
       </header>
       <h2 id="main-title">HISTORIAL EN TURNO ACTUAL</h2>
       <div class="search-bar">
@@ -173,11 +183,10 @@
                             $stmt = $conn->prepare($sql);
 
                             // Bind parameters
-                            $stmt->bind_param("ss", $search, $user_id);
+                            $stmt->bind_param("si", $search, $user_id);
 
                             // Set parameters
                             $search = '%' . $_GET['search'] . '%';
-                            $user_id = 'your_user_id'; // Replace with actual user ID
 
                             // Execute the query
                             $stmt->execute();
@@ -187,7 +196,7 @@
 
                             if ($results) {
                             // Fetch and display results
-                            echo '<tr><td colspan="8">Resultados:</td></tr>';
+                            echo '<tr><td colspan="9">Resultados:</td></tr>';
 
                             while ($row = $results->fetch_assoc()) {
                                 echo '<tr class="vehicle-row" id="' . htmlspecialchars($row["id"]) . '">
@@ -216,13 +225,12 @@
             
         </tbody>
                <tbody>
-                
-                  <?php foreach ($data as $row): 
-                    $counter = 1;
+                      <?php foreach ($data as $row): 
+                 
                     ?>
                      <tr class="vehicle-row" id="<?php echo htmlspecialchars($row['id']); ?>">
                      <td><?php echo $counter; ?></td>
-                  <tr class="vehicle-row" id="<?php echo htmlspecialchars($row['id']); ?>">
+        
                      <td><?php echo htmlspecialchars($row['vehicle_type']); ?></td>
                      <td><?php echo htmlspecialchars($row['ticket']); ?></td>
                      <td><?php echo htmlspecialchars($row['time_in']); ?></td>
@@ -285,64 +293,7 @@
            </div>
          </div>
          
-         
-
-      <script>
-         document.getElementById('get-time').addEventListener('click', function() {
-         const now = new Date();
-         const hours = String(now.getHours()).padStart(2, '0');
-         const minutes = String(now.getMinutes()).padStart(2, '0');
-         document.getElementById('in').value = `${hours}:${minutes}`;
-         });
-         
-                 document.getElementById('add_box').addEventListener('click', function() {
-                     document.getElementById('add-vehicle-modal').style.display = 'flex';
-                 });
-         
-                 document.getElementById('close-modal').addEventListener('click', function() {
-                     document.getElementById('add-vehicle-modal').style.display = 'none';
-                 });
-         
-         
-                 // checkout
-                 document.getElementById('close-modal-out').addEventListener('click', function() {
-                     document.getElementById('out-vehicle-modal').style.display = 'none';
-                 });
-         
-             
-                 window.onclick = function(event) {
-                     if (event.target == document.getElementById('add-vehicle-modal')) {
-                         document.getElementById('add-vehicle-modal').style.display = 'none';
-                     }
-                 }
-             
-      </script>
-      <script>
-         // add user
-         
-         
-           
-           document.getElementById('closeUserModal').addEventListener('click', function() {
-         //      fetch('check_user_logged_in.php')
-            //           .then(response => response.json())
-              //         .then(data => {
-                //           if (!data.loggedIn) {
-         
-                  //         }else{
-              document.getElementById('userModal').style.display = 'none';
-         
-                //       }})
-                   
-         });
-         
-           window.onclick = function(event) {
-               if (event.target == document.getElementById('userModal')) {
-                   document.getElementById('userModal').style.display = 'none';
-               }
-           }
-         
-           
-      </script>
+   
       <script>
          async function reloadPage() {
          

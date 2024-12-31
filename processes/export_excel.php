@@ -5,7 +5,7 @@ ini_set('error_log', 'error.log');
 
 
 session_start();
-date_default_timezone_set('America/Denver');
+date_default_timezone_set('America/Guatemala');
 
 require '../vendor/autoload.php'; // make sure to change this between qa/production
 
@@ -88,7 +88,7 @@ $tempFile = tempnam(sys_get_temp_dir(), 'data'.$date) . '.xlsx';
 $writer = new Xlsx($spreadsheet);
 $writer->save($tempFile);
 
-export_excel_db($conn, $user, $spreadsheet, $date);
+export_excel_db($conn, $user, $spreadsheet, $date, $user_id);
 
 $sql_insert = $conn->prepare("INSERT INTO total_log_out SELECT * FROM log_out WHERE user_id = ?");
 $sql_insert->bind_param("i", $user_id);
@@ -157,9 +157,7 @@ try {
 } catch (Exception $e) {
     echo "Mensaje no pudo ser enviado. Mailer Error: {$mail->ErrorInfo}";
 }
-// Destroy the current session
-session_unset(); // Unset all session variables
-session_destroy(); // Destroy the session
+
 
 
 

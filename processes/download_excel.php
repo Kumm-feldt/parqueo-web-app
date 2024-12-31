@@ -1,8 +1,8 @@
 
 
 <?php
-include '/../conn.php';
-date_default_timezone_set('America/Denver');
+include '../conn.php';
+date_default_timezone_set('America/Guatemala');
 session_start();
 require '../vendor/autoload.php'; // Make sure you have included the autoloader for PHPSpreadsheet
 
@@ -11,7 +11,7 @@ use PhpOffice\PhpSpreadsheet\Writer\Csv;
 
 if (isset($_GET['id'])) {
     $id = intval($_GET['id']);
-    $user_id = $_Session['user_id'];
+    $user_id = $_SESSION['user_id'];
     $sql = "SELECT file_name, file_data FROM excel_files WHERE id = ? and user_id = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("ii", $id, $user_id);

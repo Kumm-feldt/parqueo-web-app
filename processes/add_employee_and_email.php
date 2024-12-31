@@ -22,6 +22,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 } else {
                     echo "Worker name and user ID cannot be empty.";
                 }
+
+
+
+                
             }elseif ($_POST['form_type'] === 'email'){
                 $email = $_POST['email_form']; 
                 $user_id = $_SESSION['user_id']; 

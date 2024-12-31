@@ -20,16 +20,25 @@ if (!isset($_SESSION['user_id'])) {
 
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <link rel="icon" href="images/favicon.ico" type="image/x-icon">
-    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+
 </head>
 <body>
     <header>
-         <div class="logoimage">
-         <?php echo "             
-                                   <img src='logos/img_user_".$user_id.".png' alt='Company Logo' id='logo' class='s-logo-circle'>
-
-"?>
-         </div>
+    <div class="logoimage">
+    <a href="index.php">
+        <img id="logo" 
+             <?php 
+                    $logoPath = "/logos/img_user_" . $user_id . ".png";
+                    echo "src='" . (file_exists($_SERVER['DOCUMENT_ROOT'] . $logoPath) ? $logoPath : "/logos/default.png") . "'"; 
+                    ?> 
+                    alt="logo">
+                
+            </a>
+            <h2>amiparqueo</h2>
+        </div>
       </header>
     <div class="container">
         <h1>Historial de archivos</h1>

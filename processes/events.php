@@ -41,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
             foreach ($_POST as $event=>$value) {
                 // Skip non-event fields
-                if ($event === 'form_type' or !$value) {
+                if ($event === 'form_type' or $value == null) {
                     continue;
                 }
 
@@ -85,6 +85,28 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             }
 
             $stmt->close();
+        }  elseif ($_POST['form_type'] === 'update_vehicle') {
+            // -- Update event --
+
+            foreach ($_POST as $vehicle=>$value) {
+                // Skip non-event fields
+                if ($vehicle === 'form_type' or $value == null) {
+                    continue;
+                }
+                $sql = "UPDATE vehicles SET price = ? WHERE user_id = ? and vehicle = ?";
+                $stmt = $conn->prepare($sql);
+                $stmt->bind_param("iis", $value, $user_id, $vehicle);
+
+                if (!$stmt->execute()) {
+                    echo "Error updating event: " . $stmt->error;
+
+                }
+                $stmt->close();
+            }
+
+            header('Location: ../settings.php');
+            exit();
+        
         }
     }
 }

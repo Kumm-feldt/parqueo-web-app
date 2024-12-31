@@ -30,12 +30,27 @@
       <link rel="icon" href="images/favicon.ico" type="image/x-icon">
       <meta name="viewport" content="width=device-width, initial-scale=1">
       <link rel="stylesheet" href="/css/index.css">
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+
+
    </head>
    <body>
       <header>
-         <div class="logoimage">
-            <a href="index.php">  <img id="logo"<?php echo "src= /logos/img_user_" .$user_id.".png " ?> alt="logo"> </a>
-         </div>
+      <div class="logoimage">
+    <a href="index.php">
+        <img id="logo" 
+             <?php 
+                    $logoPath = "/logos/img_user_" . $user_id . ".png";
+                    echo "src='" . (file_exists($_SERVER['DOCUMENT_ROOT'] . $logoPath) ? $logoPath : "/logos/default.png") . "'"; 
+                    ?> 
+                    alt="logo">
+                
+            </a>
+            <h2>amiparqueo</h2>
+        </div>
+
       </header>
       <!--  <h2 id="main-title">INICIO:Sistema de parqueos</h2>-->
       <div class="wrapper">
@@ -92,8 +107,6 @@
                                   while ($row = $result->fetch_assoc()){
                                       $vehicle = $row["vehicle"];
                                       $price = $row["price"];
-                              
-                              
                                       echo "<option value='$vehicle' data-price='$price'>$vehicle</option>";
                               
                                               

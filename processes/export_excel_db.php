@@ -1,16 +1,16 @@
 <?php
 require '../vendor/autoload.php'; // Make sure to switch between qa/production
 //session_start();
-date_default_timezone_set('America/Denver');
+date_default_timezone_set('America/Guatemala');
 
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use PhpOffice\PhpSpreadsheet\Writer\Csv;
 
-$user_id = $_SESSION['user_id'];
 
 
-function export_excel_db($conn, $username, $spreadsheet, $date){
+
+function export_excel_db($conn, $username, $spreadsheet, $date, $user_id){
 
 
     

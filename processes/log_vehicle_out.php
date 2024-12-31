@@ -1,9 +1,9 @@
 <?php
 session_start();
    
-include '../conn.php';
+require '../conn.php';
 
-date_default_timezone_set('America/Denver');
+date_default_timezone_set('America/Guatemala');
 
 $user = $_POST['users'];
 $user_id = $_SESSION['user_id'];
@@ -20,9 +20,11 @@ $selected_user = isset($_SESSION['selected_user']) ? $_SESSION['selected_user'] 
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $ticket = $_POST['ticket'];
+    error_log("++++++++++++++++++++");
 
+    error_log("Ticket: " . $ticket);
     // Check if the ticket already exists
-    if (checkTicket($conn, $ticket)) {
+    if (checkTicket($conn, $ticket, $user_id)) {
         exit();
     }
     $charge = $_POST['charge'];
@@ -55,7 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         if($park_type == "Por Hora"){
             $duration = calculateDuration($time_in, $time_out);
-            $charge = calculatePrice($duration, $vehicle_type, $num_sellos);
+            $charge = calculatePrice($duration, $vehicle_type, $num_sellos, $user_id);
 
         }
 
@@ -128,7 +130,9 @@ function calculateDuration($startTime, $endTime) {
 
 
 // Function to calculate price based on duration and vehicle type
-function calculatePrice($duration, $vehicle_type, $num_sellos) {
+function calculatePrice($duration, $vehicle_type, $num_sellos, $user_id) {
+    global $conn;  // Add this line to access the global $conn variable
+
     $sql = "SELECT vehicle, price FROM vehicles WHERE user_id = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param('i', $user_id);
@@ -138,13 +142,16 @@ function calculatePrice($duration, $vehicle_type, $num_sellos) {
     
     $result = $stmt->get_result();
     
+    $base_rate = 0; // default to 0
+
     if ($result->num_rows > 0) {
     
         while ($row = $result->fetch_assoc()){
             $vehicle = $row["vehicle"];
-            if($vehicle === $vehicle_type){
+            error_log("Vehicle: " . $vehicle);
+            if($vehicle == $vehicle_type){
             $base_rate = $row["price"];
-                return;
+                break;
             }    
                     
         }
@@ -160,6 +167,14 @@ function calculatePrice($duration, $vehicle_type, $num_sellos) {
 
     // Final price after discount
     $final_price = max(0, $base_price - $discount); // Ensure the final price is not negative
+    error_log("calculate price");
+    error_log($base_rate);
+
+    error_log($base_price);
+    error_log($discount);
+    error_log($final_price);
+
+
 
     return $final_price;
 }
@@ -172,40 +187,28 @@ function calculatePrice($duration, $vehicle_type, $num_sellos) {
 // ***********************************************
 
 
-function checkTicket($conn, $ticket_p) {
-    // Check log_in table
-    $stmt = $conn->prepare("SELECT ticket FROM log_in WHERE ticket = ? and user_id = ?");
-    if (!$stmt) {
-        die("Error preparing statement (log_in): " . $conn->error);
-    }
-    $stmt->bind_param("si", $ticket_p, $user_id);
-    if (!$stmt->execute()) {
-        die("Error executing statement (log_in): " . $stmt->error);
-    }
-    $stmt->store_result();
+function checkTicket($conn, $ticket_p, $user_id) {
 
     // Check log_out table
     $stmt_log_out = $conn->prepare("SELECT ticket FROM log_out WHERE ticket = ? and user_id = ?");
     if (!$stmt_log_out) {
         die("Error preparing statement (log_out): " . $conn->error);
     }
-    $stmt_log_out->bind_param("si", $ticket_p, $user_id);
+    $stmt_log_out->bind_param("ii", $ticket_p, $user_id);
     if (!$stmt_log_out->execute()) {
         die("Error executing statement (log_out): " . $stmt_log_out->error);
     }
     $stmt_log_out->store_result();
 
-    if ($stmt->num_rows > 0 || $stmt_log_out->num_rows > 0) {
-echo "<div style='text-align: center; padding-top:50px;'>";
-echo "<p>TICKET: " . $ticket_p . " ya fue usado por hoy, por favor ingresa uno nuevo. </p><br>";
-echo "<button> <a href='/../index.php'>Ingresa nuevo ticket</a> </button>";
-echo "</div>";
+    if ($stmt_log_out->num_rows > 0) {
+        echo "<div style='text-align: center; padding-top:50px;'>";
+        echo "<p>TICKET: " . $ticket_p . " ya fue usado por hoy, por favor ingresa uno nuevo. </p><br>";
+        echo "<button> <a href='/../index.php'>Ingresa nuevo ticket</a> </button>";
+        echo "</div>";
 
-        $stmt->close();
         $stmt_log_out->close();
         return true;
     } else {
-        $stmt->close();
         $stmt_log_out->close();
         return false;
     }

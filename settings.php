@@ -101,11 +101,11 @@
                      <div class="s-image-buttons">
                      <form action="processes/upload_images.php" method="post" enctype="multipart/form-data">
                         <input type="file" name="logo" id="s-logo-file" class="s-upload-btn" style="display: none;" onchange="this.form.submit();">
-                        <button type="button" class="s-upload-btn" onclick="document.getElementById('s-logo-file').click();">Upload Image</button>
+                        <button type="button" class="s-upload-btn" onclick="document.getElementById('s-logo-file').click();">Subir Imagen</button>
                     </form>
 
                         <form action="processes/delete_image.php" method="post">
-                           <button type="submit" name="delete" class="s-delete-btn">Delete Image</button>
+                           <button type="submit" name="delete" class="s-delete-btn">Eliminar Imagen</button>
                         </form>
                      </div>
                   </div>
@@ -182,7 +182,7 @@
                <div class="s-changes">
                   <h3 class="s-h3">Cambios internos</h3>
                   <!-- Add employee -->
-                  <form action="processes/add_employee.php" method="POST">
+                  <form action="processes/add_employee_and_email.php" method="POST">
                   <input type="hidden" name="form_type" value="employee">
 
                      <input type="text" id="employee_name" name="employee_name" placeholder="Nombre del Empleado" style="margin-right:30px; border:1px solid gray; border-radius:5px;">
@@ -220,7 +220,7 @@
                      </tbody>
                   </table>
                     <!-- Add email -->
-                    <form action="processes/add_employee.php" method="POST" >
+                    <form action="processes/add_employee_and_email.php" method="POST" >
                     <input type="hidden" name="form_type" value="email">
 
                      <input type="text" id="email_form" name="email_form" placeholder="Email" class="s-inputs">
@@ -259,6 +259,66 @@
                         <h3 class="s-h3">Precios</h3>
                         
 
+                        <h4 class="s-h4">Vehiculos</h4>
+
+                        <?php
+
+$sql = "SELECT vehicle, price FROM vehicles WHERE user_id = ?";
+$stmt = $conn->prepare($sql); // Prepare the statement to prevent SQL injection
+
+// Check if the statement was prepared successfully
+if ($stmt) {
+    $stmt->bind_param('i', $user_id); // 'i' denotes the type as integer
+    $stmt->execute(); // Execute the query
+    $result = $stmt->get_result();
+   
+    if ($result->num_rows < 1) {
+     // Output error if the query failed
+        echo   "Agrega Vehiculos";
+    } else {
+        // Proceed with fetching and displaying data
+       
+        echo '
+        <form action="processes/events.php" method="POST" class="event-form">
+            <input type="hidden" name="form_type" value="update_vehicle">
+            <div class="dynamic-inputs">'; // Add the wrapper div
+    
+            while ($row = $result->fetch_assoc()) {
+
+                  echo '
+                     
+   
+                           <input style="margin: 16px 0px 16px 14px;" 
+                                  class="s-inputs" 
+                                  type="text" 
+                                  placeholder="' . htmlspecialchars($row["vehicle"]) . ": Q.". $row["price"] . '.00" 
+                                  name="' . htmlspecialchars($row["vehicle"]) . '">
+                   
+                   ';
+               
+           }
+           
+    
+        echo '
+            </div> <!-- Close the wrapper div -->
+            <input type="submit" value="Actualizar" class="s-button"> 
+        </form>';
+    
+    
+    }
+   
+
+    $stmt->close(); // Close the statement
+}
+
+?>
+
+
+
+
+
+
+                        <h4 class="s-h4">Eventos</h4>
 
                         <?php
 
@@ -348,8 +408,8 @@
                </div>
                <div class="s-close-account">
                   <h3 class=" s-h3">Eliminar cuenta</h3>
-                  <p class="s-p">Tener en cuenta que se borraran todos los datos y no podra ser reversible.</p>
-                  <button class="s-delete-btn s-button">Eliminar cuenta</button>
+                  <p class="s-p">Favor contactar a soporte. updates@amiparqueo.com</p>
+               <!--   <button class="s-delete-btn s-button">Eliminar cuenta</button>-->
                </div>
             </div>
          </div>
