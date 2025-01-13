@@ -115,6 +115,11 @@ The system allows for customization of:
 4. Reports can be exported to Excel format
 5. Transaction history is searchable by ticket number
 
+## For testing purposes use:
+   - Username: updates@amiparqueo.com
+   - Password: 12345
+
+
 ---
 
 For support or inquiries, contact: updates@amiparqueo.com
