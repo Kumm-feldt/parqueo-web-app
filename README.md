@@ -117,7 +117,7 @@ The system allows for customization of:
 
 ## For testing purposes use:
    - Username: updates@amiparqueo.com
-   - Password: 12345
+   - Password: 123
 
 
 ---
