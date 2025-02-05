@@ -1897,3 +1897,30 @@ Stack trace:
   thrown in C:\Users\antho\OneDrive\Documents\Nelson\export_excel_db.php on line 30
 [01-Dec-2024 14:44:07 America/Guatemala] checking14 and 43
 [01-Dec-2024 14:45:02 America/Guatemala] checking14 and 45
+[01-Feb-2025 19:29:22 America/Guatemala] PHP Fatal error:  Uncaught mysqli_sql_exception: No such file or directory in /Users/anthony/Documents/GitHub/parqueo-web-app/conn.php:10
+Stack trace:
+#0 /Users/anthony/Documents/GitHub/parqueo-web-app/conn.php(10): mysqli->__construct('localhost', 'root', Object(SensitiveParameterValue), 'parqueoOriginal')
+#1 /Users/anthony/Documents/GitHub/parqueo-web-app/previous.php(8): include('/Users/anthony/...')
+#2 {main}
+  thrown in /Users/anthony/Documents/GitHub/parqueo-web-app/conn.php on line 10
+[01-Feb-2025 19:32:47 America/Guatemala] checking0 and 0
+[01-Feb-2025 19:33:00 America/Guatemala] checking0 and 0
+[01-Feb-2025 19:33:19 America/Guatemala] checking0 and 0
+[01-Feb-2025 19:33:19 America/Guatemala] checking0 and 0
+[01-Feb-2025 19:34:18 America/Guatemala] checking0 and 0
+[01-Feb-2025 19:34:18 America/Guatemala] checking0 and 0
+[01-Feb-2025 19:42:40 America/Guatemala] checking0 and 0
+[01-Feb-2025 19:42:40 America/Guatemala] checking0 and 0
+[01-Feb-2025 19:42:40 America/Guatemala] checking0 and 0
+[01-Feb-2025 19:42:40 America/Guatemala] checking0 and 0
+[01-Feb-2025 19:44:33 America/Guatemala] checking0 and 0
+[01-Feb-2025 19:44:33 America/Guatemala] checking0 and 0
+[01-Feb-2025 19:44:33 America/Guatemala] checking0 and 0
+[01-Feb-2025 19:44:33 America/Guatemala] checking0 and 0
+[01-Feb-2025 19:44:33 America/Guatemala] checking0 and 0
+[01-Feb-2025 19:46:08 America/Guatemala] checking0 and 0
+[01-Feb-2025 19:46:08 America/Guatemala] checking0 and 0
+[01-Feb-2025 19:46:08 America/Guatemala] checking0 and 0
+[01-Feb-2025 19:46:08 America/Guatemala] checking0 and 0
+[01-Feb-2025 19:46:08 America/Guatemala] checking0 and 0
+[01-Feb-2025 19:46:08 America/Guatemala] checking0 and 0

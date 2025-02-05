@@ -1,11 +1,10 @@
 <?php
 
 
- $servername = "localhost";
+ $servername = "localhost:3306";
    $username = "root";
   $password = "";
-  $dbname = "mydb";
-$conn = new mysqli($servername, $username, $password, $dbname);
+  $dbname = "parqueoOriginal";
 
 
 $conn = new mysqli($servername, $username, $password, $dbname);

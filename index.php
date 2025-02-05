@@ -243,12 +243,12 @@ color:#48752C;
                 <label for="users"><strong> -- Turno --</strong></label>
                 <select name="users" id="users">
                     <option value="Alex Vasquez" <?php if ($selected_user == "Alex Vasquez") echo 'selected'; ?>>Alex Vasquez</option>
-                    <option value="Armando Hernandez" <?php if ($selected_user == "Armando Hernandez") echo 'selected'; ?>>Armando Hernandez</option>
+                    <option value="Abraham Garcia" <?php if ($selected_user == "Abraham Garcia") echo 'selected'; ?>>Abraham Garcia</option>
                     <option value="Ivan Lopez" <?php if ($selected_user == "Ivan Lopez") echo 'selected'; ?>>Ivan Lopez</option>
                     <option value="Soemia Monzon" <?php if ($selected_user == "Soemia Monzon") echo 'selected'; ?>>Soemia Monzon</option>
                     <option value="Yenifer Calderas" <?php if ($selected_user == "Yenifer Calderas") echo 'selected'; ?>>Yenifer Calderas</option>
                     <option value="Esdras Liquez" <?php if ($selected_user == "Esdras Liquez") echo 'selected'; ?>>Esdras Liquez                    </option>
-                    <option value="Werner Luther" <?php if ($selected_user == "Werner Luther") echo 'selected'; ?>>Werner Luther</option>
+                    
                 
                 </select>
 
@@ -274,12 +274,14 @@ color:#48752C;
                     <label for="temporal">Por Hora</label><br>
                     <input type="radio" id="evento" name="tipo_parqueo" value="Tarifa Evento">
                     <label for="evento">Tarifa Evento</label><br>
-                    <input type="radio" id="dia_noche" name="tipo_parqueo" value="Tarifa dia/noche">
-                    <label for="dia_noche">Tarifa dia/noche</label><br>
+                <!--    <input type="radio" id="dia_noche" name="tipo_parqueo" value="Tarifa dia/noche">
+                    <label for="dia_noche">Tarifa dia/noche</label><br>-->
                     <input type="radio" id="anulado" name="tipo_parqueo" value="Anulado">
                     <label for="anulado">Anulado</label><br>
                     <input type="radio" id="perdido" name="tipo_parqueo" value="Ticket Perdido">
-                    <label for="perdido">Ticket Perdido</label>
+                    <label for="perdido">Ticket Perdido</label><br>
+                    <input type="radio" id="discoteca" name="tipo_parqueo" value="Discoteca">
+                    <label for="perdido">Discoteca</label>
                    </div>
 
                    <!-- Time in / Time out-->
@@ -375,8 +377,10 @@ function toggleRequiredAttribute(enable) {
         const outDiv = document.getElementById("out-div");
 
         const temporalRadio = document.getElementById('temporal');
+        const discotecaRadio = document.getElementById('discoteca');
+
         const eventoRadio = document.getElementById('evento');
-        const diaNocheRadio = document.getElementById('dia_noche');
+       // const diaNocheRadio = document.getElementById('dia_noche');
         const anuladoRadio = document.getElementById('anulado');
         const perdidoRadio = document.getElementById('perdido');
 
@@ -423,13 +427,13 @@ function toggleRequiredAttribute(enable) {
                 toggleRequiredAttribute(false);
 
 
-            }
-            else if(diaNocheRadio.checked){
-                outDuration.innerText = "Tarifa dia/noche";
-                outPrice.innerText = "Q. 60.00";
+           // }
+           // else if(diaNocheRadio.checked){
+             //   outDuration.innerText = "Tarifa dia/noche";
+               // outPrice.innerText = "Q. 60.00";
 
-                document.getElementById("hidden-charge").value = 60;
-                toggleRequiredAttribute(false);
+                //document.getElementById("hidden-charge").value = 60;
+            //    toggleRequiredAttribute(false);
 
 
             }else if(anuladoRadio.checked){
@@ -441,6 +445,11 @@ function toggleRequiredAttribute(enable) {
                 outPrice.innerText = "Q. 150.00";
 
                 document.getElementById("hidden-charge").value = 150;
+            }else if(discotecaRadio.checked){
+                outDuration.innerText = "Tarifa Discoteca";
+                outPrice.innerText = "Q. 25.00";
+
+                document.getElementById("hidden-charge").value = 25;
             }
             else{
                 outDuration.innerText = "";
@@ -453,9 +462,10 @@ function toggleRequiredAttribute(enable) {
         // Add event listeners to the radio buttons
         temporalRadio.addEventListener('change', toggleTimeDivs);
         eventoRadio.addEventListener('change', toggleTimeDivs);
-        diaNocheRadio.addEventListener('change', toggleTimeDivs);
+       // diaNocheRadio.addEventListener('change', toggleTimeDivs);
         anuladoRadio.addEventListener('change', toggleTimeDivs);
         perdidoRadio.addEventListener('change', toggleTimeDivs);
+        discotecaRadio.addEventListener('change', toggleTimeDivs);
 
 
 
