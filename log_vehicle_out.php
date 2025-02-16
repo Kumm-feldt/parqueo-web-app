@@ -39,23 +39,38 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $placa = $_POST['placa'];
     $num_sellos = $_POST['rating']; // Number of "sellos" from the form
 
-    // check for DISCOTECA constraints +++++++++++++++++++++++++++
+    // check for DISCOTECA constraints ==================================
     // Get current day and time
     $current_day = date('N'); // 1 (Monday) to 7 (Sunday)
     $current_time = date('H:i'); // 24-hour format
 
-    // Check if it's Friday (5) or Saturday (6)
-    $is_weekend_night = ($current_day == 5 || $current_day == 6) && ($current_time >= '20:00' && $current_time <= '23:59');
+    // Check if it is between 20:00 pm and 23:50pm
+    $is_valid_night_schedule = ($current_time >= '20:00' && $current_time <= '23:59');
 
-if($park_type == "Discoteca"){
-    if (!$is_weekend_night ) {
-        echo "<div style='text-align: center; padding-top:50px;'>";
-        echo "<p>Esta opcion solo es valida: VIERNES y SABADO \n 8:00 p.m. - 11:59 p.m</p><br>";
-        echo "<button> <a href='index.php'>Ingresa nuevo ticket</a> </button>";
-        echo "</div>";
-        exit();
-    } 
-}
+    // Check if it's Friday (5) or Saturday (6)
+    $is_weekend_night = ($current_day == 5 || $current_day == 6) && $is_valid_night_schedule;
+
+
+
+    if($park_type == "Discoteca"){
+        if (!$is_weekend_night ) {
+            echo "<div style='text-align: center; padding-top:50px;'>";
+            echo "<p>Esta opcion solo es valida: VIERNES y SABADO \n 8:00 p.m. - 11:59 p.m</p><br>";
+            echo "<button> <a href='index.php'>Ingresa nuevo ticket</a> </button>";
+            echo "</div>";
+            exit();
+        } 
+    }
+    if($park_type == "Noche"){
+        if (!$is_valid_night_schedule ) {
+            echo "<div style='text-align: center; padding-top:50px;'>";
+            echo "<p>Esta opcion solo es valida: \n 8:00 p.m. - 11:59 p.m</p><br>";
+            echo "<button> <a href='index.php'>Ingresa nuevo ticket</a> </button>";
+            echo "</div>";
+            exit();
+        } 
+    }
+   
    
     // +++++++++++++++++
 

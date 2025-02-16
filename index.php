@@ -281,7 +281,9 @@ color:#48752C;
                     <input type="radio" id="perdido" name="tipo_parqueo" value="Ticket Perdido">
                     <label for="perdido">Ticket Perdido</label><br>
                     <input type="radio" id="discoteca" name="tipo_parqueo" value="Discoteca">
-                    <label for="perdido">Discoteca</label>
+                    <label for="discoteca">Discoteca</label><br>
+                    <input type="radio" id="noche" name="tipo_parqueo" value="Noche">
+                    <label for="noche">Tarifa noche</label>
                    </div>
 
                    <!-- Time in / Time out-->
@@ -378,6 +380,8 @@ function toggleRequiredAttribute(enable) {
 
         const temporalRadio = document.getElementById('temporal');
         const discotecaRadio = document.getElementById('discoteca');
+        const nocheRadio = document.getElementById('noche');
+
 
         const eventoRadio = document.getElementById('evento');
        // const diaNocheRadio = document.getElementById('dia_noche');
@@ -450,6 +454,11 @@ function toggleRequiredAttribute(enable) {
                 outPrice.innerText = "Q. 25.00";
 
                 document.getElementById("hidden-charge").value = 25;
+            }else if(nocheRadio.checked){
+                outDuration.innerText = "Tarifa Noche";
+                outPrice.innerText = "Q. 60.00";
+
+                document.getElementById("hidden-charge").value = 60;
             }
             else{
                 outDuration.innerText = "";
@@ -466,6 +475,8 @@ function toggleRequiredAttribute(enable) {
         anuladoRadio.addEventListener('change', toggleTimeDivs);
         perdidoRadio.addEventListener('change', toggleTimeDivs);
         discotecaRadio.addEventListener('change', toggleTimeDivs);
+        nocheRadio.addEventListener('change', toggleTimeDivs);
+
 
 
 
