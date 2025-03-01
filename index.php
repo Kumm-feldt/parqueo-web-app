@@ -247,7 +247,9 @@ color:#48752C;
                     <option value="Ivan Lopez" <?php if ($selected_user == "Ivan Lopez") echo 'selected'; ?>>Ivan Lopez</option>
                     <option value="Soemia Monzon" <?php if ($selected_user == "Soemia Monzon") echo 'selected'; ?>>Soemia Monzon</option>
                     <option value="Yenifer Calderas" <?php if ($selected_user == "Yenifer Calderas") echo 'selected'; ?>>Yenifer Calderas</option>
-                    <option value="Esdras Liquez" <?php if ($selected_user == "Esdras Liquez") echo 'selected'; ?>>Esdras Liquez                    </option>
+                    <option value="Norma Co" <?php if ($selected_user == "Norma Co") echo 'selected'; ?>>Norma Co</option>
+
+                    <option value="Jonathan Ocós" <?php if ($selected_user == "Jonathan Ocós") echo 'selected'; ?>>Jonathan Ocós                   </option>
                     
                 
                 </select>
@@ -591,7 +593,7 @@ function toggleRequiredAttribute(enable) {
     return { hours, minutes };
 }
 
-
+/* 
                 function calculatePrice(duration, vehicleType) {
                     if (vehicleType == 'carro'){
                         var rating = document.getElementById('rating').value * 7;
@@ -608,6 +610,24 @@ function toggleRequiredAttribute(enable) {
                     }
                     return price;
                 }
+ */
+            function calculatePrice(duration, vehicleType) {
+                var rating = document.getElementById('rating').value * 7; // Default rating applies to "carro"
+
+                var totalMinutes = duration.hours * 60 + duration.minutes;
+                var price;
+
+                if (vehicleType === "carro") {
+                    var pricePer30Min = 7;
+                    price = (Math.ceil(totalMinutes / 30) * pricePer30Min) - rating;
+                } else {
+                    var pricePerHour = 5;
+                    var totalHours = Math.ceil(totalMinutes / 60); // Always rounds up to the next full hour
+                    price = totalHours * pricePerHour;
+                }
+
+                return price < 0 ? 0 : price; // Ensure price is never negative
+            }
 
                 
                
