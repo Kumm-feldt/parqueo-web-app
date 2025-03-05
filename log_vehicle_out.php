@@ -41,6 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     // check for DISCOTECA constraints ==================================
     // Get current day and time
+    $current_month = date('n'); // 1 (Monday) to 7 (Sunday)
     $current_day = date('N'); // 1 (Monday) to 7 (Sunday)
     $current_time = date('H:i'); // 24-hour format
 
@@ -98,7 +99,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
             $duration = calculateDuration($time_in, $time_out);
     
-            $charge = calculatePrice($duration, $vehicle_type, $num_sellos);
+            $charge = ($current_month == 3) ? calculatePriceMarch($duration, $vehicle_type, $num_sellos) : calculatePrice($duration, $vehicle_type, $num_sellos);
           
             if($charge == 0){
                 $park_type = "Cortesia";
@@ -180,7 +181,7 @@ function calculateDuration($startTime, $endTime) {
 
 
 
-/* // Function to calculate price based on duration and vehicle type
+// Function to calculate price based on duration and vehicle type
 function calculatePrice($duration, $vehicle_type, $num_sellos = 0) {
 
     $base_rate = $vehicle_type == "carro" ?  7: 5; // 7Q for cars, 5Q for motorcycles
@@ -201,10 +202,10 @@ function calculatePrice($duration, $vehicle_type, $num_sellos = 0) {
 
     return $final_price;
 }
- */
+ 
 
  // Function to calculate price based on duration and vehicle type
-function calculatePrice($duration, $vehicle_type, $num_sellos = 0) {
+function calculatePriceMarch($duration, $vehicle_type, $num_sellos = 0) {
 
     if ($vehicle_type == "carro") {
         $base_rate = 7; // 7Q per 30 minutes

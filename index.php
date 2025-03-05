@@ -509,7 +509,13 @@ function toggleRequiredAttribute(enable) {
 
                     // Calculate duration and price
                     var duration = calculateDuration(timeIn, timeOut);
-                    var price = calculatePrice(duration, vehicleType);
+
+                    let currentDate = new Date();
+                    let currentMonth = currentDate.getMonth() + 1;
+
+
+                    var price = (currentMonth == 3) ? calculatePriceMarch(duration, vehicleType) : calculatePrice(duration, vehicleType);
+
                  
                     // Set Data on table
                     var outDuration = document.getElementById("out-duration");
@@ -526,8 +532,10 @@ function toggleRequiredAttribute(enable) {
                         document.getElementById("hidden-charge").value = price;
                     }
                    
-                    setTimeout(function() {
-                        document.querySelector('form').submit(); // This submits the form
+
+
+                 setTimeout(function() {
+                     document.querySelector('form').submit(); // This submits the form
                     }, 15000); // 15000 milliseconds = 15 seconds
 
 
@@ -593,7 +601,7 @@ function toggleRequiredAttribute(enable) {
     return { hours, minutes };
 }
 
-/* 
+
                 function calculatePrice(duration, vehicleType) {
                     if (vehicleType == 'carro'){
                         var rating = document.getElementById('rating').value * 7;
@@ -610,9 +618,16 @@ function toggleRequiredAttribute(enable) {
                     }
                     return price;
                 }
- */
-            function calculatePrice(duration, vehicleType) {
-                var rating = document.getElementById('rating').value * 7; // Default rating applies to "carro"
+ 
+            function calculatePriceMarch(duration, vehicleType) {
+
+                if (vehicleType == 'carro'){
+                        var rating = document.getElementById('rating').value * 7;
+
+                    }else{
+                        var rating = document.getElementById('rating').value * 5;
+                    }
+
 
                 var totalMinutes = duration.hours * 60 + duration.minutes;
                 var price;
@@ -623,7 +638,7 @@ function toggleRequiredAttribute(enable) {
                 } else {
                     var pricePerHour = 5;
                     var totalHours = Math.ceil(totalMinutes / 60); // Always rounds up to the next full hour
-                    price = totalHours * pricePerHour;
+                    price = totalHours * pricePerHour - rating;
                 }
 
                 return price < 0 ? 0 : price; // Ensure price is never negative
