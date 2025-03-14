@@ -242,14 +242,16 @@ color:#48752C;
                 <!-- ------------------ USER ------------------------- -->
                 <label for="users"><strong> -- Turno --</strong></label>
                 <select name="users" id="users">
-                    <option value="Alex Vasquez" <?php if ($selected_user == "Alex Vasquez") echo 'selected'; ?>>Alex Vasquez</option>
-                    <option value="Abraham Garcia" <?php if ($selected_user == "Abraham Garcia") echo 'selected'; ?>>Abraham Garcia</option>
+                    <option value="Edson Ramírez" <?php if ($selected_user == "Edson Ramírez") echo 'selected'; ?>>Edson Ramírez</option>
+                    <option value="J C López" <?php if ($selected_user == "J C López") echo 'selected'; ?>>J C López</option>
                     <option value="Ivan Lopez" <?php if ($selected_user == "Ivan Lopez") echo 'selected'; ?>>Ivan Lopez</option>
                     <option value="Soemia Monzon" <?php if ($selected_user == "Soemia Monzon") echo 'selected'; ?>>Soemia Monzon</option>
                     <option value="Yenifer Calderas" <?php if ($selected_user == "Yenifer Calderas") echo 'selected'; ?>>Yenifer Calderas</option>
                     <option value="Norma Co" <?php if ($selected_user == "Norma Co") echo 'selected'; ?>>Norma Co</option>
 
-                    <option value="Jonathan Ocós" <?php if ($selected_user == "Jonathan Ocós") echo 'selected'; ?>>Jonathan Ocós                   </option>
+                    <option value="J J Gonzalez" <?php if ($selected_user == "J J Gonzalez") echo 'selected'; ?>> J J Gonzalez         </option>
+                    <option value="Marlon Gonzalez" <?php if ($selected_user == "Marlon Gonzalez") echo 'selected'; ?>> Marlon Gonzalez         </option>
+
                     
                 
                 </select>
