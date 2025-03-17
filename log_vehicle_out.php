@@ -45,7 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $current_day = date('N'); // 1 (Monday) to 7 (Sunday)
     $current_time = date('H:i'); // 24-hour format
 
-    // Check if it is between 20:00 pm and 23:50pm
+    // Check if it is between 20:00 pm and 23:59pm
     $is_valid_night_schedule = ($current_time >= '20:00' && $current_time <= '23:59');
 
     // Check if it's Friday (5) or Saturday (6)

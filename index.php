@@ -305,10 +305,7 @@ color:#48752C;
                     <div class="flex">
                     <input type="time" name="out" id="out-log"  value="00:00" required>
                     </div>
-
-
-                   
-                   
+   
                     </div> 
                     <div class="placa-div">
                     <label id="placa-label" for="placa">Placa</label> <br>
