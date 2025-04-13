@@ -184,14 +184,14 @@ function calculateDuration($startTime, $endTime) {
 // Function to calculate price based on duration and vehicle type
 function calculatePrice($duration, $vehicle_type, $num_sellos = 0) {
 
-    $base_rate = $vehicle_type == "carro" ?  7: 5; // 7Q for cars, 5Q for motorcycles
+    $base_rate = $vehicle_type == "carro" ?  8: 5; // 7Q for cars, 5Q for motorcycles
 
     // Calculate the base price
     $base_price = ceil($duration / 30) * $base_rate; // Round up to the nearest 30 minutes
 
     if($num_sellos != 0){
     // Calculate the discount
-    $discount = $num_sellos * ($vehicle_type == "carro" ? 7 : 5);
+    $discount = $num_sellos * ($vehicle_type == "carro" ? 8 : 5);
     }else{
         $discount = 0;
     }
@@ -208,7 +208,7 @@ function calculatePrice($duration, $vehicle_type, $num_sellos = 0) {
 function calculatePriceMarch($duration, $vehicle_type, $num_sellos = 0) {
 
     if ($vehicle_type == "carro") {
-        $base_rate = 7; // 7Q per 30 minutes
+        $base_rate = 8; // 7Q per 30 minutes
         $base_price = ceil($duration / 30) * $base_rate; // Round up to nearest 30 minutes
     } else {
         $base_rate = 5; // 5Q per full hour
@@ -216,7 +216,7 @@ function calculatePriceMarch($duration, $vehicle_type, $num_sellos = 0) {
     }
 
     // Calculate the discount
-    $discount = $num_sellos * ($vehicle_type == "carro" ? 7 : 5);
+    $discount = $num_sellos * ($vehicle_type == "carro" ? 8 : 5);
 
     // Final price after discount (ensuring it doesn't go negative)
     $final_price = max(0, $base_price - $discount);
