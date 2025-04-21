@@ -14,6 +14,9 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
+
+
+
 ?>
 
 <!DOCTYPE html>
@@ -485,6 +488,16 @@ function toggleRequiredAttribute(enable) {
 </script>
 
          <script>
+
+// --------------------------------------------------
+//  PRICE VARIABLES
+// --------------------------------------------------
+
+const car_regular_price = 7;
+const bike_regular_price = 5;
+
+
+
         const anuladoRadio = document.getElementById('anulado');
            
             // Calculate
@@ -601,14 +614,14 @@ function toggleRequiredAttribute(enable) {
 
                 function calculatePrice(duration, vehicleType) {
                     if (vehicleType == 'carro'){
-                        var rating = document.getElementById('rating').value * 8;
+                        var rating = document.getElementById('rating').value * car_regular_price;
 
                     }else{
-                        var rating = document.getElementById('rating').value * 5;
+                        var rating = document.getElementById('rating').value * bike_regular_price;
                     }
 
                     var totalMinutes = duration.hours * 60 + duration.minutes;
-                    var pricePer30Min = vehicleType === "carro" ? 8 : 5;
+                    var pricePer30Min = vehicleType === "carro" ? car_regular_price : bike_regular_price;
                     var price = (Math.ceil(totalMinutes / 30) * pricePer30Min) - rating;
                     if(price < 0){
                         price = 0;
@@ -619,10 +632,10 @@ function toggleRequiredAttribute(enable) {
             function calculatePriceMarch(duration, vehicleType) {
 
                 if (vehicleType == 'carro'){
-                        var rating = document.getElementById('rating').value * 8;
+                        var rating = document.getElementById('rating').value * car_regular_price;
 
                     }else{
-                        var rating = document.getElementById('rating').value * 5;
+                        var rating = document.getElementById('rating').value * bike_regular_price;
                     }
 
 
@@ -630,10 +643,10 @@ function toggleRequiredAttribute(enable) {
                 var price;
 
                 if (vehicleType === "carro") {
-                    var pricePer30Min = 8;
+                    var pricePer30Min = car_regular_price;
                     price = (Math.ceil(totalMinutes / 30) * pricePer30Min) - rating;
                 } else {
-                    var pricePerHour = 5;
+                    var pricePerHour = bike_regular_price;
                     var totalHours = Math.ceil(totalMinutes / 60); // Always rounds up to the next full hour
                     price = totalHours * pricePerHour - rating;
                 }

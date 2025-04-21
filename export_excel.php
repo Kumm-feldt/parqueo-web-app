@@ -36,6 +36,7 @@ if (isset($_SESSION['selected_user'])) {
     $user = "-";
 }
 
+
 $spreadsheet = new Spreadsheet();
 $sheet = $spreadsheet->getActiveSheet();
 $sheet->setTitle('Data de Vehiculos');
@@ -71,9 +72,9 @@ $tempFile = tempnam(sys_get_temp_dir(), 'data'.$date) . '.xlsx';
 $writer = new Xlsx($spreadsheet);
 $writer->save($tempFile);
 
+export_excel_db($conn, $user, $spreadsheet, $date);
 
-//export_excel_db($conn, $user, $spreadsheet, $date);
-
+error_log("just checking");
 // SQL statement to insert all data from log_out into log_out_copy
 $sql_insert = "INSERT INTO total_log_out SELECT * FROM log_out";
 
@@ -105,11 +106,17 @@ try {
     $mail->Password = 'jhkalmi85!A'; 
     
     $mail->addReplyTo('updates@amiparqueo.com', 'amiparqueo.com'); // correo creado en hostinger
-  //$mail->addAddress('mercadeo@realdelparque.com', 'Mercadeo');
-  //$mail->addAddress('administracion@realdelparque.com', 'Administracion');
+
+
+  $mail->addAddress('mercadeo@realdelparque.com', 'Mercadeo');
+  $mail->addAddress('administracion@realdelparque.com', 'Administracion');
+  $mail->addAddress('asistente@realdelparque.com', 'Administracion');
+
   
 
- $mail->addAddress('anthonykenneth007@gmail.com', 'antonio');
+
+
+// $mail->addAddress('anthonykenneth007@gmail.com', 'antonio');
     
     $mail->setFrom('updates@amiparqueo.com', 'amiparqueo.com');
     
