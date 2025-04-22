@@ -1,10 +1,5 @@
 <?php
 
-// -----------------------------------
-//  VEHICLE PRICE VARIABLES
-// -----------------------------------
-$car_reg_price = 7;
-$bike_reg_price = 5;
 
 
 session_start();
@@ -32,7 +27,6 @@ $selected_user = isset($_SESSION['selected_user']) ? $_SESSION['selected_user'] 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     $ticket = $_POST['ticket'];
-    error_log("->" .$ticket);
 
     // Check if the ticket already exists
     if (checkTicket($conn, $ticket) or empty(trim($ticket)) ) {
@@ -81,8 +75,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
    
    
-    // +++++++++++++++++
+// -----------------------------------
+//  VEHICLE PRICE VARIABLES
+// -----------------------------------
+    $car_reg_price = 7;
+    $bike_reg_price = 5;
 
+// -----------------------------------
 
     
       // Get current date
@@ -106,8 +105,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if($park_type == "Por Hora"){
 
             $duration = calculateDuration($time_in, $time_out);
-    
-            $charge = ($current_month == 3) ? calculatePriceMarch($duration, $vehicle_type, $num_sellos) : calculatePrice($duration, $vehicle_type, $num_sellos);
+ 
+
+
+            $charge =  calculatePrice($duration, $vehicle_type, $car_reg_price, $bike_reg_price, $num_sellos);
           
             if($charge == 0){
                 $park_type = "Cortesia";
@@ -183,14 +184,15 @@ function calculateDuration($startTime, $endTime) {
         $diffMinutes += 24 * 60; // Add 24 hours worth of minutes
     }
 
-    error_log("minutes " . $diffMinutes);
     return $diffMinutes;
 }
 
 
 
 // Function to calculate price based on duration and vehicle type
-function calculatePrice($duration, $vehicle_type, $num_sellos = 0) {
+function calculatePrice($duration, $vehicle_type, $car_reg_price, $bike_reg_price, $num_sellos = 0) {
+
+
 
     $base_rate = $vehicle_type == "carro" ?  $car_reg_price: $bike_reg_price; // 7Q for cars, 5Q for motorcycles
 
@@ -212,25 +214,7 @@ function calculatePrice($duration, $vehicle_type, $num_sellos = 0) {
 }
  
 
- // Function to calculate price based on duration and vehicle type
-function calculatePriceMarch($duration, $vehicle_type, $num_sellos = 0) {
 
-    if ($vehicle_type == "carro") {
-        $base_rate = $car_reg_price; // 7Q per 30 minutes
-        $base_price = ceil($duration / 30) * $base_rate; // Round up to nearest 30 minutes
-    } else {
-        $base_rate = $bike_reg_price; // 5Q per full hour
-        $base_price = ceil($duration / 60) * $base_rate; // Round up to nearest hour
-    }
-
-    // Calculate the discount
-    $discount = $num_sellos * ($vehicle_type == "carro" ? $car_reg_price : $bike_reg_price);
-
-    // Final price after discount (ensuring it doesn't go negative)
-    $final_price = max(0, $base_price - $discount);
-
-    return $final_price;
-}
 
 function checkTicket($conn, $ticket_p) {
    
